@@ -1,0 +1,88 @@
+package com.nexsoft.buku.controller;
+
+import com.nexsoft.buku.model.Peminjaman;
+import com.nexsoft.buku.service.PeminjamanService;
+import com.nexsoft.buku.util.CustomErrorType;
+import com.nexsoft.buku.util.CustomSuccessType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+@RequestMapping("/api")
+public class PeminjamanController {
+    public static final Logger logger = LoggerFactory.getLogger(PeminjamanController.class);
+    @Autowired
+    PeminjamanService peminjamanService;
+
+    @PostMapping("/rental/")
+    public ResponseEntity<?> createPeminjaman (@RequestBody Peminjaman peminjaman){
+        try{
+            peminjamanService.save(peminjaman);
+            return new ResponseEntity<>(new CustomSuccessType("Peminjaman buku berhasil !! Buku harus dikembalikan maksimal 5 hari setelah peminjaman..."), HttpStatus.CREATED);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new CustomErrorType("Peminjaman buku gagal!!"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/pengembalianbuku/")
+    public ResponseEntity<?> createPengembalianBuku (@RequestBody Peminjaman peminjaman){
+        try{
+            peminjamanService.pengembalianBuku(peminjaman);
+            return new ResponseEntity<>(new CustomSuccessType("Pengembalian buku berhasil..."), HttpStatus.CREATED);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new CustomErrorType("Pengembalian buku gagal!!"), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/checkpengembalian/")
+    public ResponseEntity<?> pengembalian(@RequestParam String idUser) {
+        logger.info("Comparing data!");
+        Peminjaman peminjaman = peminjamanService.checkPengembalian(idUser);
+        return new ResponseEntity<>(peminjaman, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/pengembalian/")
+    public ResponseEntity<?> pengembalianPaging(@RequestParam int page, @RequestParam int limit) {
+        List<Peminjaman> pinjam = peminjamanService.dataPengembalianPaging(page, limit);
+        return new ResponseEntity<>(pinjam, HttpStatus.OK);
+    }
+
+    @GetMapping("/riwayatpeminjaman/")
+    public ResponseEntity<?> riwayatPengembalian(@RequestParam String idUser) {
+        List<Peminjaman> pinjam = peminjamanService.riwayatPeminjaman(idUser);
+        return new ResponseEntity<>(pinjam, HttpStatus.OK);
+    }
+
+    @GetMapping("/total/")
+    public ResponseEntity<?> totalData() {
+        logger.info("Comparing data!");
+
+        Peminjaman total = peminjamanService.totalData();
+        return new ResponseEntity<>(total, HttpStatus.OK);
+    }
+
+    @GetMapping("/totallaporan/")
+    public ResponseEntity<?> totalLaporan() {
+        logger.info("Comparing data!");
+
+        Peminjaman total = peminjamanService.totalDataLaporan();
+        return new ResponseEntity<>(total, HttpStatus.OK);
+    }
+
+    @GetMapping("/laporan/")
+    public ResponseEntity<?> laporanPaging(@RequestParam int page, @RequestParam int limit) {
+        List<Peminjaman> pinjam = peminjamanService.dataLaporan(page, limit);
+        return new ResponseEntity<>(pinjam, HttpStatus.OK);
+    }
+
+}
