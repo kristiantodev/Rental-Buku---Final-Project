@@ -1,0 +1,111 @@
+
+
+.widget {
+    background:#fff;
+    clear: both;
+    margin-bottom: 20px;
+    margin-top: 0;
+    border: 1px solid #404040;
+}
+
+.widget-title {
+    background: #404040;
+    height: 36px;
+}
+
+.widget.green {
+    border: 1px solid #74B749;
+}
+.widget.green .widget-title {
+    background: #74B749;
+}
+
+.widget.blue {
+    border: 1px solid #4A8BC2;
+}
+.widget.blue .widget-title {
+    background: #4A8BC2;
+}
+
+.widget.purple {
+    border: 1px solid #9D4A9C;
+}
+.widget.purple .widget-title {
+    background: #9D4A9C;
+}
+
+.widget.yellow {
+    border: 1px solid #FFB400;
+}
+.widget.yellow .widget-title {
+    background: #FFB400;
+}
+
+.widget.orange {
+    border: 1px solid #F37B53;
+}
+.widget.orange .widget-title {
+    background: #F37B53;
+}
+
+.widget.red {
+    border: 1px solid #DE577B;
+}
+.widget.red .widget-title {
+    background: #DE577B;
+}
+
+.widget-title > h4 {
+    float: left;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 10px 11px 10px 15px;
+    line-height: 12px;
+    margin: 0;
+    color: white;
+    font-family: 'MyriadPro-Regular';
+}
+
+.widget-title > h4 i {
+    font-size: 14px;
+    margin-right: 2px;
+}
+
+.widget-title span.tools {
+    float: right;
+    margin: 2px 0 0;
+    padding: 6px 5px 6px 10px;
+}
+
+.widget-title span.tools > a {
+    display: inline-block;
+    margin-right: 5px;
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.widget-title span.tools > a:hover {
+    text-decoration: none;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+    opacity: .7;
+}
+
+.widget-title .btn-group {
+    margin-right:5px;
+    margin-top: -2px;
+}
+
+.widget-title .btn-group .caret {
+    margin-top: 8px;
+    margin-left: 3px;
+}
+
+.widget-body {
+    padding: 15px 15px;
+}
+

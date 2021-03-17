@@ -1,0 +1,157 @@
+
+#form {
+    background-color: white;
+	border-radius: 5%;
+    border: 1px solid #cfdefa;
+	position: absolute;
+	height: 475px;
+	width: 475px;
+	margin-top: 5.5%;
+	margin-left : 0.5%;
+	padding: 2vh 3vh;
+	justify-content: center;
+}
+
+
+#tabel {
+    background-color: white;
+    border-radius: 5%;
+    border: 0px solid #cfdefa;
+    position: absolute;
+    height: 475px;
+    width: 775px;
+    overflow: scroll;
+    margin-top: 5.5%;
+    margin-left : 39%;
+    padding: 2vh 3vh;
+    justify-content: center;
+}
+
+#header{
+    height: 85px;
+    width: 600px;
+    position: relative;
+}
+
+	.judul{
+		font-family: arial;
+		font-size: 20px;
+		text-align: center;
+		margin-top: 0;
+		margin-left: 90px;
+		font-style: bold;
+	}
+
+	.input{
+		width: 20%;
+        height: 10%;
+        padding: 12px 20px;
+        margin: 8px 0 0 20px;
+        display: inline-block;
+        border: 1px solid #6495ED;
+        border-radius: 4px;
+        box-sizing: border-box;
+	}
+
+    .inputSearch{
+        height: 8%;
+        padding: 3px 10px;
+        margin: 8px 0 0 5px;
+        display: inline-block;
+        border: 1px solid #6495ED;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-bottom: 7px;
+    }
+
+    .radio{
+        margin-left: 20px;
+    }
+
+
+.button {
+        background-color: #008CBA;
+        border: none;
+        color: white;
+        padding: 10px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 12px 2px;
+        margin-left: 23px;
+        cursor: pointer;
+        font-weight: bold;
+        width: 94%;
+    }
+
+    .buttonPaging {
+        background-color: #6495ED;
+        border: none;
+        color: white;
+        padding: 7px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 5px 2px;
+        margin-left: 3px;
+        cursor: pointer;
+        font-weight: bold;
+        width: 20%;
+    }
+
+    .buttonPaging:disabled,
+    .buttonPaging[disabled]{
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+    }
+
+    .buttonDelete {
+        background-color: #DC143C;
+        border: none;
+        color: white;
+        padding: 7px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 5px 2px;
+        margin-left: 3px;
+        cursor: pointer;
+        font-weight: bold;
+        width: 20%;
+    }
+
+    button {
+  border: 1px solid #0066cc;
+  background-color: #0099cc;
+  color: #ffffff;
+  padding: 5px 10px;
+}
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        border : 1px solid #008CBA;
+      }
+      
+      th, td{
+        text-align: center;
+        padding: 8px;
+      }
+      
+      th {
+        background-color:#008CBA;
+        color: white;
+      }
+
+      .img{
+         margin-left: 25vh; 
+      }
+
+    hr{
+     border: 1px solid #1E90FF;
+     border-radius: 5px;
+    }
