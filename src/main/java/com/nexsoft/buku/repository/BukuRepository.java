@@ -7,6 +7,7 @@ import java.util.List;
 public interface BukuRepository {
     List<Buku> getDataBuku();
     List<Buku> findWithPaging(int page, int limit);
+    List<Buku> searchWithPaging(int page, int limit, String keyword);
     List<Buku> serchingBuku(String keyword);
     void deleteById(String id);
     void addBuku(Buku buku);

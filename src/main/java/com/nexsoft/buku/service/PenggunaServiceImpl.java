@@ -77,6 +77,20 @@ public class PenggunaServiceImpl implements PenggunaService{
 
     }
 
+    public List<User> searchWithPaging(int page, int limit, String keyword) {
+        List<User> pd;
+
+        try{
+            pd = penggunaRepository.searchWithPaging(page, limit, keyword);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+
+        return pd;
+
+    }
+
     public void registrasi(User user) {
         synchronized (this) {
             penggunaRepository.registrasi(user);

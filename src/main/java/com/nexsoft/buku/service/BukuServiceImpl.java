@@ -52,6 +52,20 @@ public class BukuServiceImpl implements BukuService{
 
     }
 
+    public List<Buku> searchWithPaging(int page, int limit, String keyword) {
+        List<Buku> pd;
+
+        try{
+            pd = bukuRepository.searchWithPaging(page, limit, keyword);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+
+        return pd;
+
+    }
+
     public List<Buku> serchingBuku(String keyword) {
         List<Buku> pd;
 

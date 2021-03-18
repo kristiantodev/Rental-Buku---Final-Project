@@ -43,6 +43,12 @@ public class PenggunaController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @GetMapping("/userserchingpaging/")
+    public ResponseEntity<?> getUserSerchingPaging(@RequestParam int page, @RequestParam int limit, @RequestParam String keyword) {
+        List<User> user = penggunaService.searchWithPaging(page, limit, keyword);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @GetMapping("/user/")
     public ResponseEntity<List<User>> listAllUser() {
         List<User> userList = penggunaService.getDataUser();

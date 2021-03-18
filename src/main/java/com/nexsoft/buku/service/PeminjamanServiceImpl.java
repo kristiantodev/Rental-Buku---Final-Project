@@ -77,6 +77,20 @@ public class PeminjamanServiceImpl implements PeminjamanService{
 
     }
 
+    public List<Peminjaman> cetakAllLaporan() {
+        List<Peminjaman> pd;
+
+        try{
+            pd = peminjamanRepository.cetakAllLaporan();
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+
+        return pd;
+
+    }
+
     public Peminjaman totalData() {
         Peminjaman pd;
 
@@ -99,6 +113,34 @@ public class PeminjamanServiceImpl implements PeminjamanService{
             System.out.println(e);
             pd = null;
         }
+        return pd;
+
+    }
+
+    public List<Peminjaman> filterLaporan(String keyword, String start, String end) {
+        List<Peminjaman> pd;
+
+        try{
+            pd = peminjamanRepository.filterLaporan(keyword, start, end);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+
+        return pd;
+
+    }
+
+    public List<Peminjaman> filterLaporanPaging(String keyword, String start, String end, int page, int limit) {
+        List<Peminjaman> pd;
+
+        try{
+            pd = peminjamanRepository.filterLaporanPaging(keyword, start, end, page, limit);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+
         return pd;
 
     }

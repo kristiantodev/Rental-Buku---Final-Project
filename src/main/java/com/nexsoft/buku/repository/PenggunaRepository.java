@@ -20,5 +20,6 @@ public interface PenggunaRepository {
     User findByPhoneEdit(String Phone, String idUser);
     List<User> getDataUser();
     List<User> findWithPaging(int page, int limit);
+    List<User> searchWithPaging(int page, int limit, String keyword);
     List<User> serchingUser(String keyword);
 }

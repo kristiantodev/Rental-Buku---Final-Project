@@ -13,4 +13,7 @@ public interface PeminjamanRepository {
     void pengembalianBuku(Peminjaman peminjaman);
     List<Peminjaman> riwayatPeminjaman(String idUser);
     List<Peminjaman> dataLaporan(int page, int limit);
+    List<Peminjaman> filterLaporan(String keyword, String start, String end);
+    List<Peminjaman> filterLaporanPaging(String keyword, String start, String end, int page, int limit);
+    List<Peminjaman> cetakAllLaporan();
 }

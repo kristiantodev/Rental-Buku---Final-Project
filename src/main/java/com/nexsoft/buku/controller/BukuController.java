@@ -47,6 +47,12 @@ public class BukuController {
         return new ResponseEntity<>(buku, HttpStatus.OK);
     }
 
+    @GetMapping("/bukuserchingpaging/")
+    public ResponseEntity<?> getBukuSerchingPaging(@RequestParam int page, @RequestParam int limit, @RequestParam String keyword) {
+        List<Buku> buku = bukuService.searchWithPaging(page, limit, keyword);
+        return new ResponseEntity<>(buku, HttpStatus.OK);
+    }
+
     @DeleteMapping("/buku/{id}")
     public ResponseEntity<?> deleteBuku(@PathVariable("id") String  id) {
         logger.info("Fetching & deleting Buku with id {}", id);

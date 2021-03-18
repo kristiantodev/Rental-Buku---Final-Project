@@ -22,4 +22,5 @@ public interface PenggunaService {
     List<User> getDataUser();
     List<User> serchingUser(String keyword);
     List<User> findWithPaging(int page, int limit);
+    List<User> searchWithPaging(int page, int limit, String keyword);
 }

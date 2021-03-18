@@ -104,6 +104,41 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
         return headers;
     }
 
+    public List<Peminjaman> cetakAllLaporan() {
+        List<Peminjaman> headers;
+
+        headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE p.idUser = u.idUser AND p.statusPinjam=2 ORDER BY p.tglKembali asc",
+                (rs, rowNum) ->
+                        new Peminjaman(
+                                rs.getString("idPinjam"),
+                                rs.getString("idUser"),
+                                rs.getString("namaUser"),
+                                rs.getString("role"),
+                                rs.getString("tglPinjam"),
+                                rs.getString("tglKembali"),
+                                rs.getInt("statusPinjam"),
+                                rs.getInt("denda")
+                        ));
+
+        for (Peminjaman ch : headers){
+            List<PeminjamanDetail> details = new ArrayList<>();
+            details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '"+ch.getIdPinjam()+"'",
+                    (rs, rowNum) ->
+                            new PeminjamanDetail(
+                                    rs.getString("idDetailPinjam"),
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idBuku"),
+                                    rs.getString("judulBuku"),
+                                    rs.getString("jenisBuku"),
+                                    rs.getInt("biayaSewa"),
+                                    rs.getInt("qty")
+                            ));
+            ch.setListBuku(details);
+        }
+
+        return headers;
+    }
+
     public List<Peminjaman> riwayatPeminjaman(String idUser) {
         List<Peminjaman> headers;
 
@@ -206,6 +241,576 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                         new Peminjaman(
                                 rs.getInt("totalData")
                         )).get(0);
+    }
+
+    public List<Peminjaman> filterLaporan(String keyword, String start, String end) {
+        List<Peminjaman> headers;
+
+        if(keyword.isEmpty() == true && start.isEmpty() == true && end.isEmpty() == true) {
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE p.idUser = u.idUser AND p.statusPinjam=2 ORDER BY p.tglKembali desc",
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else if(start.isEmpty() == false && end.isEmpty() == true && keyword.isEmpty()==true){
+            System.out.println(start);
+            System.out.println(end.isEmpty());
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE p.idUser = u.idUser AND p.statusPinjam=2 AND p.tglKembali = ? ORDER BY p.tglKembali desc",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, start);
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+            for (Peminjaman ch : headers){
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '"+ch.getIdPinjam()+"'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else if(start.isEmpty() == true && end.isEmpty() == false && keyword.isEmpty()==true){
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE p.idUser = u.idUser AND p.statusPinjam=2 AND p.tglKembali = ? ORDER BY p.tglKembali desc",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, end);
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else if(start.isEmpty() == true && end.isEmpty() == true && keyword.isEmpty() == false){
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u, detail_peminjaman d, buku b WHERE (u.namaUser LIKE ? OR b.judulBuku LIKE ?) AND p.idPinjam = d.idPinjam AND b.idBuku=d.idBuku AND p.idUser = u.idUser AND p.statusPinjam=2 GROUP BY p.idPinjam ORDER BY p.tglKembali desc",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, "%" + keyword + "%");
+                        preparedStatement.setString(2, "%" + keyword + "%");
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else if(start.isEmpty() == false && end.isEmpty() == false && keyword.isEmpty() == true){
+            System.out.println(start);
+            System.out.println(end);
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE p.idUser = u.idUser AND p.statusPinjam=2 AND p.tglKembali BETWEEN ? AND ? ORDER BY p.tglKembali desc",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, start);
+                        preparedStatement.setString(2, end);
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else if(start.isEmpty() == false && end.isEmpty() == true && keyword.isEmpty() == false){
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u, detail_peminjaman d, buku b WHERE (u.namaUser LIKE ? OR b.judulBuku LIKE ?) AND p.idPinjam = d.idPinjam AND b.idBuku=d.idBuku AND p.idUser = u.idUser AND p.statusPinjam=2 AND p.tglKembali = ? GROUP BY p.idPinjam ORDER BY p.tglKembali desc",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, "%" + keyword + "%");
+                        preparedStatement.setString(2, "%" + keyword + "%");
+                        preparedStatement.setString(3, start);
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else if(start.isEmpty() == true && end.isEmpty() == false && keyword.isEmpty() == false){
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u, detail_peminjaman d, buku b WHERE (u.namaUser LIKE ? OR b.judulBuku LIKE ?) AND p.idPinjam = d.idPinjam AND b.idBuku=d.idBuku AND p.idUser = u.idUser AND p.statusPinjam=2 AND p.tglKembali = ? GROUP BY p.idPinjam ORDER BY p.tglKembali desc",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, "%" + keyword + "%");
+                        preparedStatement.setString(2, "%" + keyword + "%");
+                        preparedStatement.setString(3, end);
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else{
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u, detail_peminjaman d, buku b WHERE (u.namaUser LIKE ? OR b.judulBuku LIKE ?) AND p.idPinjam = d.idPinjam AND b.idBuku=d.idBuku AND p.idUser = u.idUser AND p.statusPinjam=2 AND p.tglKembali BETWEEN ? AND ? GROUP BY p.idPinjam ORDER BY p.tglKembali desc",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, "%" + keyword + "%");
+                        preparedStatement.setString(2, "%" + keyword + "%");
+                        preparedStatement.setString(3, start);
+                        preparedStatement.setString(4, end);
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+        }
+       return headers;
+    }
+
+    public List<Peminjaman> filterLaporanPaging(String keyword, String start, String end, int page, int limit) {
+        List<Peminjaman> headers;
+        int numPages;
+        numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM peminjaman where statusPinjam=2",
+                (rs, rowNum) -> rs.getInt("count")).get(0);
+
+        if (page < 1) page = 1;
+        if (page > numPages) page = numPages;
+        int startPage = (page - 1) * limit;
+
+        if(numPages == 0){
+            startPage=0;
+            limit=0;
+        }
+
+        if(keyword.isEmpty() == true && start.isEmpty() == true && end.isEmpty() == true) {
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE p.idUser = u.idUser AND p.statusPinjam=2 ORDER BY p.tglKembali desc LIMIT " + startPage +"," + limit +";",
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else if(start.isEmpty() == false && end.isEmpty() == true && keyword.isEmpty()==true){
+            System.out.println(start);
+            System.out.println(end.isEmpty());
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE p.idUser = u.idUser AND p.statusPinjam=2 AND p.tglKembali = ? ORDER BY p.tglKembali desc LIMIT " + startPage +"," + limit +";",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, start);
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+            for (Peminjaman ch : headers){
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '"+ch.getIdPinjam()+"'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else if(start.isEmpty() == true && end.isEmpty() == false && keyword.isEmpty()==true){
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE p.idUser = u.idUser AND p.statusPinjam=2 AND p.tglKembali = ? ORDER BY p.tglKembali desc LIMIT " + startPage +"," + limit +";",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, end);
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else if(start.isEmpty() == true && end.isEmpty() == true && keyword.isEmpty() == false){
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u, detail_peminjaman d, buku b WHERE (u.namaUser LIKE ? OR b.judulBuku LIKE ?) AND p.idPinjam = d.idPinjam AND b.idBuku=d.idBuku AND p.idUser = u.idUser AND p.statusPinjam=2 GROUP BY p.idPinjam ORDER BY p.tglKembali desc LIMIT " + startPage +"," + limit +";",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, "%" + keyword + "%");
+                        preparedStatement.setString(2, "%" + keyword + "%");
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else if(start.isEmpty() == false && end.isEmpty() == false && keyword.isEmpty() == true){
+            System.out.println(start);
+            System.out.println(end);
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE p.idUser = u.idUser AND p.statusPinjam=2 AND p.tglKembali BETWEEN ? AND ? ORDER BY p.tglKembali desc LIMIT " + startPage +"," + limit +";",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, start);
+                        preparedStatement.setString(2, end);
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else if(start.isEmpty() == false && end.isEmpty() == true && keyword.isEmpty() == false){
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u, detail_peminjaman d, buku b WHERE (u.namaUser LIKE ? OR b.judulBuku LIKE ?) AND p.idPinjam = d.idPinjam AND b.idBuku=d.idBuku AND p.idUser = u.idUser AND p.statusPinjam=2 AND p.tglKembali = ? GROUP BY p.idPinjam ORDER BY p.tglKembali desc LIMIT " + startPage +"," + limit +";",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, "%" + keyword + "%");
+                        preparedStatement.setString(2, "%" + keyword + "%");
+                        preparedStatement.setString(3, start);
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else if(start.isEmpty() == true && end.isEmpty() == false && keyword.isEmpty() == false){
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u, detail_peminjaman d, buku b WHERE (u.namaUser LIKE ? OR b.judulBuku LIKE ?) AND p.idPinjam = d.idPinjam AND b.idBuku=d.idBuku AND p.idUser = u.idUser AND p.statusPinjam=2 AND p.tglKembali = ? GROUP BY p.idPinjam ORDER BY p.tglKembali desc LIMIT " + startPage +"," + limit +";",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, "%" + keyword + "%");
+                        preparedStatement.setString(2, "%" + keyword + "%");
+                        preparedStatement.setString(3, end);
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+
+        }else{
+            headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u, detail_peminjaman d, buku b WHERE (u.namaUser LIKE ? OR b.judulBuku LIKE ?) AND p.idPinjam = d.idPinjam AND b.idBuku=d.idBuku AND p.idUser = u.idUser AND p.statusPinjam=2 AND p.tglKembali BETWEEN ? AND ? GROUP BY p.idPinjam ORDER BY p.tglKembali desc LIMIT " + startPage +"," + limit +";",
+                    preparedStatement -> {
+                        preparedStatement.setString(1, "%" + keyword + "%");
+                        preparedStatement.setString(2, "%" + keyword + "%");
+                        preparedStatement.setString(3, start);
+                        preparedStatement.setString(4, end);
+                    },
+                    (rs, rowNum) ->
+                            new Peminjaman(
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idUser"),
+                                    rs.getString("namaUser"),
+                                    rs.getString("role"),
+                                    rs.getString("tglPinjam"),
+                                    rs.getString("tglKembali"),
+                                    rs.getInt("statusPinjam"),
+                                    rs.getInt("denda")
+                            ));
+
+            for (Peminjaman ch : headers) {
+                List<PeminjamanDetail> details = new ArrayList<>();
+                details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '" + ch.getIdPinjam() + "'",
+                        (rs, rowNum) ->
+                                new PeminjamanDetail(
+                                        rs.getString("idDetailPinjam"),
+                                        rs.getString("idPinjam"),
+                                        rs.getString("idBuku"),
+                                        rs.getString("judulBuku"),
+                                        rs.getString("jenisBuku"),
+                                        rs.getInt("biayaSewa"),
+                                        rs.getInt("qty")
+                                ));
+                ch.setListBuku(details);
+            }
+        }
+        return headers;
     }
 
 

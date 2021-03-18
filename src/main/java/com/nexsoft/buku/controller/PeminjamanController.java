@@ -85,4 +85,22 @@ public class PeminjamanController {
         return new ResponseEntity<>(pinjam, HttpStatus.OK);
     }
 
+    @GetMapping("/filterlaporan/")
+    public ResponseEntity<?> filterPaging(@RequestParam String keyword, @RequestParam String start,@RequestParam String end) {
+        List<Peminjaman> pinjam = peminjamanService.filterLaporan(keyword,start, end);
+        return new ResponseEntity<>(pinjam, HttpStatus.OK);
+    }
+
+    @GetMapping("/filterlaporanpaging/")
+    public ResponseEntity<?> filterLaporanPaging(@RequestParam String keyword, @RequestParam String start,@RequestParam String end,@RequestParam int page, @RequestParam int limit) {
+        List<Peminjaman> pinjam = peminjamanService.filterLaporanPaging(keyword,start, end, page, limit);
+        return new ResponseEntity<>(pinjam, HttpStatus.OK);
+    }
+
+    @GetMapping("/cetakalllaporan/")
+    public ResponseEntity<?> cetakAlllaporan() {
+        List<Peminjaman> pinjam = peminjamanService.cetakAllLaporan();
+        return new ResponseEntity<>(pinjam, HttpStatus.OK);
+    }
+
 }

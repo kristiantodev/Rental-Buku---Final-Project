@@ -53,6 +53,39 @@ public class BukuRepositoryImpl implements BukuRepository{
                         ));
     }
 
+    public List<Buku> searchWithPaging(int page, int limit, String keyword) {
+        int numPages;
+        numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM buku",
+                (rs, rowNum) -> rs.getInt("count")).get(0);
+
+        if (page < 1) page = 1;
+        if (page > numPages) page = numPages;
+
+        int start = (page - 1) * limit;
+
+        return jdbcTemplate.query("select b.*, j.jenisBuku from buku b, jenisbuku j WHERE (b.idBuku LIKE ? OR b.judulBuku LIKE ?" +
+                        "OR b.pengarang LIKE ? OR b.hargaSewa LIKE ? OR b.stok LIKE ? OR j.jenisBuku LIKE ?) AND b.idJenisBuku = j.idJenisBuku LIMIT " + start +"," + limit + ";",
+                preparedStatement -> {
+                    preparedStatement.setString(1, "%" + keyword + "%");
+                    preparedStatement.setString(2, "%" + keyword + "%");
+                    preparedStatement.setString(3, "%" + keyword + "%");
+                    preparedStatement.setString(4, "%" + keyword + "%");
+                    preparedStatement.setString(5, "%" + keyword + "%");
+                    preparedStatement.setString(6, "%" + keyword + "%");
+                },
+                (rs,rowNum)->
+                        new Buku(
+                                rs.getString("idBuku"),
+                                rs.getString("judulBuku"),
+                                rs.getString("pengarang"),
+                                rs.getInt("idJenisBuku"),
+                                rs.getString("jenisBuku"),
+                                rs.getInt("hargaSewa"),
+                                rs.getInt("stok"),
+                                rs.getString("keterangan")
+                        ));
+    }
+
     public List<Buku> findWithPaging(int page, int limit) {
         int numPages;
         numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM buku",

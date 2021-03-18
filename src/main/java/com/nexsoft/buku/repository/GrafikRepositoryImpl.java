@@ -93,7 +93,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
     }
 
     public Grafik bukuTerpinjam(){
-        return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=2",
+        return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=1",
                 (rs,rowNum)->
                         new Grafik(
                                 rs.getInt("total")

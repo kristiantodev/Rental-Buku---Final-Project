@@ -13,4 +13,7 @@ public interface PeminjamanService {
     Peminjaman totalDataLaporan();
     void pengembalianBuku(Peminjaman peminjaman);
     List<Peminjaman> riwayatPeminjaman(String idUser);
+    List<Peminjaman> cetakAllLaporan();
+    List<Peminjaman> filterLaporan(String keyword, String start, String end);
+    List<Peminjaman> filterLaporanPaging(String keyword, String start, String end, int page, int limit);
 }

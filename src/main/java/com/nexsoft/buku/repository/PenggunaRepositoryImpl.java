@@ -109,6 +109,40 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                                 ));
     }
 
+    public List<User> searchWithPaging(int page, int limit, String keyword) {
+        int numPages;
+        numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM users",
+                (rs, rowNum) -> rs.getInt("count")).get(0);
+
+        if (page < 1) page = 1;
+        if (page > numPages) page = numPages;
+
+        int start = (page - 1) * limit;
+
+        return jdbcTemplate.query("select*from users WHERE idUser LIKE ? OR username LIKE ? OR namaUser LIKE ? " +
+                        "OR alamat LIKE ? OR phone LIKE ? OR email LIKE ? OR role LIKE ? ORDER BY role asc LIMIT " + start + "," + limit +";",
+                preparedStatement -> {
+                    preparedStatement.setString(1, "%" + keyword + "%");
+                    preparedStatement.setString(2, "%" + keyword + "%");
+                    preparedStatement.setString(3, "%" + keyword + "%");
+                    preparedStatement.setString(4, "%" + keyword + "%");
+                    preparedStatement.setString(5, "%" + keyword + "%");
+                    preparedStatement.setString(6, "%" + keyword + "%");
+                    preparedStatement.setString(7, "%" + keyword + "%");
+                },
+                (rs,rowNum)->
+                        new User(
+                                rs.getString("idUser"),
+                                rs.getString("username"),
+                                rs.getString("namaUser"),
+                                rs.getString("alamat"),
+                                rs.getString("phone"),
+                                rs.getString("email"),
+                                rs.getString("tglregistrasi"),
+                                rs.getString("role")
+                        ));
+    }
+
     public User GetProfil(String idUser) {
 
         return jdbcTemplate.query("SELECT * FROM users WHERE idUser = ?",
