@@ -48,8 +48,10 @@ import Center from "./center"
 import LinkCenter from "./linkcenter"
 import ModalClick from "./modalclick"
 import Tooltip from "./tooltip"
+import TableReport from "./tablereport"
 
 export {
+  TableReport,
   Fitur,
   Tooltip,
   Center,

@@ -29,7 +29,7 @@ import {
 } from "../../../component";
 import TablePagination from "@material-ui/core/TablePagination";
 import swal from "sweetalert";
-import $ from 'jquery';
+import $ from "jquery";
 
 class User extends Component {
   constructor(props) {
@@ -78,34 +78,65 @@ class User extends Component {
 
   searchData = (el) => {
     var keyword = el.target.value;
+    this.setState({
+      cari: keyword,
+    });
 
     if (keyword === "") {
       this.getUsers();
     } else {
-      fetch(
-        `http://localhost:8080/api/userserching/?keyword=${encodeURIComponent(
-          keyword
-        )}`,
-        {
-          method: "get",
-          headers: {
-            "Content-Type": "application/json; ; charset=utf-8",
-            "Access-Control-Allow-Headers": "Authorization, Content-Type",
-            "Access-Control-Allow-Origin": "*",
-          },
-        }
-      )
-        .then((response) => response.json())
-        .then((json) => {
+      let url = `http://localhost:8080/api/userserching/?keyword=${encodeURIComponent(
+        keyword
+      )}`;
+
+      let url2 = `http://localhost:8080/api/userserchingpaging/?page=${
+        this.state.page + 1
+      }&limit=${this.state.rowsPerPage}&keyword=${encodeURIComponent(keyword)}`;
+
+      Promise.all([fetch(url), fetch(url2)])
+        .then(([response, response2]) =>
+          Promise.all([response.json(), response2.json()])
+        )
+        .then(([json, json2]) => {
           this.setState({
-            items: json,
+            items: json2,
           });
+
+          const total = json.length;
+          this.setState({ totalRows: total });
         })
         .catch((e) => {
           console.log(e);
           swal("Gagal !", "Gagal mengambil data", "error");
         });
     }
+  };
+
+  searchDataTampung = (keyword) => {
+    fetch(
+      `http://localhost:8080/api/userserchingpaging/?page=${
+        this.state.page + 1
+      }&limit=${this.state.rowsPerPage}&keyword=${encodeURIComponent(keyword)}`,
+      {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json; ; charset=utf-8",
+          "Access-Control-Allow-Headers": "Authorization, Content-Type",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({
+          items: json,
+        });
+       
+      })
+      .catch((e) => {
+        console.log(e);
+        swal("Gagal !", "Gagal mengambil data", "error");
+      });
   };
 
   addItemToState = (item) => {
@@ -125,7 +156,11 @@ class User extends Component {
 
   handleChangePage = (event, newPage) => {
     this.setState({ page: newPage }, () => {
-      this.getUsers();
+      if (this.state.cari === "") {
+        this.getUsers();
+      } else {
+        this.searchDataTampung(this.state.cari);
+      }
     });
   };
 
@@ -191,17 +226,15 @@ class User extends Component {
           if (typeof json.errorMessage !== "undefined") {
             swal("Gagal !", json.errorMessage, "error");
           } else if (typeof json.successMessage !== "undefined") {
-
             swal({
               text: "Admin Baru berhasil ditambahkan!!",
               icon: "success",
-              title: "Berhasil !!"
-              })
-              .then((value) => {
-                this.clear();
-                $("#admin .close").click();
-                this.getUsers();
-              })
+              title: "Berhasil !!",
+            }).then((value) => {
+              this.clear();
+              $("#admin .close").click();
+              this.getUsers();
+            });
           }
         })
         .catch((e) => {});
@@ -209,11 +242,9 @@ class User extends Component {
   };
 
   updateToMember = (id) => {
-
     const dataStatus = {
-      idUser : id,
+      idUser: id,
       role: "Member",
-      
     };
 
     swal({
@@ -222,47 +253,37 @@ class User extends Component {
       icon: "warning",
       buttons: true,
       dangerMode: true,
-    })
-    .then((konfirmasi) => {
+    }).then((konfirmasi) => {
       if (konfirmasi) {
-      fetch("http://localhost:8080/api/updatestatus/", {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json; ; charset=utf-8",
-        "Access-Control-Allow-Headers": "Authorization, Content-Type",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(dataStatus),
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        if (typeof json.errorMessage !== "undefined") {
-          swal("Gagal !", json.errorMessage, "error");
-        } else if(typeof json.successMessage !== "undefined"){
-          swal(
-            "Berhasil !",
-            json.successMessage,
-            "success"
-          );
-          this.getUsers()
-        }
-      })
-      .catch((e) => {
-        
-      });
-      
+        fetch("http://localhost:8080/api/updatestatus/", {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json; ; charset=utf-8",
+            "Access-Control-Allow-Headers": "Authorization, Content-Type",
+            "Access-Control-Allow-Origin": "*",
+          },
+          body: JSON.stringify(dataStatus),
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            if (typeof json.errorMessage !== "undefined") {
+              swal("Gagal !", json.errorMessage, "error");
+            } else if (typeof json.successMessage !== "undefined") {
+              swal("Berhasil !", json.successMessage, "success");
+              this.getUsers();
+            }
+          })
+          .catch((e) => {});
       } else {
         swal("Batal !", "Update Umum ke Member dibatalkan...", "error");
       }
     });
-  }
+  };
 
   updateToUmum = (id) => {
-
     const dataStatus = {
-      idUser : id,
+      idUser: id,
       role: "Umum",
-      
     };
 
     swal({
@@ -271,47 +292,37 @@ class User extends Component {
       icon: "warning",
       buttons: true,
       dangerMode: true,
-    })
-    .then((konfirmasi) => {
+    }).then((konfirmasi) => {
       if (konfirmasi) {
-      fetch("http://localhost:8080/api/updatestatus/", {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json; ; charset=utf-8",
-        "Access-Control-Allow-Headers": "Authorization, Content-Type",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(dataStatus),
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        if (typeof json.errorMessage !== "undefined") {
-          swal("Gagal !", json.errorMessage, "error");
-        } else if(typeof json.successMessage !== "undefined"){
-          swal(
-            "Berhasil !",
-            json.successMessage,
-            "success"
-          );
-          this.getUsers()
-        }
-      })
-      .catch((e) => {
-        
-      });
-      
+        fetch("http://localhost:8080/api/updatestatus/", {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json; ; charset=utf-8",
+            "Access-Control-Allow-Headers": "Authorization, Content-Type",
+            "Access-Control-Allow-Origin": "*",
+          },
+          body: JSON.stringify(dataStatus),
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            if (typeof json.errorMessage !== "undefined") {
+              swal("Gagal !", json.errorMessage, "error");
+            } else if (typeof json.successMessage !== "undefined") {
+              swal("Berhasil !", json.successMessage, "success");
+              this.getUsers();
+            }
+          })
+          .catch((e) => {});
       } else {
         swal("Batal !", "Hapus status Member menjadi umum dibatalkan", "error");
       }
     });
-  }
+  };
 
   resetPassword = (id, defaultPassword) => {
-
     const dataPassword = {
-      idUser : id,
+      idUser: id,
       password: defaultPassword,
-      
     };
 
     swal({
@@ -320,40 +331,32 @@ class User extends Component {
       icon: "warning",
       buttons: true,
       dangerMode: true,
-    })
-    .then((konfirmasi) => {
+    }).then((konfirmasi) => {
       if (konfirmasi) {
-      fetch("http://localhost:8080/api/updatepassworddefault/", {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json; ; charset=utf-8",
-        "Access-Control-Allow-Headers": "Authorization, Content-Type",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify(dataPassword),
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        if (typeof json.errorMessage !== "undefined") {
-          swal("Gagal !", json.errorMessage, "error");
-        } else if(typeof json.successMessage !== "undefined"){
-          swal(
-            "Berhasil !",
-            json.successMessage,
-            "success"
-          );
-          this.getUsers()
-        }
-      })
-      .catch((e) => {
-        
-      });
-      
+        fetch("http://localhost:8080/api/updatepassworddefault/", {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json; ; charset=utf-8",
+            "Access-Control-Allow-Headers": "Authorization, Content-Type",
+            "Access-Control-Allow-Origin": "*",
+          },
+          body: JSON.stringify(dataPassword),
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            if (typeof json.errorMessage !== "undefined") {
+              swal("Gagal !", json.errorMessage, "error");
+            } else if (typeof json.successMessage !== "undefined") {
+              swal("Berhasil !", json.successMessage, "success");
+              this.getUsers();
+            }
+          })
+          .catch((e) => {});
       } else {
         swal("Batal !", "Reset password ke default dibatalkan...", "error");
       }
     });
-  }
+  };
 
   render() {
     if (
@@ -392,13 +395,14 @@ class User extends Component {
               <Div className="col-lg-9 col-md-6 col-5">
                 <Div className="form-group row">
                   <Label className="col-sm-2 col-form-label">
-                    Cari Pengguna : 
+                    Cari Pengguna :
                   </Label>
                   <Div className="col-sm-10">
                     <Input
                       type="text"
                       placeholder="Masukan Kata Kunci Pencarian"
                       name="cari"
+                      value={this.state.cari}
                       onChange={this.searchData}
                     />
                   </Div>
@@ -428,7 +432,9 @@ class User extends Component {
                             <Tooltip keterangan="Edit Profil">
                               <Button
                                 className="btn btn-outline-warning"
-                                onClick={() => this.props.history.push("/admin/profil")}
+                                onClick={() =>
+                                  this.props.history.push("/admin/profil")
+                                }
                                 hidden={
                                   value.idUser ===
                                   this.props.dataUserLogin.idUser
@@ -444,7 +450,12 @@ class User extends Component {
                               <Button
                                 className="btn btn-outline-info"
                                 hidden={value.role !== "Admin" ? false : true}
-                                onClick={() =>{this.resetPassword(value.idUser, value.username)} }
+                                onClick={() => {
+                                  this.resetPassword(
+                                    value.idUser,
+                                    value.username
+                                  );
+                                }}
                               >
                                 <Italic className="fas fa-key" />
                               </Button>
@@ -454,7 +465,9 @@ class User extends Component {
                               <Button
                                 className="btn btn-outline-secondary"
                                 hidden={value.role === "Umum" ? false : true}
-                                onClick={() =>{this.updateToMember(value.idUser)} }
+                                onClick={() => {
+                                  this.updateToMember(value.idUser);
+                                }}
                               >
                                 <Italic className="fas fa-check" />
                               </Button>
@@ -464,7 +477,9 @@ class User extends Component {
                               <Button
                                 className="btn btn-outline-danger"
                                 hidden={value.role === "Member" ? false : true}
-                                onClick={() =>{this.updateToUmum(value.idUser)} }
+                                onClick={() => {
+                                  this.updateToUmum(value.idUser);
+                                }}
                               >
                                 <Italic className="fas fa-times" />
                               </Button>

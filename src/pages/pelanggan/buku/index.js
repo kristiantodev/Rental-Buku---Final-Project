@@ -55,7 +55,8 @@ class BukuList extends Component {
       cart: {},
       checkPengembalian: {},
       listBuku : [],
-      hargaSewa : 0
+      hargaSewa : 0,
+      cari : ""
     };
   }
 
@@ -120,40 +121,74 @@ class BukuList extends Component {
 
   handleChangePage = (event, newPage) => {
     this.setState({ page: newPage }, () => {
-      this.getBooks();
+      if (this.state.cari === "") {
+        this.getBooks();
+      } else {
+        this.searchDataTampung(this.state.cari);
+      }
     });
   };
 
   searchData = (el) => {
     var keyword = el.target.value;
+    this.setState({
+      cari: keyword,
+    });
 
     if (keyword === "") {
       this.getBooks();
     } else {
-      fetch(
-        `http://localhost:8080/api/bukuserching/?keyword=${encodeURIComponent(
-          keyword
-        )}`,
-        {
-          method: "get",
-          headers: {
-            "Content-Type": "application/json; ; charset=utf-8",
-            "Access-Control-Allow-Headers": "Authorization, Content-Type",
-            "Access-Control-Allow-Origin": "*",
-          },
-        }
-      )
-        .then((response) => response.json())
-        .then((json) => {
+      let url = `http://localhost:8080/api/bukuserching/?keyword=${encodeURIComponent(
+        keyword
+      )}`;
+
+      let url2 = `http://localhost:8080/api/bukuserchingpaging/?page=${
+        this.state.page + 1
+      }&limit=${this.state.rowsPerPage}&keyword=${encodeURIComponent(keyword)}`;
+
+      Promise.all([fetch(url), fetch(url2)])
+        .then(([response, response2]) =>
+          Promise.all([response.json(), response2.json()])
+        )
+        .then(([json, json2]) => {
           this.setState({
-            items: json,
+            items: json2,
           });
+
+          const total = json.length;
+          this.setState({ totalRows: total });
         })
         .catch((e) => {
           console.log(e);
           swal("Gagal !", "Gagal mengambil data", "error");
         });
     }
+  };
+
+  searchDataTampung = (keyword) => {
+    fetch(
+      `http://localhost:8080/api/bukuserchingpaging/?page=${
+        this.state.page + 1
+      }&limit=${this.state.rowsPerPage}&keyword=${encodeURIComponent(keyword)}`,
+      {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json; ; charset=utf-8",
+          "Access-Control-Allow-Headers": "Authorization, Content-Type",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({
+          items: json,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+        swal("Gagal !", "Gagal mengambil data", "error");
+      });
   };
 
   detailData = (idBuku) => {
