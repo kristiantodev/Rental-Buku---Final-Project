@@ -25,7 +25,9 @@ import {
   TableData,
   Italic,
   ModalClick,
-  Bold, TextStatus
+  Bold, TextStatus,
+  Label,
+  Input
 } from "../../../component";
 const dateKembali = new Date()
 
@@ -44,6 +46,7 @@ class Pengembalian extends Component {
       denda : 0,
       totalBayar : 0,
       telat : 0,
+      cari:""
     };
   }
 
@@ -81,6 +84,68 @@ class Pengembalian extends Component {
       });
   }
 
+  searchData = (el) => {
+    var keyword = el.target.value;
+    this.setState({
+      cari: keyword,
+    });
+
+    if (keyword === "") {
+      this.getPeminjaman();
+    } else {
+      let url = `http://localhost:8080/api/searchpengembalian/?keyword=${encodeURIComponent(
+        keyword
+      )}`;
+
+      let url2 = `http://localhost:8080/api/searchpengembalianpaging/?keyword=${encodeURIComponent(keyword)}&page=${
+        this.state.page + 1
+      }&limit=${this.state.rowsPerPage}`;
+
+      Promise.all([fetch(url), fetch(url2)])
+        .then(([response, response2]) =>
+          Promise.all([response.json(), response2.json()])
+        )
+        .then(([json, json2]) => {
+          this.setState({
+            items: json2,
+          });
+
+          const total = json.length;
+          this.setState({ totalRows: total });
+        })
+        .catch((e) => {
+          console.log(e);
+          swal("Gagal !", "Gagal mengambil data", "error");
+        });
+    }
+  };
+
+  searchDataTampung = (keyword) => {
+    fetch(
+      `http://localhost:8080/api/searchpengembalianpaging/?keyword=${encodeURIComponent(keyword)}&page=${
+        this.state.page + 1
+      }&limit=${this.state.rowsPerPage}`,
+      {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json; ; charset=utf-8",
+          "Access-Control-Allow-Headers": "Authorization, Content-Type",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({
+          items: json,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+        swal("Gagal !", "Gagal mengambil data", "error");
+      });
+  };
+
   addItemToState = (item) => {
     this.setState((prevState) => ({
       items: [...prevState.items, item],
@@ -98,7 +163,11 @@ class Pengembalian extends Component {
 
   handleChangePage = (event, newPage) => {
     this.setState({ page: newPage }, () => {
-      this.getPeminjaman();
+      if (this.state.cari === "") {
+        this.getPeminjaman();
+      } else {
+        this.searchDataTampung(this.state.cari);
+      }
     });
   };
 
@@ -236,6 +305,19 @@ class Pengembalian extends Component {
           <IsiBody>
             <Row>
               <Div className="col-lg-9 col-md-6 col-5">
+              <Div className="form-group row">
+                  <Label className="col-sm-2 col-form-label">
+                    Cari Peminjaman
+                  </Label>
+                  <Div className="col-sm-10">
+                    <Input
+                      type="text"
+                      placeholder="Masukan Kata Kunci Pencarian"
+                      name="cari"
+                      onChange={this.searchData}
+                    />
+                  </Div>
+                  </Div>
 
               {this.state.items.length !== 0 ?
 

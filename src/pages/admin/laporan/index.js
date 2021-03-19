@@ -138,7 +138,6 @@ class Laporan extends Component {
         })
         
       })
-
       .catch(() => {
         swal("Gagal !", "Gagal mengambil data", "error");
       });

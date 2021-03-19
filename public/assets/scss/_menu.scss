@@ -129,12 +129,13 @@
 
 .content-page {
   margin-left: 240px;
-  overflow: hidden;
 
   .content {
     padding: 0 15px 10px 15px;
     margin-top: 70px;
     margin-bottom: 60px;
+    overflow-y: auto;
+    height: 78vh;
   }
 }
 

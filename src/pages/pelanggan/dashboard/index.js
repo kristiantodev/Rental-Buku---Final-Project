@@ -166,7 +166,7 @@ class DashboardPelanggan extends Component {
     return totalbayar;
   };
 
-  render() {
+  checkAkses = () =>{
     if (
       this.props.checkLogin === true &&
       this.props.dataUserLogin.role === "Admin"
@@ -175,6 +175,11 @@ class DashboardPelanggan extends Component {
     } else if (this.props.checkLogin === false) {
       this.props.history.push("/login");
     }
+  }
+
+  render() {
+    this.checkAkses();
+    console.log(this.state.riwayatPeminjaman)
     return (
       <>
         <Header />
@@ -256,7 +261,7 @@ class DashboardPelanggan extends Component {
                     return (
                       <TableRow align="center" key={index}>
                         <TableData>{value.tglPinjam}</TableData>
-                        <TableData>{value.tglKembali}</TableData>
+                        <TableData>{value.tglKembali !== null? value.tglKembali : <><b>BELUM DIKEMBALIKAN</b></>}</TableData>
                         <TableData align="left">{value.listBuku.map((buku, idx) => {
                     return (
                        <ul key={idx}>
