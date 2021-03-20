@@ -49,6 +49,32 @@ public class PeminjamanServiceImpl implements PeminjamanService{
 
     }
 
+    public List<Peminjaman> searchPengembalian(String keyword) {
+        List<Peminjaman> pd;
+
+        try{
+            pd = peminjamanRepository.searchPengembalian(keyword);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+
+        return pd;
+
+    }
+
+    public List<Peminjaman> searchPengembalianPaging(String keyword, int page, int limit) {
+        List<Peminjaman> pd;
+
+        try{
+            pd = peminjamanRepository.searchPengembalianPaging(keyword, page, limit);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
     public List<Peminjaman> riwayatPeminjaman(String idUser) {
         List<Peminjaman> pd;
 

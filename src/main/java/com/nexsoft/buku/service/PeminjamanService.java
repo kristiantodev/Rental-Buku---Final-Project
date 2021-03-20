@@ -8,6 +8,8 @@ public interface PeminjamanService {
     void save(Peminjaman peminjaman);
     Peminjaman checkPengembalian(String idUser);
     List<Peminjaman> dataPengembalianPaging(int page, int limit);
+    List<Peminjaman> searchPengembalian(String keyword);
+    List<Peminjaman> searchPengembalianPaging(String keyword, int page, int limit);
     List<Peminjaman> dataLaporan(int page, int limit);
     Peminjaman totalData();
     Peminjaman totalDataLaporan();

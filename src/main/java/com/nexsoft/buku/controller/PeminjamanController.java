@@ -57,6 +57,18 @@ public class PeminjamanController {
         return new ResponseEntity<>(pinjam, HttpStatus.OK);
     }
 
+    @GetMapping("/searchpengembalian/")
+    public ResponseEntity<?> searchPengembalian(@RequestParam String keyword) {
+        List<Peminjaman> pinjam = peminjamanService.searchPengembalian(keyword);
+        return new ResponseEntity<>(pinjam, HttpStatus.OK);
+    }
+
+    @GetMapping("/searchpengembalianpaging/")
+    public ResponseEntity<?> searchPengembalianPaging(@RequestParam String keyword, @RequestParam int page, @RequestParam int limit) {
+        List<Peminjaman> pinjam = peminjamanService.searchPengembalianPaging(keyword, page, limit);
+        return new ResponseEntity<>(pinjam, HttpStatus.OK);
+    }
+
     @GetMapping("/riwayatpeminjaman/")
     public ResponseEntity<?> riwayatPengembalian(@RequestParam String idUser) {
         List<Peminjaman> pinjam = peminjamanService.riwayatPeminjaman(idUser);

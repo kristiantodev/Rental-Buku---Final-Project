@@ -24,10 +24,32 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    public List<Grafik> pelangganTeraktifFilter(int bulan, int tahun) {
+        List<Grafik> pd;
+        try{
+            pd = grafikRepository.pelangganTeraktifFilter(bulan, tahun);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
     public List<Grafik> bukuPopuler() {
         List<Grafik> pd;
         try{
             pd = grafikRepository.bukuPopuler();
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
+    public List<Grafik> bukuPopulerFilter(int bulan, int tahun) {
+        List<Grafik> pd;
+        try{
+            pd = grafikRepository.bukuPopulerFilter(bulan, tahun);
         }catch (IndexOutOfBoundsException e){
             System.out.println(e);
             pd = null;
@@ -46,10 +68,32 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    public List<Grafik> allPendapatanFilter(int bulan, int tahun) {
+        List<Grafik> pd;
+        try{
+            pd = grafikRepository.allPendapatanFilter(bulan, tahun);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
     public List<Grafik> pengeluaranPelanggan(String idUser) {
         List<Grafik> pd;
         try{
             pd = grafikRepository.pengeluaranPelanggan(idUser);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
+    public List<Grafik> pengeluaranPelangganFilter(String idUser, int bulan, int tahun) {
+        List<Grafik> pd;
+        try{
+            pd = grafikRepository.pengeluaranPelangganFilter(idUser, bulan, tahun);
         }catch (IndexOutOfBoundsException e){
             System.out.println(e);
             pd = null;
@@ -90,6 +134,17 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    public Grafik totalPengeluaranFilter(String idUser, int bulan, int tahun){
+        Grafik pd;
+        try{
+            pd = grafikRepository.totalPengeluaranFilter(idUser, bulan, tahun);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
     public Grafik bukuTerpinjam(){
         Grafik pd;
         try{
@@ -105,6 +160,50 @@ public class GrafikServiceImpl implements GrafikService{
         Grafik pd;
         try{
             pd = grafikRepository.totalPendapatanRental();
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
+    public Grafik totalPendapatanRentalFilter(int bulan, int tahun){
+        Grafik pd;
+        try{
+            pd = grafikRepository.totalPendapatanRentalFilter(bulan, tahun);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
+    public Grafik totalPinjamKomik(String idUser){
+        Grafik pd;
+        try{
+            pd = grafikRepository.totalPinjamKomik(idUser);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
+    public Grafik totalPinjamNovel(String idUser){
+        Grafik pd;
+        try{
+            pd = grafikRepository.totalPinjamNovel(idUser);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
+    public Grafik totalPinjamEnsiklopedia(String idUser){
+        Grafik pd;
+        try{
+            pd = grafikRepository.totalPinjamEnsiklopedia(idUser);
         }catch (IndexOutOfBoundsException e){
             System.out.println(e);
             pd = null;

@@ -104,6 +104,97 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
         return headers;
     }
 
+    public List<Peminjaman> searchPengembalian(String keyword) {
+        List<Peminjaman> headers;
+
+        headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE (u.namaUser LIKE ? OR p.idPinjam LIKE ? OR u.role LIKE ? OR p.tglPinjam LIKE ?) AND p.idUser = u.idUser AND p.statusPinjam=1",
+                preparedStatement -> {
+                    preparedStatement.setString(1, "%" + keyword + "%");
+                    preparedStatement.setString(2, "%" + keyword + "%");
+                    preparedStatement.setString(3, "%" + keyword + "%");
+                    preparedStatement.setString(4, "%" + keyword + "%");
+                },
+                (rs, rowNum) ->
+                        new Peminjaman(
+                                rs.getString("idPinjam"),
+                                rs.getString("idUser"),
+                                rs.getString("namaUser"),
+                                rs.getString("role"),
+                                rs.getString("tglPinjam"),
+                                rs.getInt("statusPinjam")
+                        ));
+
+        for (Peminjaman ch : headers){
+            List<PeminjamanDetail> details = new ArrayList<>();
+            details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '"+ch.getIdPinjam()+"'",
+                    (rs, rowNum) ->
+                            new PeminjamanDetail(
+                                    rs.getString("idDetailPinjam"),
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idBuku"),
+                                    rs.getString("judulBuku"),
+                                    rs.getString("jenisBuku"),
+                                    rs.getInt("biayaSewa"),
+                                    rs.getInt("qty")
+                            ));
+            ch.setListBuku(details);
+        }
+
+        return headers;
+    }
+
+    public List<Peminjaman> searchPengembalianPaging(String keyword, int page, int limit) {
+        List<Peminjaman> headers;
+        int numPages;
+        numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM peminjaman where statusPinjam=1",
+                (rs, rowNum) -> rs.getInt("count")).get(0);
+
+        if (page < 1) page = 1;
+        if (page > numPages) page = numPages;
+        int start = (page - 1) * limit;
+
+        if(numPages == 0){
+            start=0;
+            limit=0;
+        }
+
+        headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE (u.namaUser LIKE ? OR p.idPinjam LIKE ? OR u.role LIKE ? OR p.tglPinjam LIKE ?) AND p.idUser = u.idUser AND p.statusPinjam=1 LIMIT " + start +"," + limit + ";",
+                preparedStatement -> {
+                    preparedStatement.setString(1, "%" + keyword + "%");
+                    preparedStatement.setString(2, "%" + keyword + "%");
+                    preparedStatement.setString(3, "%" + keyword + "%");
+                    preparedStatement.setString(4, "%" + keyword + "%");
+                },
+                (rs, rowNum) ->
+                        new Peminjaman(
+                                rs.getString("idPinjam"),
+                                rs.getString("idUser"),
+                                rs.getString("namaUser"),
+                                rs.getString("role"),
+                                rs.getString("tglPinjam"),
+                                rs.getInt("statusPinjam")
+                        ));
+
+        for (Peminjaman ch : headers){
+            List<PeminjamanDetail> details = new ArrayList<>();
+            details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '"+ch.getIdPinjam()+"'",
+                    (rs, rowNum) ->
+                            new PeminjamanDetail(
+                                    rs.getString("idDetailPinjam"),
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idBuku"),
+                                    rs.getString("judulBuku"),
+                                    rs.getString("jenisBuku"),
+                                    rs.getInt("biayaSewa"),
+                                    rs.getInt("qty")
+                            ));
+            ch.setListBuku(details);
+        }
+
+        return headers;
+    }
+
+
     public List<Peminjaman> cetakAllLaporan() {
         List<Peminjaman> headers;
 
@@ -142,7 +233,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
     public List<Peminjaman> riwayatPeminjaman(String idUser) {
         List<Peminjaman> headers;
 
-        headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE p.idUser = u.idUser AND p.statusPinjam=2 AND p.idUser = ? ORDER BY p.tglKembali asc",
+        headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE p.idUser = u.idUser AND p.idUser = ? ORDER BY p.tglKembali asc",
                 preparedStatement -> {
                     preparedStatement.setString(1, idUser);
                 },
