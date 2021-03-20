@@ -80,18 +80,18 @@ class Login extends Component {
        
   };
 
-
+checkAkses= () => {
+  if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin") {
+    this.props.history.push("/admin");
+  }else if(this.props.checkLogin === true && this.props.dataUserLogin.role === "Member"){
+    this.props.history.push("/pelanggan");
+  }else if(this.props.checkLogin === true && this.props.dataUserLogin.role === "Umum"){
+    this.props.history.push("/pelanggan");
+  }
+}
 
   render() {
-    
-    if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin") {
-      this.props.history.push("/admin");
-    }else if(this.props.checkLogin === true && this.props.dataUserLogin.role === "Member"){
-      this.props.history.push("/pelanggan");
-    }else if(this.props.checkLogin === true && this.props.dataUserLogin.role === "Umum"){
-      this.props.history.push("/pelanggan");
-    }
-
+    this.checkAkses();
     const { username, password} = this.state;
     return (
       <>

@@ -381,7 +381,7 @@ class Buku extends Component {
     }
   };
 
-  render() {
+  checkAkses=()=>{
     if (
       this.props.checkLogin === true &&
       this.props.dataUserLogin.role === "Member"
@@ -395,6 +395,10 @@ class Buku extends Component {
     } else if (this.props.checkLogin === false) {
       this.props.history.push("/login");
     }
+  }
+
+  render() {
+   this.checkAkses();
     return (
       <>
         <Header />

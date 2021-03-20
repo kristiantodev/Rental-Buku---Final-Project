@@ -106,7 +106,7 @@ class Registrasi extends Component {
     }
   };
 
-  render() {
+  checkAkses = () =>{
     if (
       this.props.checkLogin === true &&
       this.props.dataUserLogin.role === "Admin"
@@ -124,6 +124,10 @@ class Registrasi extends Component {
       this.props.history.push("/pelanggan");
     }
 
+  }
+
+  render() {
+    this.checkAkses();  
     return (
       <>
         <AccountPage className="wrapper-registrasi">

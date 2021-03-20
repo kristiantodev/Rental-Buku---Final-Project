@@ -123,7 +123,6 @@ class Keranjang extends Component {
         Promise.all([response.json(), response2.json(), response3.json()])
       )
       .then(([json, json2, json3]) => {
-
         const updateTotalRiwayat = {
           labels: ["Komik", "Novel", "Ensiklopedia"],
           datasets: [
@@ -132,21 +131,21 @@ class Keranjang extends Component {
               backgroundColor: ["#2FDE00", "#00A6B4", "#6800B4"],
               hoverBackgroundColor: ["#175000", "#003350", "#35014F"],
               data: [json.data, json2.data, json3.data],
-            }
-          ]
-        }
+            },
+          ],
+        };
 
         this.setState({
-          totalPinjamKomik : json.data,
-          totalPinjamNovel:json2.data,
-          totalPinjamEnsiklopedia:json3.data,
-          totalPinjam:updateTotalRiwayat
+          totalPinjamKomik: json.data,
+          totalPinjamNovel: json2.data,
+          totalPinjamEnsiklopedia: json3.data,
+          totalPinjam: updateTotalRiwayat,
         });
 
         console.log("komik", this.state.totalPinjamKomik);
         console.log("novel", this.state.totalPinjamNovel);
         console.log("ens", this.state.totalPinjamEnsiklopedia);
-        console.log(updateTotalRiwayat)
+        console.log(updateTotalRiwayat);
       })
       .catch(() => {
         swal("Gagal !", "Gagal mengambil data", "error");
@@ -519,7 +518,7 @@ class Keranjang extends Component {
       .catch((e) => {});
   };
 
-  checkAkses=()=>{
+  checkAkses = () => {
     if (
       this.props.checkLogin === true &&
       this.props.dataUserLogin.role === "Admin"
@@ -528,10 +527,10 @@ class Keranjang extends Component {
     } else if (this.props.checkLogin === false) {
       this.props.history.push("/login");
     }
-  }
+  };
 
   render() {
-    this.checkAkses()
+    this.checkAkses();
     return (
       <>
         <Header />
@@ -654,7 +653,15 @@ class Keranjang extends Component {
                               ).length
                             }
                           </TableData>
-                          <TableData align="center" colSpan="2"></TableData>
+                          <TableData align="center" colSpan="2">
+                            <Button
+                              className="btn btn-outline-success col-10"
+                              onClick={() => this.konfirmasiPeminjaman()}
+                            >
+                              <Italic className="far fa-check-circle" />
+                              &nbsp; Konfirmasi Peminjaman
+                            </Button>
+                          </TableData>
                         </TableRow>
                         <TableRow>
                           <TableData colSpan="2" align="right">
@@ -667,6 +674,19 @@ class Keranjang extends Component {
                               ).length
                             }
                           </TableData>
+                          <TableData align="center" colSpan="2">
+                            <Button
+                              className="btn btn-outline-danger col-10"
+                              onClick={() =>
+                                this.onClickBatalPeminjaman(
+                                  this.state.peminjaman.idCart
+                                )
+                              }
+                            >
+                              <Italic className="fas fa-times-circle" />
+                              &nbsp; Batalkan Peminjaman
+                            </Button>
+                          </TableData>
                         </TableRow>
                         <TableRow>
                           <TableData colSpan="2" align="right">
@@ -678,6 +698,15 @@ class Keranjang extends Component {
                                 (x) => x.jenisBuku === "Ensiklopedia"
                               ).length
                             }
+                          </TableData>
+                          <TableData align="center" colSpan="2">
+                            <Button
+                              className="btn btn-outline-info col-10"
+                              onClick={() => this.infoPeminjaman()}
+                            >
+                              <Italic className="fas fa-info-circle" />
+                              &nbsp; Aturan Peminjaman Buku
+                            </Button>
                           </TableData>
                         </TableRow>
 
@@ -710,31 +739,6 @@ class Keranjang extends Component {
                   </Div>
                   <Div className="col-lg-3 col-md-6 col-7">
                     <Center>
-                      <Button
-                        className="btn btn-outline-success col-10"
-                        onClick={() => this.konfirmasiPeminjaman()}
-                      >
-                        <Italic className="far fa-check-circle" />
-                        &nbsp; Konfirmasi Peminjaman
-                      </Button>
-                      <Button
-                        className="btn btn-outline-danger col-10"
-                        onClick={() =>
-                          this.onClickBatalPeminjaman(
-                            this.state.peminjaman.idCart
-                          )
-                        }
-                      >
-                        <Italic className="fas fa-times-circle" />
-                        &nbsp; Batalkan Peminjaman
-                      </Button>
-                      <Button
-                        className="btn btn-outline-info col-10"
-                        onClick={() => this.infoPeminjaman()}
-                      >
-                        <Italic className="fas fa-info-circle" />
-                        &nbsp; Aturan Peminjaman Buku
-                      </Button>
                       <Doughnut
                         data={this.state.totalPinjam}
                         options={{

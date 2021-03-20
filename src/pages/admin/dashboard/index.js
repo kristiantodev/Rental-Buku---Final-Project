@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
 import { Header, Menu, Footer } from "../../../template/admin"
-import { Card, Content, HeaderContent, IsiDashboard, Title } from "../../../component"
+import { Card, Content, HeaderContent, IsiDashboard, Title, Select, Option, Div } from "../../../component"
 import {Bar} from 'react-chartjs-2';
 import {Line} from 'react-chartjs-2';
 import {Doughnut} from 'react-chartjs-2';
@@ -13,6 +13,56 @@ class Dashboard extends Component {
     this.state = {
       bukuTerpinjam : 0,
       totalPendapatanRental:0,
+      bulan : [
+        {
+          bulan : 1,
+          namaBulan: "Januari"
+        },
+        {
+          bulan : 2,
+          namaBulan: "Februari"
+        },
+        {
+          bulan : 3,
+          namaBulan: "Maret"
+        },
+        {
+          bulan : 4,
+          namaBulan: "April"
+        },
+        {
+          bulan : 5,
+          namaBulan: "Mei"
+        },
+        {
+          bulan : 6,
+          namaBulan: "Juni"
+        },
+        {
+          bulan : 7,
+          namaBulan: "Juli"
+        },
+        {
+          bulan : 8,
+          namaBulan: "Agustus"
+        },
+        {
+          bulan : 9,
+          namaBulan: "September"
+        },
+        {
+          bulan : 10,
+          namaBulan: "Oktober"
+        },
+        {
+          bulan : 11,
+          namaBulan: "November"
+        },
+        {
+          bulan : 12,
+          namaBulan: "Desember"
+        }
+      ],
       pelangganTeraktif : {
         labels: [],
         datasets: [
@@ -181,12 +231,12 @@ class Dashboard extends Component {
 
   changeRupiah = (bilangan) => {
     var reverse = bilangan.toString().split("").reverse().join(""),
-      ribuan = reverse.match(/\d{1,3}/g);
+    ribuan = reverse.match(/\d{1,3}/g);
     ribuan = ribuan.join(".").split("").reverse().join("");
     return ribuan;
   };
 
-  render() {
+  checkAkses=()=>{
     if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Member") {
       this.props.history.push("/pelanggan");
     }else if(this.props.checkLogin === true && this.props.dataUserLogin.role === "Umum"){
@@ -194,6 +244,10 @@ class Dashboard extends Component {
     }else if(this.props.checkLogin === false){
       this.props.history.push("/login");
     }
+  }
+
+  render() {
+    this.checkAkses();
     return (
       <>
         <Header />
@@ -201,6 +255,28 @@ class Dashboard extends Component {
         <Content>
           <HeaderContent>
             <Title icon="fas fa-th-large" judul="Dashboard Admin" />
+            <Div className="state-information d-none d-sm-block">
+            <Div className="form-group row">
+              <Div className="col-6">
+                <Select
+                  value={this.state.idJenisBuku}
+                  onChange={this.setValueInput}
+                  name="idJenisBuku"
+                >
+                  <Option value="">-- Pilih Bulan--</Option>
+                </Select>
+              </Div>
+              <Div className="col-6">
+                <Select
+                  value={this.state.idJenisBuku}
+                  onChange={this.setValueInput}
+                  name="idJenisBuku"
+                >
+                  <Option value="">-- Pilih Tahun--</Option>
+                </Select>
+              </Div>
+            </Div>
+            </Div>
           </HeaderContent>
           <IsiDashboard>
             <Card size="col-xl-4 col-md-6" color="card bg-secondary mini-stat position-relative" judul="Buku Terpinjam :" isi={this.state.bukuTerpinjam +" Buku"} icon="fas fa-book-open display-2" />
