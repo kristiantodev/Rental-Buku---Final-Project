@@ -345,15 +345,15 @@ class DashboardPelanggan extends Component {
             <Card
               size="col-xl-4 col-md-6"
               color="card bg-secondary mini-stat position-relative"
-              judul="Pengeluaran Bulan ini"
+              judul="Pengeluaran"
               isi={"Rp. " + this.changeRupiah(this.state.totalPengeluaran)}
               icon="far fa-money-bill-alt display-2"
             />
           </IsiDashboard>
 
           <IsiHistory>
-            <Div className="form-group row">
-              <Div className="col-3">
+            <Div className="row">
+              <Div className="col2-3">
                 <Select
                   value={this.state.pilihbulan}
                   onChange={this.setValueInput}
@@ -367,7 +367,7 @@ class DashboardPelanggan extends Component {
                       ))}
                 </Select>
               </Div>
-              <Div className="col-3">
+              <Div className="col2-3">
                 <Select
                   value={this.state.pilihtahun}
                   onChange={this.setValueInput}
@@ -377,7 +377,7 @@ class DashboardPelanggan extends Component {
                   {this.state.tahun.map((item, idx) => <Option key={idx} value={item}>{item}</Option>)}
                 </Select>   
               </Div>
-              <Div className="col-2">
+              <Div className="col2-2">
               <Button className="btn btn-info" onClick={() => this.filter()}>
                   <Italic className="fas fa-search" />
                   &nbsp; Tampilkan

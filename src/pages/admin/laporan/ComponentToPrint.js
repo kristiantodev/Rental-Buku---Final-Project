@@ -42,7 +42,8 @@ class ComponentToPrint extends Component {
                     <TableHeader>Nama</TableHeader>
                     <TableHeader>Tanggal Pinjam</TableHeader>
                     <TableHeader>Tanggal Kembali</TableHeader>
-                    <TableHeader>Jumlah Pinjam</TableHeader>
+                    <TableHeader>Jumlah</TableHeader>
+                    <TableHeader>Buku Pinjam</TableHeader>
                     <TableHeader>Biaya Rental</TableHeader>
                     <TableHeader>Denda</TableHeader>
                     <TableHeader>Total Bayar</TableHeader>
@@ -59,6 +60,17 @@ class ComponentToPrint extends Component {
                         <TableData>{value.tglKembali}</TableData>
                         <TableData>
                         {value.listBuku.length}
+                        </TableData>
+                        <TableData align="left">
+                        {value.listBuku.map((buku, idx) => {
+                            return (
+                              <ul key={idx}>
+                                <li>
+                                  {buku.judulBuku}
+                                </li>
+                              </ul>
+                            );
+                          })}
                         </TableData>
                         <TableData>
                           Rp.{" "}

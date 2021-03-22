@@ -397,14 +397,14 @@ class Pengembalian extends Component {
                     color="card bg-secondary mini-stat position-relative"
                     judul="Tanggal :"
                     isi={this.getTanggal()}
-                    icon="far fa-calendar-alt  display-1"
+                    icon="fas fa-tint display-1"
                   />
                   <Card
                     size="col-xl-12"
                     color="card bg-primary mini-stat position-relative"
                     judul="Pengembalian : "
                     isi={this.state.totalRows}
-                    icon="far fa-calendar-times display-2"
+                    icon="fas fa-clock display-2"
                   />
                 </Row>
               </Div>
