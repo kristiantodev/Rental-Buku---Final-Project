@@ -137,6 +137,24 @@ public class GrafikController {
         return new ResponseEntity<>(grafik, HttpStatus.OK);
     }
 
+    @GetMapping("/bukuterpinjamfilter/")
+    public ResponseEntity<Grafik> bukuTerpinjamfilter(@RequestParam int bulan, @RequestParam int tahun) {
+        Grafik grafik = grafikService.bukuTerpinjamFilter(bulan, tahun);
+        return new ResponseEntity<>(grafik, HttpStatus.OK);
+    }
+
+    @GetMapping("/bukukembali/")
+    public ResponseEntity<Grafik> bukuKembali() {
+        Grafik grafik = grafikService.bukuKembali();
+        return new ResponseEntity<>(grafik, HttpStatus.OK);
+    }
+
+    @GetMapping("/bukukembalifilter/")
+    public ResponseEntity<Grafik> bukuKembalifilter(@RequestParam int bulan, @RequestParam int tahun) {
+        Grafik grafik = grafikService.bukuKembaliFilter(bulan, tahun);
+        return new ResponseEntity<>(grafik, HttpStatus.OK);
+    }
+
     @GetMapping("/totalpendapatanrental/")
     public ResponseEntity<Grafik> totalPendapatanRental() {
         Grafik grafik = grafikService.totalPendapatanRental();

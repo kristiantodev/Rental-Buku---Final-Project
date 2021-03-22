@@ -156,6 +156,39 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    public Grafik bukuTerpinjamFilter(int bulan, int tahun){
+        Grafik pd;
+        try{
+            pd = grafikRepository.bukuTerpinjamFilter(bulan, tahun);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
+    public Grafik bukuKembali(){
+        Grafik pd;
+        try{
+            pd = grafikRepository.bukuKembali();
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
+    public Grafik bukuKembaliFilter(int bulan, int tahun){
+        Grafik pd;
+        try{
+            pd = grafikRepository.bukuKembaliFilter(bulan, tahun);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
     public Grafik totalPendapatanRental(){
         Grafik pd;
         try{

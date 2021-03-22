@@ -18,6 +18,9 @@ public interface GrafikRepository {
     Grafik totalPengeluaran(String idUser);
     Grafik totalPengeluaranFilter(String idUser, int bulan, int tahun);
     Grafik bukuTerpinjam();
+    Grafik bukuKembali();
+    Grafik bukuTerpinjamFilter(int bulan, int tahun);
+    Grafik bukuKembaliFilter(int bulan, int tahun);
     Grafik totalPendapatanRental();
     Grafik totalPendapatanRentalFilter(int bulan, int tahun);
     Grafik totalPinjamKomik(String idUser);

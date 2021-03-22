@@ -13,7 +13,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
     private JdbcTemplate jdbcTemplate;
 
     public List<Grafik> pelangganTeraktif(){
-        return jdbcTemplate.query("select u.namauser, count(*) as total from users u, peminjaman j where u.idUser=j.idUser GROUP BY u.idUser order by total desc limit 3"
+        return jdbcTemplate.query("select u.namauser, count(*) as total from users u, peminjaman j where u.idUser=j.idUser AND MONTH(j.tglKembali) = MONTH(NOW()) AND YEAR(j.tglKembali) = YEAR(NOW()) AND j.statusPinjam=2 GROUP BY u.idUser order by total desc limit 3"
                 ,
                 (rs,rowNum)->
                         new Grafik(
@@ -23,7 +23,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
     }
 
     public List<Grafik> pelangganTeraktifFilter(int bulan, int tahun){
-        return jdbcTemplate.query("select u.namauser, count(*) as total from users u, peminjaman j where u.idUser=j.idUser AND MONTH(j.tglKembali) = ? AND YEAR(j.tglKembali) = ? GROUP BY u.idUser order by total desc limit 3"
+        return jdbcTemplate.query("select u.namauser, count(*) as total from users u, peminjaman j where u.idUser=j.idUser AND j.statusPinjam=2 AND MONTH(j.tglKembali) = ? AND YEAR(j.tglKembali) = ? GROUP BY u.idUser order by total desc limit 3"
                 ,
                 preparedStatement -> {
                     preparedStatement.setInt(1, bulan);
@@ -37,7 +37,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
     }
 
     public List<Grafik> bukuPopuler(){
-        return jdbcTemplate.query("select b.judulBuku, count(*) as total from detail_peminjaman d, buku b where d.idBuku=b.idBuku GROUP BY d.idBuku order by total desc LIMIT 5;"
+        return jdbcTemplate.query("select b.judulBuku, count(*) as total from detail_peminjaman d, buku b, peminjaman j where d.idBuku=b.idBuku AND j.idPinjam=d.idPinjam AND MONTH(j.tglKembali) = MONTH(NOW()) AND YEAR(j.tglKembali) = YEAR(NOW()) GROUP BY d.idBuku order by total desc LIMIT 5;"
                 ,
                 (rs,rowNum)->
                         new Grafik(
@@ -61,7 +61,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
     }
 
     public List<Grafik> allPendapatan(){
-        return jdbcTemplate.query("select p.tglKembali, sum(d.biayaSewa)+p.denda as total from peminjaman p, detail_peminjaman d where p.idPinjam = d.idPinjam AND MONTH(p.tglKembali) = MONTH(NOW()) AND p.statusPinjam=2 GROUP BY p.tglKembali order by p.tglKembali asc"
+        return jdbcTemplate.query("select p.tglKembali, sum(d.biayaSewa)+p.denda as total from peminjaman p, detail_peminjaman d where p.idPinjam = d.idPinjam AND MONTH(p.tglKembali) = MONTH(NOW()) AND YEAR(p.tglKembali) = YEAR(NOW()) AND p.statusPinjam=2 GROUP BY p.tglKembali order by p.tglKembali asc"
                 ,
                 (rs,rowNum)->
                         new Grafik(
@@ -113,7 +113,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
     }
 
     public Grafik totalBukuPinjam(String idUser){
-        return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=2 AND p.idUser=?"
+        return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=2 AND MONTH(p.tglKembali) = MONTH(NOW()) AND p.idUser=?"
                 ,
                 preparedStatement -> {
                     preparedStatement.setString(1, idUser);
@@ -167,7 +167,39 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
     }
 
     public Grafik bukuTerpinjam(){
-        return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=1",
+        return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=1 AND MONTH(p.tglPinjam) = MONTH(NOW()) AND YEAR(p.tglPinjam) = YEAR(NOW())",
+                (rs,rowNum)->
+                        new Grafik(
+                                rs.getInt("total")
+                        )).get(0);
+    }
+
+    public Grafik bukuKembali(){
+        return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=2 AND MONTH(p.tglPinjam) = MONTH(NOW()) AND YEAR(p.tglPinjam) = YEAR(NOW())",
+                (rs,rowNum)->
+                        new Grafik(
+                                rs.getInt("total")
+                        )).get(0);
+    }
+
+    public Grafik bukuTerpinjamFilter(int bulan, int tahun){
+        return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=1 AND MONTH(p.tglPinjam) = ? AND YEAR(p.tglPinjam) = ?",
+                preparedStatement -> {
+                    preparedStatement.setInt(1, bulan);
+                    preparedStatement.setInt(2, tahun);
+                },
+                (rs,rowNum)->
+                        new Grafik(
+                                rs.getInt("total")
+                        )).get(0);
+    }
+
+    public Grafik bukuKembaliFilter(int bulan, int tahun){
+        return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=2 AND MONTH(p.tglPinjam) = ? AND YEAR(p.tglPinjam) = ?",
+                preparedStatement -> {
+                    preparedStatement.setInt(1, bulan);
+                    preparedStatement.setInt(2, tahun);
+                },
                 (rs,rowNum)->
                         new Grafik(
                                 rs.getInt("total")
@@ -175,7 +207,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
     }
 
     public Grafik totalPendapatanRental(){
-        return jdbcTemplate.query("select sum(d.biayaSewa) + (select sum(denda) from peminjaman where MONTH(tglKembali) = MONTH(NOW())) as total from peminjaman p, detail_peminjaman d where p.idPinjam=d.idPinjam AND p.statusPinjam=2 AND MONTH(p.tglKembali) = MONTH(NOW())",
+        return jdbcTemplate.query("select sum(d.biayaSewa) + (select sum(denda) from peminjaman where MONTH(tglKembali) = MONTH(NOW())) as total from peminjaman p, detail_peminjaman d where p.idPinjam=d.idPinjam AND p.statusPinjam=2 AND MONTH(p.tglKembali) = MONTH(NOW()) AND YEAR(p.tglPinjam) = YEAR(NOW())",
                 (rs,rowNum)->
                         new Grafik(
                                 rs.getInt("total")
