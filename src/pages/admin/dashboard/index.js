@@ -12,6 +12,7 @@ import {
   Div,
   Button,
   Italic,
+  CardDashboard
 } from "../../../component";
 import { Bar } from "react-chartjs-2";
 import { Line } from "react-chartjs-2";
@@ -484,10 +485,8 @@ class Dashboard extends Component {
               icon="far fa-money-bill-alt display-2"
             />
           </IsiDashboard>
-          <div className="row">
-            <div className="col-xl-6">
-              <div className="card m-b-20">
-                <div className="card-body">
+          <Div className="row">
+            <CardDashboard className="col-xl-6">
                   <Bar
                     data={this.state.pelangganTeraktif}
                     options={{
@@ -502,13 +501,8 @@ class Dashboard extends Component {
                       },
                     }}
                   />
-                </div>
-              </div>
-            </div>{" "}
-            {/* end col */}
-            <div className="col-xl-6">
-              <div className="card m-b-20">
-                <div className="card-body">
+                </CardDashboard>
+            <CardDashboard className="col-xl-6">
                   <Doughnut
                     data={this.state.bukuPopuler}
                     options={{
@@ -523,16 +517,10 @@ class Dashboard extends Component {
                       },
                     }}
                   />
-                </div>
-              </div>
-            </div>{" "}
-            {/* end col */}
-          </div>{" "}
-          {/* end row */}
-          <div className="row">
-            <div className="col-xl-12">
-              <div className="card m-b-20">
-                <div className="card-body">
+                </CardDashboard>
+          </Div>
+          <Div className="row">
+            <CardDashboard className="col-xl-12">
                   <Line
                     data={this.state.pendapatanBulan}
                     options={{
@@ -547,12 +535,8 @@ class Dashboard extends Component {
                       },
                     }}
                   />
-                </div>
-              </div>
-            </div>{" "}
-            {/* end col */}
-          </div>{" "}
-          {/* end row */}
+                </CardDashboard>
+          </Div>
         </Content>
         <Footer />
       </>

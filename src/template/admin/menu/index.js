@@ -62,9 +62,6 @@ class Menu extends Component {
                   </Fitur>
                 </Link>
               </Li>
-
-              
-
               <Li>
                 <Link to="/admin/user">
                   <Fitur onClick={() => this.props.history.push("/admin/user")}>

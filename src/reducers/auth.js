@@ -14,7 +14,8 @@ const authReducer = (state = defaultState, action) => {
               userLogin: {
                 idUser : action.payload.userData.idUser,
                 namaUser: action.payload.userData.namaUser,
-                role: action.payload.userData.role
+                role: action.payload.userData.role,
+                password: action.payload.userData.password
             }
           }
 
@@ -24,7 +25,8 @@ const authReducer = (state = defaultState, action) => {
               userLogin: {
                 idUser : action.payload.userData.idUser,
                 namaUser: action.payload.userData.namaUser,
-                role: action.payload.userData.role
+                role: action.payload.userData.role,
+                password: action.payload.userData.password
             }
           }
 

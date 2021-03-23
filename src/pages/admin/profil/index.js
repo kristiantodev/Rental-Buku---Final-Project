@@ -42,6 +42,7 @@ class ProfilAdmin extends Component {
       email : "",
       role : "",
       passwordUlangi : "",
+      passwordLama : "",
       userProfil : {},
     };
   }
@@ -82,14 +83,14 @@ class ProfilAdmin extends Component {
     console.log(obj.password);
     console.log(obj.passwordUlangi);
 
-    if (
-      obj.password === "" ||
-      obj.passwordUlangi === ""
-    ) {
-      swal("Gagal !", "password baru dan Konfirmasi password baru wajib diisi", "error");
-  
+    if (obj.password === "" ||obj.passwordUlangi === "" || obj.passwordLama === "") {
+      swal("Gagal !", "password lama, password baru dan Konfirmasi password baru wajib diisi", "error");
     } else if (obj.password !== obj.passwordUlangi) {
       swal("Gagal !", "Password dan Konfirmasi password baru tidak sesuai", "error");
+    } else if (obj.passwordLama !== this.props.dataUserLogin.password) {
+      swal("Gagal !", "Password lama tidak sesuai!!", "error");
+    } else if (obj.password === this.props.dataUserLogin.password) {
+      swal("Gagal !", "Password lama dan password baru tidak boleh sama!", "error");
     } else {
 
       const dataPassword = {
@@ -341,7 +342,16 @@ class ProfilAdmin extends Component {
               <ModalHeader judulheader="Ubah Password" />
             </Div>
             <Div className="modal-body">
-            
+            <Div className="form-group">
+              <Label>Password Lama<font color="red">*</font></Label>
+              <Input
+                type="password"
+                placeholder=""
+                name="passwordLama"
+                onChange={this.setValueInput}
+                value={this.state.passwordLama}
+              />
+            </Div>
             <Div className="form-group">
               <Label>Password Baru<font color="red">*</font></Label>
               <Input

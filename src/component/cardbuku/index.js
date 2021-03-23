@@ -7,7 +7,7 @@ class CardBuku extends Component {
         this.state = {}
     }
     render() {
-        const { src, datatarget, judul, pengarang, sewa} = this.props
+        const { src, datatarget, judul, pengarang, sewa, stokBuku} = this.props
         return (
           <div className="col-xl-4">
           <div className="cardBuku m-b-30">
@@ -17,7 +17,7 @@ class CardBuku extends Component {
             <div className="card-body">
               <h4 className="font-16 mt-0 text-primary">
               <div href="#" onClick={this.props.onClick} data-toggle="modal" className="waves-effect" data-target={datatarget}>
-                {judul}
+                {judul} {stokBuku !== 0 ? <><span className="badge badge-success">Stok : {stokBuku}</span></> : <><span className="badge badge-danger">Kosong</span></>}
               </div>
                 </h4>
               <p className="card-text">

@@ -33,15 +33,11 @@ class Login extends Component {
     });
   };
 
-  doLogin = (userObj) => {
-    const { username, password } = userObj;
-    console.log("user", username);
-    console.log("pass", password);
-
-    if (username === "" || password === "") {
+  doLogin = () => {
+    if (this.state.username === "" || this.state.password === "") {
       swal("Gagal !", "Username atau Password harus diisi !!", "error");
     } else {
-      fetch(`http://localhost:8080/api/login/?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
+      fetch(`http://localhost:8080/api/login/?username=${this.state.username}&password=${this.state.password}`, {
             method: "get",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -92,7 +88,6 @@ checkAkses= () => {
 
   render() {
     this.checkAkses();
-    const { username, password} = this.state;
     return (
       <>
         <AccountPage className="wrapper-page">
@@ -121,7 +116,7 @@ checkAkses= () => {
               <Div className="col-12 text-right">
                 <Button
                   className="btn btn-success waves-effect waves-light form-control"
-                  onClick={() => this.doLogin({ username, password})}
+                  onClick={() => this.doLogin()}
                 >
                   <Italic className="fas fa-sign-in-alt" /> Masuk
                 </Button>

@@ -49,9 +49,15 @@ import LinkCenter from "./linkcenter"
 import ModalClick from "./modalclick"
 import Tooltip from "./tooltip"
 import TableReport from "./tablereport"
+import CardDashboard from "./carddashboard"
+import UL from "./ul"
+import Nav from "./nav"
 
 export {
   TableReport,
+  UL,
+  Nav,
+  CardDashboard,
   Fitur,
   Tooltip,
   Center,

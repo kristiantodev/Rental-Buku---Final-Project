@@ -42,6 +42,7 @@ class Profil extends Component {
       email : "",
       role : "",
       passwordUlangi : "",
+      passwordLama : "",
       userProfil : {},
     };
   }
@@ -84,12 +85,16 @@ class Profil extends Component {
 
     if (
       obj.password === "" ||
-      obj.passwordUlangi === ""
+      obj.passwordUlangi === "" || obj.passwordLama === ""
     ) {
-      swal("Gagal !", "password baru dan Konfirmasi password baru wajib diisi", "error");
+      swal("Gagal !", "password lama, password baru dan Konfirmasi password baru wajib diisi", "error");
   
     } else if (obj.password !== obj.passwordUlangi) {
       swal("Gagal !", "Password dan Konfirmasi password baru tidak sesuai", "error");
+    } else if (obj.passwordLama !== this.props.dataUserLogin.password) {
+      swal("Gagal !", "Password lama tidak sesuai!!", "error");
+    } else if (obj.password === this.props.dataUserLogin.password) {
+      swal("Gagal !", "Password lama dan password baru tidak boleh sama!", "error");
     } else {
 
       const dataPassword = {
@@ -219,9 +224,7 @@ class Profil extends Component {
             
           }
         })
-        .catch((e) => {
-          
-        });
+        .catch((e) => {});
         
         } else {
           swal("Batal !", "Edit Profil dibatalkan...", "error");
@@ -237,12 +240,16 @@ class Profil extends Component {
     });
   };
 
-  render() {
+  checkAkses = () => {
     if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin") {
       this.props.history.push("/admin");
     }else if(this.props.checkLogin === false){
       this.props.history.push("/login");
     }
+  }
+
+  render() {
+    this.checkAkses();
     return (
       <>
         <Header />
@@ -336,7 +343,16 @@ class Profil extends Component {
               <ModalHeader judulheader="Ubah Password" />
             </Div>
             <Div className="modal-body">
-            
+            <Div className="form-group">
+              <Label>Password Lama<font color="red">*</font></Label>
+              <Input
+                type="password"
+                placeholder=""
+                name="passwordLama"
+                onChange={this.setValueInput}
+                value={this.state.passwordLama}
+              />
+            </Div>
             <Div className="form-group">
               <Label>Password Baru<font color="red">*</font></Label>
               <Input

@@ -68,7 +68,7 @@ class BukuList extends Component {
     Promise.all([
       fetch(url),
       fetch("http://localhost:8080/api/buku/"),
-      fetch(`http://localhost:8080/api/isikeranjang/?idCart=${encodeURIComponent(
+      fetch(`http://localhost:8080/api/lihatisikeranjang/?idCart=${encodeURIComponent(
         this.props.dataUserLogin.idUser
       )}`)
     ])
@@ -211,19 +211,19 @@ class BukuList extends Component {
     if (this.props.dataUserLogin.role === "Member") {
       swal(
         "Informasi",
-        "Pelanggan MEMBER bisa meminjam hingga 5 buku dalam kurun waktu tertentu, dengan syarat: \n4 buku novel \n3 buku komik. \n3 buku novel dan 2 buku komik. \n2 buku ensiklopedia \nMasing-masing jenis buku 1.",
+        "Pelanggan MEMBER bisa meminjam hingga 5 buku dalam kurun waktu 10 HARI TERAKHIR, dengan syarat: \n4 buku novel \n3 buku komik. \n3 buku novel dan 2 buku komik. \n2 buku ensiklopedia \nMasing-masing jenis buku 1.",
         "warning"
       );
     } else {
       swal(
         "Informasi",
-        "Pelanggan UMUM hanya bisa meminjam paling banyak 3 buku dalam kurun waktu tertentu, dengan syarat: \n 2 buku novel. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
+        "Pelanggan UMUM hanya bisa meminjam paling banyak 2 buku dalam kurun waktu 10 HARI TERAKHIR, dengan syarat: \n 2 buku novel. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
         "warning"
       );
     }
   };
 
-  addKeranjang = (idBuku) => {
+  addKeranjang = () => {
     const objekBuku = {
       idCart: this.props.dataUserLogin.idUser,
       idUser: this.props.dataUserLogin.idUser,
@@ -255,7 +255,7 @@ class BukuList extends Component {
       qty: 1,
     };
 
-    fetch("http://localhost:8080/api/cartdetail/", {
+    fetch("http://localhost:8080/api/isicartdetail/", {
       method: "post",
       headers: {
         "Content-Type": "application/json; ; charset=utf-8",
@@ -360,7 +360,7 @@ class BukuList extends Component {
     }
   };
 
-  render() {
+  checkAkses=()=>{
     if (
       this.props.checkLogin === true &&
       this.props.dataUserLogin.role === "Admin"
@@ -369,6 +369,11 @@ class BukuList extends Component {
     } else if (this.props.checkLogin === false) {
       this.props.history.push("/login");
     }
+  }
+
+  render() {
+    console.log("object items", this.state.items)
+    this.checkAkses();
     return (
       <>
         <Header />
@@ -457,6 +462,7 @@ class BukuList extends Component {
                             }
                             datatarget="#bb"
                             judul={value.judulBuku}
+                            stokBuku={value.stok}
                             pengarang={value.pengarang}
                             sewa={this.changeRupiah(value.hargaSewa)}
                             onClick={() => {
@@ -489,6 +495,7 @@ class BukuList extends Component {
                                 : gambarEnsiklopedia
                             }
                             datatarget="#bb"
+                            stokBuku={value.stok}
                             judul={value.judulBuku}
                             pengarang={value.pengarang}
                             sewa={this.changeRupiah(value.hargaSewa)}
@@ -514,6 +521,7 @@ class BukuList extends Component {
                                 : gambarEnsiklopedia
                             }
                             datatarget="#bb"
+                            stokBuku={value.stok}
                             judul={value.judulBuku}
                             pengarang={value.pengarang}
                             sewa={this.changeRupiah(value.hargaSewa)}
@@ -539,6 +547,7 @@ class BukuList extends Component {
                                 : gambarEnsiklopedia
                             }
                             datatarget="#bb"
+                            stokBuku={value.stok}
                             judul={value.judulBuku}
                             pengarang={value.pengarang}
                             sewa={this.changeRupiah(value.hargaSewa)}

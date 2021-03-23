@@ -6,7 +6,10 @@ import {
   Li,
   Span,
   Div,
-  Italic
+  Italic, 
+  Button,
+  UL,
+  Nav
 } from "../../../component";
 
 class Header extends Component {
@@ -46,17 +49,17 @@ class Header extends Component {
                 </Span>
             
             </Div>
-            <nav className="navbar-custom">
-            <ul className="list-inline menu-right mb-0">
+            <Nav className="navbar-custom">
+            <UL className="list-inline menu-right mb-0">
                 <Li className="float-right">
 
-                  <button className="button-menu-mobile btn btn-outline-light waves-effect" onClick={() => { this.doLogout()}}>
+                  <Button className="button-menu-mobile btn btn-outline-light waves-effect" onClick={() => { this.doLogout()}}>
                     <Italic className="fas fa-sign-out-alt" /> Keluar
-                  </button>
+                  </Button>
                   
                 </Li>                        
-              </ul>
-            </nav>
+              </UL>
+            </Nav>
           </Div>
         );
     }

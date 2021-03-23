@@ -254,6 +254,8 @@ class Buku extends Component {
       obj.keterangan === ""
     ) {
       swal("Gagal !", "Semua Data wajib diisi", "error");
+    }else if(obj.stok < 0 || obj.hargaSewa < 0){
+      swal("Gagal !", "Stok atau harga sewa tidak boleh kurang dari 0", "error");
     } else {
       const objekBuku = {
         idBuku: this.state.idBuku,
@@ -381,6 +383,11 @@ class Buku extends Component {
     }
   };
 
+  batalClick = () => {
+    this.clear();
+    $("#buku .close").click();
+  };
+
   checkAkses=()=>{
     if (
       this.props.checkLogin === true &&
@@ -468,7 +475,7 @@ class Buku extends Component {
                           <TableData align="center">
                             Rp. {value.hargaSewa}
                           </TableData>
-                          <TableData>
+                          <TableData align="center">
                           <Tooltip keterangan="Detail">
                               <Button
                                 className="btn btn-outline-info"
@@ -642,6 +649,9 @@ class Buku extends Component {
               />
             </Div>
             <Div className="modal-footer">
+            <Button className="btn btn-secondary" onClick={()=> {this.batalClick()}}>
+                <i className="fas fa-times" /> &nbsp;Batal
+              </Button>
               <Button className="btn btn-primary" onClick={this.simpanClick}>
                 <i className="fas fa-save" /> &nbsp;Simpan
               </Button>
