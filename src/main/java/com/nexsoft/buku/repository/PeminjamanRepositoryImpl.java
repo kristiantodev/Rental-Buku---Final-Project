@@ -28,6 +28,8 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
             String uuidDetail= String.valueOf(UUID.randomUUID());
             jdbcTemplate.update("INSERT INTO detail_peminjaman (idDetailPinjam, idPinjam, idBuku, biayaSewa, qty)VALUES (?,?,?,?,?)",
                     uuidDetail, uuid, detail.getIdBuku(), detail.getHargaSewa(), detail.getQty());
+            jdbcTemplate.update("update buku set stok=stok-1 where idBuku=?",
+                    detail.getIdBuku());
         }
     }
 

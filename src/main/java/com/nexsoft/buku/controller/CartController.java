@@ -1,6 +1,7 @@
 package com.nexsoft.buku.controller;
 
 import com.nexsoft.buku.model.Cart;
+import com.nexsoft.buku.model.CartDetail;
 import com.nexsoft.buku.service.CartService;
 import com.nexsoft.buku.util.CustomErrorType;
 import com.nexsoft.buku.util.CustomSuccessType;
@@ -32,6 +33,41 @@ public class CartController {
         }
 
 }
+
+    @PostMapping("/isicartdetail/")
+    public ResponseEntity<?> createCartDetail (@RequestBody CartDetail detail){
+
+        try{
+            if (cartService.checkIsiKeranjang(detail)) {
+                return new ResponseEntity<>(new CustomErrorType("Gagal !!. Buku dengan ID " +
+                        detail.getIdBuku() + " sudah ada di Keranjang. Silahkan masukan buku lain..."), HttpStatus.CONFLICT);
+            }else{
+                cartService.isiKeranjang(detail);
+                return new ResponseEntity<>(new CustomSuccessType("Buku dengan ID "+detail.getIdBuku()+" Berhasil dimasukan ke Keranjang..."), HttpStatus.CREATED);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(new CustomErrorType("Gagal menambahkan buku ke keranjang"), HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @GetMapping("/lihatisikeranjang/")
+    public ResponseEntity<?> isiKeranjang(@RequestParam String idCart) {
+        logger.info("Comparing data!");
+
+        List<CartDetail> isi = cartService.getIsiKeranjang(idCart);
+        return new ResponseEntity<>(isi, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/hapusisikeranjang/{id}")
+    public ResponseEntity<?> deleteDetail(@PathVariable("id") String  id) {
+        logger.info("Fetching & deleting cart detail with id {}", id);
+
+        cartService.deleteDetailById(id);
+        return new ResponseEntity<>(new CustomSuccessType("Buku berhasil dihapus dari keranjang !!"), HttpStatus.OK);
+    }
 
     @GetMapping("/cart/")
     public ResponseEntity<?> cartGet(@RequestParam String idCart) {

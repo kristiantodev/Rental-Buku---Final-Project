@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Repository("CartRepository")
 public class CartRepositoryImpl implements CartRepository{
@@ -17,6 +18,45 @@ public class CartRepositoryImpl implements CartRepository{
     public void addCart(Cart cart){
         jdbcTemplate.update("INSERT INTO cart_peminjaman(idCart, idUser) VALUES (?,?)",
                 cart.getIdCart(), cart.getIdUser());
+    }
+
+    public void isiKeranjang(CartDetail detail){
+        String uuid= String.valueOf(UUID.randomUUID());
+        jdbcTemplate.update("INSERT INTO cart_detail(idDetail, idCart, idBuku, qty) VALUES (?,?,?,?)",
+                uuid,  detail.getIdCart(), detail.getIdBuku(), 1);
+    }
+
+    public List<CartDetail> getIsiKeranjang(String idCart) {
+        return jdbcTemplate.query("SELECT * FROM cart_detail WHERE idCart=?",
+                preparedStatement -> {
+                    preparedStatement.setString(1, idCart);
+                },
+                (rs,rowNum)->
+                        new CartDetail(
+                                rs.getString("idDetail"),
+                                rs.getString("idCart"),
+                                rs.getString("idBuku"),
+                                rs.getString("qty")
+                        ));
+    }
+
+    public CartDetail checkIsiKeranjang(String idCart, String idBuku) {
+        return jdbcTemplate.query("SELECT * FROM cart_detail WHERE idCart=? AND idBuku=?",
+                preparedStatement -> {
+                    preparedStatement.setString(1, idCart);
+                    preparedStatement.setString(2, idBuku);
+                },
+                (rs,rowNum)->
+                        new CartDetail(
+                                rs.getString("idDetail"),
+                                rs.getString("idCart"),
+                                rs.getString("idBuku"),
+                                rs.getString("qty")
+                        )).get(0);
+    }
+
+    public void deleteDetailById(String id){
+        jdbcTemplate.update("DELETE from cart_detail WHERE idDetail=?",id);
     }
 
     public Cart findById(String idCart) {

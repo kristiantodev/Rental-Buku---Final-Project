@@ -229,7 +229,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
     }
 
     public Grafik totalPinjamKomik(String idUser){
-        return jdbcTemplate.query("select b.idJenisBuku, count(*) as total from peminjaman p, detail_peminjaman d, buku b where p.idPinjam=d.idPinjam AND b.idBuku=d.idBuku AND b.idJenisBuku='1' AND MONTH(DATE(p.tglPinjam)) = MONTH(NOW()) AND p.idUser=?"
+        return jdbcTemplate.query("select b.idJenisBuku, count(*) as total from peminjaman p, detail_peminjaman d, buku b where p.idPinjam=d.idPinjam AND b.idBuku=d.idBuku AND b.idJenisBuku='1' AND p.idUser=? AND DATE(p.tglPinjam) BETWEEN DATE(SUBDATE(DATE(NOW()), 10)) AND DATE(NOW())"
                 ,
                 preparedStatement -> {
                     preparedStatement.setString(1, idUser);
@@ -241,7 +241,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
     }
 
     public Grafik totalPinjamNovel(String idUser){
-        return jdbcTemplate.query("select b.idJenisBuku, count(*) as total from peminjaman p, detail_peminjaman d, buku b where p.idPinjam=d.idPinjam AND b.idBuku=d.idBuku AND b.idJenisBuku='2' AND MONTH(DATE(p.tglPinjam)) = MONTH(NOW()) AND p.idUser=?"
+        return jdbcTemplate.query("select b.idJenisBuku, count(*) as total from peminjaman p, detail_peminjaman d, buku b where p.idPinjam=d.idPinjam AND b.idBuku=d.idBuku AND b.idJenisBuku='2' AND p.idUser=? AND DATE(p.tglPinjam) BETWEEN DATE(SUBDATE(DATE(NOW()), 10)) AND DATE(NOW())"
                 ,
                 preparedStatement -> {
                     preparedStatement.setString(1, idUser);
@@ -253,7 +253,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
     }
 
     public Grafik totalPinjamEnsiklopedia(String idUser){
-        return jdbcTemplate.query("select b.idJenisBuku, count(*) as total from peminjaman p, detail_peminjaman d, buku b where p.idPinjam=d.idPinjam AND b.idBuku=d.idBuku AND b.idJenisBuku='3' AND MONTH(DATE(p.tglPinjam)) = MONTH(NOW()) AND p.idUser=?"
+        return jdbcTemplate.query("select b.idJenisBuku, count(*) as total from peminjaman p, detail_peminjaman d, buku b where p.idPinjam=d.idPinjam AND b.idBuku=d.idBuku AND b.idJenisBuku='3' AND p.idUser=? AND DATE(p.tglPinjam) BETWEEN DATE(SUBDATE(DATE(NOW()), 10)) AND DATE(NOW())"
                 ,
                 preparedStatement -> {
                     preparedStatement.setString(1, idUser);
