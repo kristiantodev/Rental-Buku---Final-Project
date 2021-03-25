@@ -34,8 +34,8 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
     }
 
     public void pengembalianBuku(Peminjaman peminjaman){
-        jdbcTemplate.update("UPDATE peminjaman set tglKembali=?, statusPinjam=2, denda=? where idPinjam=?",
-                new Date(), peminjaman.getDenda(), peminjaman.getIdPinjam());
+        jdbcTemplate.update("UPDATE peminjaman set tglPinjam=tglPinjam, tglKembali=?, statusPinjam=2, denda=?, lamaPinjam=? where idPinjam=?",
+                new Date(), peminjaman.getDenda(), peminjaman.getLamaPinjam(), peminjaman.getIdPinjam());
 
         for (PeminjamanDetail detail : peminjaman.getListBuku()){
             jdbcTemplate.update("update buku set stok=stok+1 where idBuku=?",
@@ -209,6 +209,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                 rs.getString("role"),
                                 rs.getString("tglPinjam"),
                                 rs.getString("tglKembali"),
+                                rs.getInt("lamaPinjam"),
                                 rs.getInt("statusPinjam"),
                                 rs.getInt("denda")
                         ));
@@ -304,6 +305,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                 rs.getString("role"),
                                 rs.getString("tglPinjam"),
                                 rs.getString("tglKembali"),
+                                rs.getInt("lamaPinjam"),
                                 rs.getInt("statusPinjam"),
                                 rs.getInt("denda")
                         ));
@@ -349,6 +351,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -384,6 +387,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -416,6 +420,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -450,6 +455,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -486,6 +492,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -521,6 +528,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -556,6 +564,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -592,6 +601,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -640,6 +650,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -675,6 +686,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -707,6 +719,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -741,6 +754,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -777,6 +791,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -812,6 +827,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -847,6 +863,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));
@@ -883,6 +900,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                                     rs.getString("role"),
                                     rs.getString("tglPinjam"),
                                     rs.getString("tglKembali"),
+                                    rs.getInt("lamaPinjam"),
                                     rs.getInt("statusPinjam"),
                                     rs.getInt("denda")
                             ));

@@ -134,7 +134,8 @@ public class BukuRepositoryImpl implements BukuRepository{
                 },
                 (rs,rowNum)->
                         new Buku(
-
+                                rs.getString("idBuku"),
+                                rs.getInt("stok")
                         )).get(0);
     }
 

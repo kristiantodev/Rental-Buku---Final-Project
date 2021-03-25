@@ -25,6 +25,11 @@ public class Buku {
         this.keterangan = keterangan;
     }
 
+    public Buku(String idBuku, int stok) {
+        this.idBuku = idBuku;
+        this.stok = stok;
+    }
+
     public Buku(String idBuku, String judulBuku, String pengarang, int idJenisBuku, int hargaSewa, int stok, String keterangan) {
         this.idBuku = idBuku;
         this.judulBuku = judulBuku;

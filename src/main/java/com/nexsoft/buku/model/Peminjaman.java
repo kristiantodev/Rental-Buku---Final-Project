@@ -9,6 +9,7 @@ public class Peminjaman {
     private String statusUser;
     private String tglPinjam;
     private String tglKembali;
+    private int lamaPinjam;
     private int statusPinjam;
     private int denda;
     private int totalData;
@@ -47,7 +48,17 @@ public class Peminjaman {
         this.denda = denda;
     }
 
-
+    public Peminjaman(String idPinjam, String idUser, String namaUser, String statusUser, String tglPinjam, String tglKembali, int lamaPinjam, int statusPinjam, int denda) {
+        this.idPinjam = idPinjam;
+        this.idUser = idUser;
+        this.namaUser = namaUser;
+        this.statusUser = statusUser;
+        this.tglPinjam = tglPinjam;
+        this.tglKembali = tglKembali;
+        this.lamaPinjam = lamaPinjam;
+        this.statusPinjam = statusPinjam;
+        this.denda = denda;
+    }
 
     public Peminjaman(int totalData) {
         this.totalData = totalData;
@@ -125,6 +136,14 @@ public class Peminjaman {
         this.denda = denda;
     }
 
+    public int getLamaPinjam() {
+        return lamaPinjam;
+    }
+
+    public void setLamaPinjam(int lamaPinjam) {
+        this.lamaPinjam = lamaPinjam;
+    }
+
     @Override
     public String toString() {
         return "Peminjaman{" +
@@ -134,6 +153,7 @@ public class Peminjaman {
                 ", statusUser='" + statusUser + '\'' +
                 ", tglPinjam='" + tglPinjam + '\'' +
                 ", tglKembali='" + tglKembali + '\'' +
+                ", lamaPinjam=" + lamaPinjam +
                 ", statusPinjam=" + statusPinjam +
                 ", denda=" + denda +
                 ", totalData=" + totalData +

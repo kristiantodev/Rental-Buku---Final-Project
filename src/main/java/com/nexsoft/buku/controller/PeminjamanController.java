@@ -1,6 +1,9 @@
 package com.nexsoft.buku.controller;
 
+import com.nexsoft.buku.model.Buku;
 import com.nexsoft.buku.model.Peminjaman;
+import com.nexsoft.buku.model.PeminjamanDetail;
+import com.nexsoft.buku.service.BukuService;
 import com.nexsoft.buku.service.PeminjamanService;
 import com.nexsoft.buku.util.CustomErrorType;
 import com.nexsoft.buku.util.CustomSuccessType;
@@ -18,12 +21,24 @@ import java.util.List;
 @RequestMapping("/api")
 public class PeminjamanController {
     public static final Logger logger = LoggerFactory.getLogger(PeminjamanController.class);
+
     @Autowired
     PeminjamanService peminjamanService;
+
+    @Autowired
+    BukuService bukuService;
 
     @PostMapping("/rental/")
     public ResponseEntity<?> createPeminjaman (@RequestBody Peminjaman peminjaman){
         try{
+            List<PeminjamanDetail> bukuList = peminjaman.getListBuku();
+            for (int i = 0; i < bukuList.size(); i++) {
+                Buku buku = bukuService.checkStok(peminjaman.getListBuku().get(i).getIdBuku());
+
+                if(buku.getStok() == 0){
+                    return new ResponseEntity<>(new CustomErrorType("Peminjaman gagal! Stok Buku dengan ID " + peminjaman.getListBuku().get(i).getIdBuku() + " sudah habis."), HttpStatus.CONFLICT);
+                }
+            }
             peminjamanService.save(peminjaman);
             return new ResponseEntity<>(new CustomSuccessType("Peminjaman buku berhasil !! Buku harus dikembalikan maksimal 5 hari setelah peminjaman..."), HttpStatus.CREATED);
         }catch (Exception e) {

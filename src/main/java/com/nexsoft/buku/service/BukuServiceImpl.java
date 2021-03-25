@@ -38,6 +38,20 @@ public class BukuServiceImpl implements BukuService{
 
     }
 
+    public Buku checkStok(String idBuku) {
+        Buku pd;
+
+        try{
+            pd = bukuRepository.findById(idBuku);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+
+        return pd;
+
+    }
+
     public List<Buku> findWithPaging(int page, int limit) {
         List<Buku> pd;
 

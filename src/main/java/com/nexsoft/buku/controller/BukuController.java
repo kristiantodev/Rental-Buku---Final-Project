@@ -91,6 +91,9 @@ public class BukuController {
             return new ResponseEntity<>(new CustomErrorType("Update gagal !!. Judul Buku " +
                     buku.getJudulBuku() + " sudah digunakan. Silahkan masukan judul lain..."), HttpStatus.CONFLICT);
         }else{
+            if(buku.getStok() < 0){
+                return new ResponseEntity<>(new CustomErrorType("Stok pengurangan dilarang melebihi stok asli!!"), HttpStatus.CONFLICT);
+            }
             bukuService.updateBuku(buku);
             return new ResponseEntity<>(new CustomSuccessType("Update buku dengan ID "+buku.getIdBuku()+" berhasil !! "), HttpStatus.OK);
         }
