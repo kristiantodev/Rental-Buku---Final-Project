@@ -22,7 +22,7 @@ class CardBuku extends Component {
                 </h4>
               <p className="card-text">
               Pengarang : {pengarang}<br/>
-              Harga Sewa : Rp. {sewa}
+              Sewa/hari : Rp. {sewa}
               </p>
               
             </div>

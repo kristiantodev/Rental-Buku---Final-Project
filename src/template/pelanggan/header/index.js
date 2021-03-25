@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from '../../../logo.png';
+import logo from '../../../image/logo.png';
 import { connect } from "react-redux";
 import swal from 'sweetalert';
 import {

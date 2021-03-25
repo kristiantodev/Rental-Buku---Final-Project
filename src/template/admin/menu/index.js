@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Fitur, Sidemenu, Li, SidebarMenu, Italic, SidemenuBody, Span, UserDetail } from "../../../component";
 import { connect } from "react-redux";
-import logo from "../../../adm.jpg";
+import logo from '../../../image/adm.jpg';
 import swal from 'sweetalert';
 
 class Menu extends Component {

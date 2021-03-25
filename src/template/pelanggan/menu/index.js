@@ -11,7 +11,7 @@ import {
   UserDetail
 } from "../../../component";
 import { connect } from "react-redux";
-import logo from "../../../adm.jpg";
+import logo from "../../../image/adm.jpg";
 import swal from 'sweetalert';
 
 class Menu extends Component {

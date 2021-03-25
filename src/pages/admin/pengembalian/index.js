@@ -46,7 +46,9 @@ class Pengembalian extends Component {
       denda : 0,
       totalBayar : 0,
       telat : 0,
-      cari:""
+      cari:"",
+      tglMaxPengembalian:"",
+      lamaPinjam:0
     };
   }
 
@@ -75,8 +77,7 @@ class Pengembalian extends Component {
             totalRows: json2.totalData,
           });
         }
-        
-
+      
       })
 
       .catch(() => {
@@ -196,17 +197,16 @@ class Pengembalian extends Component {
       listBuku : bukuDetail,
     });
 
+    var tglPinjamnya = new Date(tglPinjam);
     var datePinjam = new Date(tglPinjam); 
     datePinjam.setDate(datePinjam.getDate() + 5);
     var dtMaxPengembalian = datePinjam.getTime();
     var dtNow = dateKembali.getTime();
 
-    var telat = dateKembali.getDate() - datePinjam.getDate();
-
-    console.log("telat ", telat)
-    console.log(dtMaxPengembalian)
-    console.log(datePinjam)
-    console.log(dateKembali)
+    var telat = Math.ceil((dtNow - dtMaxPengembalian)/86400000);
+    var lamaPinjam = Math.ceil((dtNow - tglPinjamnya.getTime())/86400000);
+    var tglMaxPengembalian = `${datePinjam}`;
+    console.log("lama pinjam", lamaPinjam)
 
     var denda;
     if(dtNow <= dtMaxPengembalian){
@@ -215,7 +215,9 @@ class Pengembalian extends Component {
         textColor:"green",
         status:"TEPAT WAKTU",
         denda:denda,
-        telat:0
+        telat:0, 
+        tglMaxPengembalian:tglMaxPengembalian,
+        lamaPinjam:lamaPinjam
       });
     }else if(dtNow >= dtMaxPengembalian){
       denda = telat*1000;
@@ -223,12 +225,14 @@ class Pengembalian extends Component {
         textColor:"red",
         status:"TELAT",
         denda : denda,
-        telat : telat
+        telat:telat,
+        tglMaxPengembalian:tglMaxPengembalian,
+        lamaPinjam:lamaPinjam
       });
     }
 
     var total = bukuDetail.map((x) => x.hargaSewa)
-    .reduce((result, item) => result + item, 0);
+    .reduce((result, item) => result + (Number(item)*Number(lamaPinjam)), 0);
 
     var totalBayar = denda+total;
 
@@ -243,6 +247,7 @@ class Pengembalian extends Component {
     const objekPengembalian = {
       idPinjam : this.state.pengembalian.idPinjam,
       denda:this.state.denda,
+      lamaPinjam:this.state.lamaPinjam,
       listBuku : this.state.listBuku
     };
 
@@ -325,10 +330,10 @@ class Pengembalian extends Component {
               <Table className="table table-striped table-bordered dt-responsive nowrap">
                   <TableHead>
                     <TableRow>
-                      <TableHeader>ID Pinjam</TableHeader>
                       <TableHeader>Nama Pelanggan</TableHeader>
                       <TableHeader>Status</TableHeader>
                       <TableHeader>Tanggal Pinjam</TableHeader>
+                      <TableHeader>Jumlah Pinjam</TableHeader>
                       <TableHeader>Aksi</TableHeader>
                     </TableRow>
                   </TableHead>
@@ -336,11 +341,10 @@ class Pengembalian extends Component {
                   {this.state.items.map((value, index) => {
                       return (
                     <TableRow align="center" key={index}>
-                      <TableData>{value.idPinjam}</TableData>
                       <TableData align="left">{value.namaUser}</TableData>
                       <TableData>{value.statusUser}</TableData>
-                      <TableData>{value.tglPinjam}
-                      </TableData>
+                      <TableData>{value.tglPinjam}</TableData>
+                      <TableData>{value.listBuku.length} buku</TableData>
                       <TableData>        
                       <ModalClick datatarget="#pengembalian">
                         <Button
@@ -416,7 +420,7 @@ class Pengembalian extends Component {
         <Modal id="pengembalian">
           <ModalContent className="modal-dialog modal-lg">
             <Div className="modal-header bg-primary">
-              <ModalHeader judulheader="Form Pengembalian Buku" />
+              <ModalHeader judulheader="Pengembalian Buku" />
             </Div>
             <Div className="modal-body">
             <Table className="dt-responsive nowrap">
@@ -424,11 +428,11 @@ class Pengembalian extends Component {
                   </TableHead>
                   <TableBody>
                     <TableRow>
-                      <TableData>ID Peminjaman</TableData>
+                      <TableData>Maksimal Pengembalian</TableData>
                       <TableData width="30">:</TableData>
-                      <TableData width="300">{this.state.pengembalian.idPinjam}</TableData>
-                      <TableData rowSpan="4" width="250" align="center">
-                        {moment(dateKembali).format('YYYY/MM/DD HH:MM:SS')}
+                      <TableData width="300">{moment(this.state.tglMaxPengembalian).format('YYYY-MM-DD HH:MM:SS')}</TableData>
+                      <TableData rowSpan="5" width="250" align="center">
+                        {moment(dateKembali).format('YYYY-MM-DD HH:MM:SS')}
                       <TextStatus color={this.state.textColor} status={this.state.status}/>
                       {this.state.telat !== 0 ? <Bold>({this.state.telat} hari)</Bold> : ""}
                       </TableData>
@@ -448,6 +452,11 @@ class Pengembalian extends Component {
                       <TableData width="30">:</TableData>
                       <TableData>{this.state.pengembalian.tglPinjam}</TableData>
                     </TableRow>
+                    <TableRow>
+                      <TableData width="250">Lama Peminjaman</TableData>
+                      <TableData width="30">:</TableData>
+                      <TableData>{this.state.lamaPinjam} Hari</TableData>
+                    </TableRow>
                   </TableBody>
                 </Table>
                 <br/>
@@ -457,8 +466,8 @@ class Pengembalian extends Component {
                       <TableHeader>ID Buku</TableHeader>
                       <TableHeader>Judul</TableHeader>
                       <TableHeader>Jenis Buku</TableHeader>
-                      <TableHeader>Jumlah</TableHeader>
-                      <TableHeader>Harga Sewa</TableHeader>
+                      <TableHeader>Sewa/Hari</TableHeader>
+                      <TableHeader>Biaya rental</TableHeader>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -468,8 +477,8 @@ class Pengembalian extends Component {
                       <TableData align="center">{value.idBuku}</TableData>
                       <TableData>{value.judulBuku}</TableData>
                       <TableData align="center">{value.jenisBuku}</TableData>
-                      <TableData align="center">{value.qty}</TableData>
                       <TableData align="center">Rp. {this.changeRupiah(value.hargaSewa)}</TableData>
+                      <TableData align="center">Rp. {this.changeRupiah(Number(value.hargaSewa)*Number(this.state.lamaPinjam))}</TableData>
                     </TableRow>
                      );
                     })}
@@ -477,11 +486,11 @@ class Pengembalian extends Component {
                       <TableData colSpan="3">
                         <Bold>Total</Bold>
                       </TableData>
-                      <TableData align="center"><Bold>{this.state.listBuku.length}</Bold></TableData>
+                      <TableData align="center"></TableData>
                       <TableData align="center"><Bold>
                       Rp. {this.changeRupiah(this.state.listBuku
                             .map((x) => x.hargaSewa)
-                            .reduce((result, item) => result + item, 0))}
+                            .reduce((result, item) => result + (Number(item)*Number(this.state.lamaPinjam)), 0))}
                         </Bold></TableData>
                     </TableRow>
                     <TableRow>

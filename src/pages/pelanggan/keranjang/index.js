@@ -5,8 +5,8 @@ import ReactTooltip from "react-tooltip";
 import moment from "moment";
 import $ from "jquery";
 import swal from "sweetalert";
-import gambar from "../../../keranjang.jpg";
-import gambarPengembalian from "../../../peminjaman.jpg";
+import gambar from "../../../image/keranjang.jpg";
+import gambarPengembalian from "../../../image/peminjaman.jpg";
 import { Doughnut } from "react-chartjs-2";
 import {
   Button,
@@ -98,6 +98,7 @@ class Keranjang extends Component {
 
   componentDidMount() {
     this.getPeminjaman();
+    this.getStatusPeminjaman();
     this.checkPengembalian();
     this.getTotalRiwayatPeminjaman();
   }
@@ -151,8 +152,7 @@ class Keranjang extends Component {
         console.log("novel", this.state.totalPinjamNovel);
         console.log("ens", this.state.totalPinjamEnsiklopedia);
         console.log(updateTotalRiwayat);
-        this.getStatusPeminjamanUmum();
-        this.getStatusPeminjamanMember();
+        this.getStatusPeminjaman();
       })
       .catch(() => {});
   };
@@ -680,7 +680,6 @@ class Keranjang extends Component {
     
     if (this.props.dataUserLogin.role === "Member") {
       this.getStatusPeminjamanMember();
-      //umum
     } else if (this.props.dataUserLogin.role === "Umum") {
       this.getStatusPeminjamanUmum();
     }
@@ -717,8 +716,7 @@ class Keranjang extends Component {
             } else if (typeof json.successMessage !== "undefined") {
               swal("Berhasil !", json.successMessage, "success");
               this.getPeminjaman();
-              this.getStatusPeminjamanUmum();
-              this.getStatusPeminjamanMember();
+              this.getStatusPeminjaman();
             }
           })
           .catch((e) => {});
@@ -746,8 +744,7 @@ class Keranjang extends Component {
           swal("Berhasil !", json.successMessage, "success");
           this.getPeminjaman();
           this.checkPengembalian();
-          this.getStatusPeminjamanUmum();
-          this.getStatusPeminjamanMember();
+          this.getStatusPeminjaman();
         }
       })
       .catch((e) => {});
@@ -1082,13 +1079,13 @@ class Keranjang extends Component {
     if (this.props.dataUserLogin.role === "Member") {
       swal(
         "Informasi",
-        "Pelanggan MEMBER bisa meminjam hingga 5 buku dalam kurun waktu 10 HARI TERAKHIR, dengan syarat: \n4 buku novel \n3 buku komik. \n3 buku novel dan 2 buku komik. \n2 buku ensiklopedia \nMasing-masing jenis buku 1.",
+        "Pelanggan MEMBER bisa meminjam hingga 5 buku dalam kurun waktu 7 HARI TERAKHIR, dengan syarat: \n4 buku novel \n3 buku komik. \n3 buku novel dan 2 buku komik. \n2 buku ensiklopedia \nMasing-masing jenis buku 1.",
         "warning"
       );
     } else {
       swal(
         "Informasi",
-        "Pelanggan UMUM hanya bisa meminjam paling banyak 3 buku dalam kurun waktu 10 HARI TERAKHIR, dengan syarat: \n 2 buku novel. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
+        "Pelanggan UMUM hanya bisa meminjam paling banyak 2 buku dalam kurun waktu 7 HARI TERAKHIR, dengan syarat: \n 2 buku novel. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
         "warning"
       );
     }
@@ -1098,13 +1095,13 @@ class Keranjang extends Component {
     if (this.props.dataUserLogin.role === "Member") {
       swal(
         "Ditolak !!",
-        "Pelanggan MEMBER bisa meminjam hingga 5 buku dalam kurun waktu 10 HARI TERAKHIR, dengan syarat: \n4 buku novel \n3 buku komik. \n3 buku novel dan 2 buku komik. \n2 buku ensiklopedia \nMasing-masing jenis buku 1.",
+        "Pelanggan MEMBER bisa meminjam hingga 5 buku dalam kurun waktu 7 HARI TERAKHIR, dengan syarat: \n4 buku novel \n3 buku komik. \n3 buku novel dan 2 buku komik. \n2 buku ensiklopedia \nMasing-masing jenis buku 1.",
         "warning"
       );
     } else {
       swal(
         "Ditolak !!",
-        "Pelanggan UMUM hanya bisa meminjam paling banyak 3 buku dalam kurun waktu 10 HARI TERAKHIR, dengan syarat: \n 2 buku novel. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
+        "Pelanggan UMUM hanya bisa meminjam paling banyak 2 buku dalam kurun waktu 7 HARI TERAKHIR, dengan syarat: \n 2 buku novel. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
         "warning"
       );
     }
@@ -1182,7 +1179,7 @@ class Keranjang extends Component {
               </>
             ) : (
               <>
-                <Table className="table dt-responsive nowrap">
+                <Table className="dt-responsive nowrap">
                   <TableHead></TableHead>
                   <TableBody>
                     <TableRow>
@@ -1345,7 +1342,7 @@ class Keranjang extends Component {
                                 this.state.listBuku
                                   .map((x) => x.hargaSewa)
                                   .reduce((result, item) => result + item, 0)
-                              )}
+                              )}/hari
                             </Bold>
                           </TableData>
                         </TableRow>
@@ -1359,7 +1356,7 @@ class Keranjang extends Component {
                         options={{
                           title: {
                             display: true,
-                            text: "Riwayat Peminjaman 10 Hari Terakhir",
+                            text: "Riwayat Peminjaman 7 Hari Terakhir",
                             fontSize: 10,
                           },
                           legend: {

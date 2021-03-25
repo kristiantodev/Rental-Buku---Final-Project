@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import moment from "moment";
-import kop from "../../../kop.jpg";
+import kop from "../../../image/kop.jpg";
 import {
   TableReport,
   TableHead,
@@ -39,12 +39,13 @@ class ComponentToPrint extends Component {
          <TableReport className="table table-striped table-bordered dt-responsive nowrap">
                 <TableHead>
                   <TableRow>
+                  <TableHeader>No.</TableHeader>
                     <TableHeader>Nama</TableHeader>
-                    <TableHeader>Tanggal Pinjam</TableHeader>
-                    <TableHeader>Tanggal Kembali</TableHeader>
-                    <TableHeader>Jumlah</TableHeader>
-                    <TableHeader>Buku Pinjam</TableHeader>
-                    <TableHeader>Biaya Rental</TableHeader>
+                    <TableHeader width="50">Tanggal Pinjam</TableHeader>
+                    <TableHeader width="50">Tanggal Kembali</TableHeader>
+                    <TableHeader>Lama Sewa</TableHeader>
+                    <TableHeader>Buku</TableHeader>
+                    <TableHeader>Harga Sewa</TableHeader>
                     <TableHeader>Denda</TableHeader>
                     <TableHeader>Total Bayar</TableHeader>
                   </TableRow>
@@ -53,13 +54,14 @@ class ComponentToPrint extends Component {
                   {this.props.items.map((value, index) => {
                     return (
                       <TableRow align="center" key={index}>
+                        <TableData>{index+1}</TableData>
                         <TableData align="left">{value.namaUser}</TableData>
                         <TableData>
                           {moment(value.tglPinjam).format("YYYY-MM-DD")}
                         </TableData>
                         <TableData>{value.tglKembali}</TableData>
                         <TableData>
-                        {value.listBuku.length}
+                        {value.lamaPinjam} hari
                         </TableData>
                         <TableData align="left">
                         {value.listBuku.map((buku, idx) => {
@@ -73,23 +75,27 @@ class ComponentToPrint extends Component {
                           })}
                         </TableData>
                         <TableData>
-                          Rp.{" "}
-                          {this.changeRupiah(
-                            value.listBuku
-                              .map((x) => x.hargaSewa)
-                              .reduce((result, item) => result + item, 0)
-                          )}
+                        {value.listBuku.map((buku, idx) => {
+                            return (
+                              <ul key={idx}>
+                                <li>
+                                  Rp. {this.changeRupiah(buku.hargaSewa)}
+                                </li>
+                              </ul>
+                            );
+                          })}
+                          
                         </TableData>
                         <TableData align="left">
                           &nbsp;&nbsp;Rp. {this.changeRupiah(value.denda)}
                         </TableData>
                         <TableData>
-                          Rp.{" "}
+                        Rp.{" "}
                           {this.changeRupiah(
                             this.getTotalBayar(
                               value.listBuku
                                 .map((x) => x.hargaSewa)
-                                .reduce((result, item) => result + item, 0),
+                                .reduce((result, item) => result + (Number(item)*Number(value.lamaPinjam)), 0),
                               value.denda
                             )
                           )}

@@ -110,7 +110,7 @@ class DashboardPelanggan extends Component {
           namaBulan: "Desember"
         }
       ],
-      tahun:[2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030],
+      tahun:[],
       pengeluaran: {
         labels: [],
         datasets: [
@@ -213,6 +213,16 @@ class DashboardPelanggan extends Component {
       .catch(() => {
         swal("Gagal !", "Gagal mengambil data", "error");
       });
+
+      let tahun=[];
+      for(let i=2000; i<=2030;i++){
+          tahun.push(i);
+      }
+
+      this.setState({
+        tahun:tahun
+      })
+
   }
 
   setValueInput = (e) => {
@@ -293,11 +303,6 @@ class DashboardPelanggan extends Component {
     return ribuan;
   };
 
-  getTotalBayar = (biaya, denda) => {
-    var totalbayar = biaya + denda;
-    return totalbayar;
-  };
-
   checkAkses = () => {
     if (
       this.props.checkLogin === true &&
@@ -338,9 +343,9 @@ class DashboardPelanggan extends Component {
             <Card
               size="col-xl-4 col-md-6"
               color="card bg-primary mini-stat position-relative"
-              judul="Buku Belum Dikembalikan"
+              judul="Belum Dikembalikan"
               isi={this.state.totalBukuBelumDikembalikan + " Buku"}
-              icon="fas fa-clock display-2"
+              icon="fas fa-book-open display-2"
             />
             <Card
               size="col-xl-4 col-md-6"
@@ -415,9 +420,7 @@ class DashboardPelanggan extends Component {
                     <TableHeader>Tanggal Pinjam</TableHeader>
                     <TableHeader>Pengembalian</TableHeader>
                     <TableHeader>Buku yang dipinjam</TableHeader>
-                    <TableHeader>Biaya Sewa</TableHeader>
-                    <TableHeader>Denda</TableHeader>
-                    <TableHeader>Total bayar</TableHeader>
+                    <TableHeader>Biaya Sewa/hari</TableHeader>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -439,34 +442,22 @@ class DashboardPelanggan extends Component {
                             return (
                               <ul key={idx}>
                                 <li>
-                                  {buku.judulBuku} (Rp.{" "}
-                                  {this.changeRupiah(buku.hargaSewa)})
+                                  {buku.judulBuku}
                                 </li>
                               </ul>
                             );
                           })}
                         </TableData>
-                        <TableData>
-                          Rp.{" "}
-                          {this.changeRupiah(
-                            value.listBuku
-                              .map((x) => x.hargaSewa)
-                              .reduce((result, item) => result + item, 0)
-                          )}
-                        </TableData>
-                        <TableData>
-                          Rp. {this.changeRupiah(value.denda)}
-                        </TableData>
-                        <TableData>
-                          Rp.{" "}
-                          {this.changeRupiah(
-                            this.getTotalBayar(
-                              value.listBuku
-                                .map((x) => x.hargaSewa)
-                                .reduce((result, item) => result + item, 0),
-                              value.denda
-                            )
-                          )}
+                        <TableData align="left">
+                          {value.listBuku.map((buku, idx) => {
+                            return (
+                              <ul key={idx}>
+                                <li>
+                                  Rp. {this.changeRupiah(buku.hargaSewa)}
+                                </li>
+                              </ul>
+                            );
+                          })}
                         </TableData>
                       </TableRow>
                     );

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Header, Menu, Footer } from "../../../template/pelanggan";
-import gambarKomik from "../../../komik.jpg";
-import gambarNovel from "../../../novel.jpg";
-import gambarEnsiklopedia from "../../../ensiklopedia.jpg";
+import gambarKomik from "../../../image/komik.jpg";
+import gambarNovel from "../../../image/novel.jpg";
+import gambarEnsiklopedia from "../../../image/ensiklopedia.jpg";
 import TablePagination from "@material-ui/core/TablePagination";
 import swal from "sweetalert";
 import { Markup } from "interweave";
@@ -211,13 +211,13 @@ class BukuList extends Component {
     if (this.props.dataUserLogin.role === "Member") {
       swal(
         "Informasi",
-        "Pelanggan MEMBER bisa meminjam hingga 5 buku dalam kurun waktu 10 HARI TERAKHIR, dengan syarat: \n4 buku novel \n3 buku komik. \n3 buku novel dan 2 buku komik. \n2 buku ensiklopedia \nMasing-masing jenis buku 1.",
+        "Pelanggan MEMBER bisa meminjam hingga 5 buku dalam kurun waktu 7 HARI TERAKHIR, dengan syarat: \n4 buku novel \n3 buku komik. \n3 buku novel dan 2 buku komik. \n2 buku ensiklopedia \nMasing-masing jenis buku 1.",
         "warning"
       );
     } else {
       swal(
         "Informasi",
-        "Pelanggan UMUM hanya bisa meminjam paling banyak 2 buku dalam kurun waktu 10 HARI TERAKHIR, dengan syarat: \n 2 buku novel. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
+        "Pelanggan UMUM hanya bisa meminjam paling banyak 2 buku dalam kurun waktu 7 HARI TERAKHIR, dengan syarat: \n 2 buku novel. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
         "warning"
       );
     }
@@ -587,7 +587,7 @@ class BukuList extends Component {
                     isi={
                       this.props.dataUserLogin.role === "Member"
                         ? "5 Buku"
-                        : "3 Buku"
+                        : "2 Buku"
                     }
                     icon="fas fa-book display-2"
                   />

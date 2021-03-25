@@ -3,8 +3,10 @@ import { connect } from "react-redux";
 import { Header, Menu, Footer } from "../../../template/admin";
 import swal from "sweetalert";
 import moment from "moment";
+import ReactTooltip from "react-tooltip";
 import {
   Button,
+  Tooltip,
   IsiBody,
   HeaderContent,
   Content,
@@ -178,6 +180,7 @@ class Laporan extends Component {
   };
 
   render() {
+    console.log("Laporan", this.state.items)
     this.checkAkses();
     return (
       <>
@@ -247,6 +250,7 @@ class Laporan extends Component {
                     <TableHeader>Nama</TableHeader>
                     <TableHeader>Tanggal Pinjam</TableHeader>
                     <TableHeader>Tanggal Kembali</TableHeader>
+                    <TableHeader>Lama Sewa</TableHeader>
                     <TableHeader>Jumlah Pinjam</TableHeader>
                     <TableHeader>Biaya Rental</TableHeader>
                     <TableHeader>Denda</TableHeader>
@@ -262,16 +266,24 @@ class Laporan extends Component {
                           {moment(value.tglPinjam).format("YYYY-MM-DD")}
                         </TableData>
                         <TableData>{value.tglKembali}</TableData>
+                        <TableData>{value.lamaPinjam} hari</TableData>
                         <TableData>
-                        <ModalClick datatarget="#detail"><span onClick={() => {
+                        <Tooltip keterangan="Lihat Buku">
+                        <ModalClick datatarget="#detail">
+                          <span onClick={() => {
                                   this.detailData(value.idPinjam);
-                                }}>{value.listBuku.length}</span></ModalClick></TableData>
+                                }}>{value.listBuku.length} <Italic className="far fa-eye "/>
+                          </span>
+                          </ModalClick>
+                          </Tooltip>
+                            <ReactTooltip />
+                          </TableData>
                         <TableData>
                           Rp.{" "}
                           {this.changeRupiah(
                             value.listBuku
                               .map((x) => x.hargaSewa)
-                              .reduce((result, item) => result + item, 0)
+                              .reduce((result, item) => result + (Number(item)*Number(value.lamaPinjam)), 0)
                           )}
                         </TableData>
                         <TableData align="left">
@@ -283,7 +295,7 @@ class Laporan extends Component {
                             this.getTotalBayar(
                               value.listBuku
                                 .map((x) => x.hargaSewa)
-                                .reduce((result, item) => result + item, 0),
+                                .reduce((result, item) => result + (Number(item)*Number(value.lamaPinjam)), 0),
                               value.denda
                             )
                           )}
@@ -316,18 +328,6 @@ class Laporan extends Component {
                   <TableHead></TableHead>
                   <TableBody>
                     <TableRow>
-                      <TableData>ID Peminjaman</TableData>
-                      <TableData width="30">:</TableData>
-                      <TableData width="300">
-                        {this.state.detail.idPinjam}
-                      </TableData>
-                      <TableData
-                        rowSpan="4"
-                        width="250"
-                        align="center"
-                      ></TableData>
-                    </TableRow>
-                    <TableRow>
                       <TableData>ID Peminjam</TableData>
                       <TableData width="30">:</TableData>
                       <TableData>{this.state.detail.idUser}</TableData>
@@ -341,6 +341,11 @@ class Laporan extends Component {
                       <TableData width="250">Tanggal Peminjaman</TableData>
                       <TableData width="30">:</TableData>
                       <TableData>{this.state.detail.tglPinjam}</TableData>
+                    </TableRow>
+                    <TableRow>
+                      <TableData width="250">Tanggal Pengembalian</TableData>
+                      <TableData width="30">:</TableData>
+                      <TableData>{this.state.detail.tglKembali}</TableData>
                     </TableRow>
                   </TableBody>
                 </Table>

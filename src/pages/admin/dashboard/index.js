@@ -78,34 +78,7 @@ class Dashboard extends Component {
           namaBulan: "Desember",
         },
       ],
-      tahun: [
-        2005,
-        2006,
-        2007,
-        2008,
-        2009,
-        2010,
-        2011,
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019,
-        2020,
-        2021,
-        2022,
-        2023,
-        2024,
-        2025,
-        2026,
-        2027,
-        2028,
-        2029,
-        2030,
-      ],
+      tahun: [],
       pelangganTeraktif: {
         labels: [],
         datasets: [
@@ -264,11 +237,18 @@ class Dashboard extends Component {
           ],
         };
 
+        let tahun=[];
+        for(let i=2000; i<=2030;i++){
+            tahun.push(i);
+        }
+
         this.setState({
           pelangganTeraktif: dataUpdate,
           bukuPopuler: bukuUpdate,
           pendapatanBulan: pdpUpdate,
+          tahun:tahun
         });
+
       })
       .catch(() => {
         swal("Gagal !", "Gagal mengambil data", "error");
@@ -499,6 +479,13 @@ class Dashboard extends Component {
                         display: true,
                         position: "right",
                       },
+                      scales: {
+                        yAxes: [{
+                           ticks: {
+                              min: 0
+                           }
+                        }]
+                     }
                     }}
                   />
                 </CardDashboard>

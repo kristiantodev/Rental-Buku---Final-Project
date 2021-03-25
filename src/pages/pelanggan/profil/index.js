@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Header, Menu, Footer } from "../../../template/pelanggan";
-import gambarKomik from "../../../adm.jpg";
+import gambarKomik from "../../../image/adm.jpg";
 import swal from 'sweetalert';
 import $ from 'jquery';
 import {

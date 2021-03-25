@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import logo from "../../img.png";
+import logo from "../../image/img.png"
 import { Link } from "react-router-dom";
 import swal from 'sweetalert';
 import {

@@ -30,6 +30,8 @@ import {
 import TablePagination from "@material-ui/core/TablePagination";
 import swal from "sweetalert";
 import $ from "jquery";
+import ReactToPrint from "react-to-print";
+import ComponentToPrint from './ComponentToPrint';
 
 class User extends Component {
   constructor(props) {
@@ -386,6 +388,19 @@ class User extends Component {
                   <Italic className="fas fa-user-plus" />
                   &nbsp; Tambah Admin Baru
                 </Button>
+              </ModalClick>&nbsp;
+              <ModalClick>
+            <ReactToPrint
+                trigger={() => {
+                  return (
+                    <Button className="btn btn-primary">
+                      <Italic className="fas fa-print" />
+                      &nbsp; Cetak Data Pelanggan
+                    </Button>
+                  );
+                }}
+                content={() => this.componentRef}
+              />
               </ModalClick>
             </Div>
           </HeaderContent>
@@ -428,8 +443,8 @@ class User extends Component {
                           <TableData>{value.email}</TableData>
                           <TableData>{value.phone}</TableData>
                           <TableData>{value.role}</TableData>
-                          <TableData>
-                            <Tooltip keterangan="Edit Profil">
+                          <TableData align="center">
+                            {/* <Tooltip keterangan="Edit Profil">
                               <Button
                                 className="btn btn-outline-warning"
                                 onClick={() =>
@@ -445,7 +460,7 @@ class User extends Component {
                                 <Italic className="fas fa-feather" />
                               </Button>
                             </Tooltip>
-                            <ReactTooltip />
+                            <ReactTooltip /> */}
                             <Tooltip keterangan="Reset Password ke Default">
                               <Button
                                 className="btn btn-outline-info"
@@ -620,6 +635,10 @@ class User extends Component {
               </Button>
             </Div>
           </ModalContent>
+        </Modal>
+
+        <Modal id="laporan">
+        <ComponentToPrint ref={el => (this.componentRef = el)} users={this.state.users}/>
         </Modal>
       </>
     );

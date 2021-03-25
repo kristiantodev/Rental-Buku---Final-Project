@@ -4,6 +4,8 @@ import { Header, Menu, Footer } from "../../../template/admin";
 import ReactTooltip from "react-tooltip";
 import { Editor } from "@tinymce/tinymce-react";
 import { Markup } from "interweave";
+import ReactToPrint from "react-to-print";
+import ComponentToPrint from './ComponentToPrint';
 import {
   Button,
   IsiBody,
@@ -32,9 +34,9 @@ import {
 } from "../../../component";
 import TablePagination from "@material-ui/core/TablePagination";
 import swal from "sweetalert";
-import gambarKomik from "../../../komik.jpg";
-import gambarNovel from "../../../novel.jpg";
-import gambarEnsiklopedia from "../../../ensiklopedia.jpg";
+import gambarKomik from "../../../image/komik.jpg";
+import gambarNovel from "../../../image/novel.jpg";
+import gambarEnsiklopedia from "../../../image/ensiklopedia.jpg";
 import $ from 'jquery';
 
 class Buku extends Component {
@@ -58,7 +60,9 @@ class Buku extends Component {
       keterangan: "",
       disable : false,
       dataEdit : {},
-      cari:""
+      cari:"",
+      operator: "",
+      cStok : 0,
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -238,7 +242,9 @@ class Buku extends Component {
       keterangan: "",
       act : 0,
       disable : false,
-      dataEdit : {}
+      dataEdit : {},
+      cStok:0,
+      operator:""
     });
   };
 
@@ -302,6 +308,25 @@ class Buku extends Component {
 
   updateBuku = () => {
     let obj = this.state;
+    let stokUpdate = obj.stok;
+    let stokUpdateIsi;
+
+    if(obj.operator === "+"){
+      if(obj.cStok < 1){
+        swal("Gagal !", "Stok tidak boleh kurang dari 0", "error");
+      }else if(obj.cStok >= 1){
+        stokUpdateIsi = Number(Number(stokUpdate) + Number(obj.cStok));
+      }
+    }else if(obj.operator === "-"){
+      if(obj.cStok < 1){
+        swal("Gagal !", "Stok tidak boleh kurang dari 0", "error");
+      }else if(obj.cStok >= 1){
+        stokUpdateIsi = Number(Number(stokUpdate) - Number(obj.cStok));
+      }
+    }else{
+        stokUpdateIsi = stokUpdate;
+    }
+
     if (
       obj.idBuku === "" ||
       obj.judulBuku === "" ||
@@ -312,6 +337,8 @@ class Buku extends Component {
       obj.keterangan === ""
     ) {
       swal("Gagal !", "Semua Data wajib diisi", "error");
+    }else if(obj.stok < 0 || obj.hargaSewa < 0){
+      swal("Gagal !", "Stok atau harga sewa tidak boleh kurang dari 0", "error");
     } else {
       const objekBuku = {
         idBuku: this.state.idBuku,
@@ -319,7 +346,7 @@ class Buku extends Component {
         pengarang: this.state.pengarang,
         idJenisBuku: this.state.idJenisBuku,
         hargaSewa: this.state.hargaSewa,
-        stok: this.state.stok,
+        stok: stokUpdateIsi,
         keterangan: this.state.keterangan,
       };
 
@@ -388,6 +415,13 @@ class Buku extends Component {
     $("#buku .close").click();
   };
 
+  changeRupiah = (bilangan) => {
+    var reverse = bilangan.toString().split("").reverse().join(""),
+    ribuan = reverse.match(/\d{1,3}/g);
+    ribuan = ribuan.join(".").split("").reverse().join("");
+    return ribuan;
+  };
+
   checkAkses=()=>{
     if (
       this.props.checkLogin === true &&
@@ -406,6 +440,7 @@ class Buku extends Component {
 
   render() {
    this.checkAkses();
+   console.log("operator", this.state.operator)
     return (
       <>
         <Header />
@@ -419,6 +454,19 @@ class Buku extends Component {
                   <Italic className="fas fa-plus" />
                   &nbsp; Tambah Buku Baru
                 </Button>
+              </ModalClick>{" "}
+              <ModalClick>
+            <ReactToPrint
+                trigger={() => {
+                  return (
+                    <Button className="btn btn-primary">
+                      <Italic className="fas fa-print" />
+                      &nbsp; Cetak Data Buku
+                    </Button>
+                  );
+                }}
+                content={() => this.componentRef}
+              />
               </ModalClick>
             </Div>
           </HeaderContent>
@@ -473,7 +521,7 @@ class Buku extends Component {
                           <TableData>{value.jenisBuku}</TableData>
                           <TableData align="center">{value.stok}</TableData>
                           <TableData align="center">
-                            Rp. {value.hargaSewa}
+                            Rp. {this.changeRupiah(value.hargaSewa)}/hari
                           </TableData>
                           <TableData align="center">
                           <Tooltip keterangan="Detail">
@@ -489,15 +537,6 @@ class Buku extends Component {
                               </Button>
                             </Tooltip>
                             <ReactTooltip />
-                            <Tooltip keterangan="Hapus">
-                              <Button
-                                className="btn btn-outline-danger"
-                                onClick={() => this.onClickDelete(value.idBuku)}
-                              >
-                                <Italic className="fas fa-trash" />
-                              </Button>
-                            </Tooltip>
-                            <ReactTooltip />
                             <Tooltip keterangan="Edit">
                               <Button
                                 className="btn btn-outline-warning"
@@ -509,7 +548,15 @@ class Buku extends Component {
                               </Button>
                             </Tooltip>
                             <ReactTooltip />
-                            
+                            <Tooltip keterangan="Hapus">
+                              <Button
+                                className="btn btn-outline-danger"
+                                onClick={() => this.onClickDelete(value.idBuku)}
+                              >
+                                <Italic className="fas fa-trash" />
+                              </Button>
+                            </Tooltip>
+                            <ReactTooltip />
                           </TableData>
                         </TableRow>
                       );
@@ -595,7 +642,7 @@ class Buku extends Component {
                   <Div className="form-group">
                     <Input
                       type="number"
-                      placeholder="Harga Sewa"
+                      placeholder="Harga Sewa Harian"
                       name="hargaSewa"
                       onChange={this.setValueInput}
                       value={this.state.hargaSewa}
@@ -626,6 +673,43 @@ class Buku extends Component {
                       ))}
                     </Select>
                   </Div>
+                  {this.state.act !== 0 ? 
+                  <>
+                  <Div className="form-group row">
+                  <Div className="col-5">
+                    <Input
+                      type="number"
+                      placeholder="Stok"
+                      name="stok"
+                      onChange={this.setValueInput}
+                      value={this.state.stok}
+                      disabled={this.state.disable}
+                    />
+                  </Div>
+                  <Div>
+                  <Select
+                      value={this.state.operator}
+                      onChange={this.setValueInput}
+                      name="operator"
+                    >
+                      <Option value="">Aksi Stok</Option>
+                      <Option value="+">+</Option>
+                      <Option value="-">-</Option>
+                    </Select>
+                  </Div>
+                  <Div className="col-4">
+                  <Input
+                      type="number"
+                      placeholder="Stok"
+                      name="cStok"
+                      onChange={this.setValueInput}
+                      value={this.state.cStok}
+                    />
+                  </Div>
+                  </Div>
+                  </>
+                   : 
+                  <>
                   <Div className="form-group">
                     <Input
                       type="number"
@@ -635,6 +719,8 @@ class Buku extends Component {
                       value={this.state.stok}
                     />
                   </Div>
+                  </>}
+                  
                 </Div>
               </Div>
               <Label>Keterangan / Sinopsis :</Label>
@@ -719,6 +805,10 @@ class Buku extends Component {
               </Table>
             </Div>
           </ModalContent>
+        </Modal>
+
+        <Modal id="laporan">
+        <ComponentToPrint ref={el => (this.componentRef = el)} buku={this.state.books}/>
         </Modal>
       </>
     );
