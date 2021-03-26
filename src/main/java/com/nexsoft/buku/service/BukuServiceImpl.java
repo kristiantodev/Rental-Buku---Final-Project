@@ -1,6 +1,7 @@
 package com.nexsoft.buku.service;
 
 import com.nexsoft.buku.model.Buku;
+import com.nexsoft.buku.model.JenisBuku;
 import com.nexsoft.buku.repository.BukuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,26 @@ public class BukuServiceImpl implements BukuService{
 
         return pd;
 
+    }
+
+    public List<JenisBuku> getDataJenisBuku() {
+        List<JenisBuku> pd;
+
+        try{
+            pd = bukuRepository.getDataJenisBuku();
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+
+        return pd;
+
+    }
+
+    public void updateStatus(Buku buku) {
+        synchronized (this) {
+            bukuRepository.updateStatus(buku);
+        }
     }
 
     public Buku checkStok(String idBuku) {

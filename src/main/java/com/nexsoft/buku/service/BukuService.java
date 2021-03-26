@@ -1,6 +1,7 @@
 package com.nexsoft.buku.service;
 
 import com.nexsoft.buku.model.Buku;
+import com.nexsoft.buku.model.JenisBuku;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface BukuService {
     boolean isJudulBukuExist(Buku buku);
     boolean isJudulBukuEditExist(Buku buku);
     void updateBuku(Buku buku);
+    List<JenisBuku> getDataJenisBuku();
+    void updateStatus(Buku buku);
 }

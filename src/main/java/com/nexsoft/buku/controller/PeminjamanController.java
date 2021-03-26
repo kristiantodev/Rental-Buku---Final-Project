@@ -37,6 +37,8 @@ public class PeminjamanController {
 
                 if(buku.getStok() == 0){
                     return new ResponseEntity<>(new CustomErrorType("Peminjaman gagal! Stok Buku dengan ID " + peminjaman.getListBuku().get(i).getIdBuku() + " sudah habis."), HttpStatus.CONFLICT);
+                }else if(buku.getIsActive() == 2){
+                    return new ResponseEntity<>(new CustomErrorType("Peminjaman gagal! Buku dengan ID " + peminjaman.getListBuku().get(i).getIdBuku() + " sudah tidak tersedia."), HttpStatus.CONFLICT);
                 }
             }
             peminjamanService.save(peminjaman);

@@ -26,7 +26,7 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
 
     public User login(String username, String password) {
 
-        return jdbcTemplate.query("SELECT * FROM users WHERE username = ? AND password = ?",
+        return jdbcTemplate.query("SELECT * FROM users WHERE BINARY username = ? AND password = ?",
                 preparedStatement -> {
                     preparedStatement.setString(1, username);
                     preparedStatement.setString(2, password);

@@ -1,6 +1,7 @@
 package com.nexsoft.buku.repository;
 
 import com.nexsoft.buku.model.Buku;
+import com.nexsoft.buku.model.JenisBuku;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface BukuRepository {
     Buku findByJudul(String judulBuku);
     Buku findByJudulEdit(String idBuku, String judulBuku);
     void updateBuku(Buku buku);
+    List<JenisBuku> getDataJenisBuku();
+    void updateStatus(Buku buku);
 }

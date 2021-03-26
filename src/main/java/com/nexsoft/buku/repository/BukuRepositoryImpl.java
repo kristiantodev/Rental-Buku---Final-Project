@@ -1,6 +1,7 @@
 package com.nexsoft.buku.repository;
 
 import com.nexsoft.buku.model.Buku;
+import com.nexsoft.buku.model.JenisBuku;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ public class BukuRepositoryImpl implements BukuRepository{
 
 
     public List<Buku> getDataBuku(){
-        return jdbcTemplate.query("select b.*, j.jenisBuku from buku b, jenisbuku j WHERE b.idJenisBuku = j.idJenisBuku"
+        return jdbcTemplate.query("select b.*, j.jenisBuku from buku b, jenisbuku j WHERE b.idJenisBuku = j.idJenisBuku order by b.isActive asc, b.judulBuku asc"
                         ,
                 (rs,rowNum)->
                         new Buku(
@@ -25,13 +26,28 @@ public class BukuRepositoryImpl implements BukuRepository{
                                 rs.getString("jenisBuku"),
                                 rs.getInt("hargaSewa"),
                                 rs.getInt("stok"),
+                                rs.getInt("isActive"),
                                 rs.getString("keterangan")
                         ));
     }
 
+    public List<JenisBuku> getDataJenisBuku(){
+        return jdbcTemplate.query("select*from jenisbuku"
+                ,
+                (rs,rowNum)->
+                        new JenisBuku(
+                                rs.getInt("idJenisBuku"),
+                                rs.getString("jenisBuku")
+                        ));
+    }
+
+    public void updateStatus(Buku buku){
+        jdbcTemplate.update("UPDATE buku SET isActive = "+buku.getIsActive()+" WHERE idBuku = '"+buku.getIdBuku()+"'");
+    }
+
     public List<Buku> serchingBuku(String keyword){
         return jdbcTemplate.query("select b.*, j.jenisBuku from buku b, jenisbuku j WHERE (b.idBuku LIKE ? OR b.judulBuku LIKE ?" +
-                        "OR b.pengarang LIKE ? OR b.hargaSewa LIKE ? OR b.stok LIKE ? OR j.jenisBuku LIKE ?) AND b.idJenisBuku = j.idJenisBuku",
+                        "OR b.pengarang LIKE ? OR b.hargaSewa LIKE ? OR b.stok LIKE ? OR j.jenisBuku LIKE ?) AND b.idJenisBuku = j.idJenisBuku order by b.isActive asc, b.judulBuku asc",
                 preparedStatement -> {
                     preparedStatement.setString(1, "%" + keyword + "%");
                     preparedStatement.setString(2, "%" + keyword + "%");
@@ -49,6 +65,7 @@ public class BukuRepositoryImpl implements BukuRepository{
                                 rs.getString("jenisBuku"),
                                 rs.getInt("hargaSewa"),
                                 rs.getInt("stok"),
+                                rs.getInt("isActive"),
                                 rs.getString("keterangan")
                         ));
     }
@@ -64,7 +81,7 @@ public class BukuRepositoryImpl implements BukuRepository{
         int start = (page - 1) * limit;
 
         return jdbcTemplate.query("select b.*, j.jenisBuku from buku b, jenisbuku j WHERE (b.idBuku LIKE ? OR b.judulBuku LIKE ?" +
-                        "OR b.pengarang LIKE ? OR b.hargaSewa LIKE ? OR b.stok LIKE ? OR j.jenisBuku LIKE ?) AND b.idJenisBuku = j.idJenisBuku LIMIT " + start +"," + limit + ";",
+                        "OR b.pengarang LIKE ? OR b.hargaSewa LIKE ? OR b.stok LIKE ? OR j.jenisBuku LIKE ?) AND b.idJenisBuku = j.idJenisBuku order by b.isActive asc, b.judulBuku asc LIMIT " + start +"," + limit + ";",
                 preparedStatement -> {
                     preparedStatement.setString(1, "%" + keyword + "%");
                     preparedStatement.setString(2, "%" + keyword + "%");
@@ -82,6 +99,7 @@ public class BukuRepositoryImpl implements BukuRepository{
                                 rs.getString("jenisBuku"),
                                 rs.getInt("hargaSewa"),
                                 rs.getInt("stok"),
+                                rs.getInt("isActive"),
                                 rs.getString("keterangan")
                         ));
     }
@@ -96,7 +114,7 @@ public class BukuRepositoryImpl implements BukuRepository{
 
         int start = (page - 1) * limit;
 
-        return jdbcTemplate.query("select b.*, j.jenisBuku from buku b, jenisbuku j WHERE b.idJenisBuku = j.idJenisBuku LIMIT " + start + "," + limit + ";",
+        return jdbcTemplate.query("select b.*, j.jenisBuku from buku b, jenisbuku j WHERE b.idJenisBuku = j.idJenisBuku order by b.isActive asc, b.judulBuku asc LIMIT " + start + "," + limit + ";",
                 (rs, rowNum) ->
                         new Buku(
                                 rs.getString("idBuku"),
@@ -106,6 +124,7 @@ public class BukuRepositoryImpl implements BukuRepository{
                                 rs.getString("jenisBuku"),
                                 rs.getInt("hargaSewa"),
                                 rs.getInt("stok"),
+                                rs.getInt("isActive"),
                                 rs.getString("keterangan")
                         ));
     }
@@ -115,8 +134,8 @@ public class BukuRepositoryImpl implements BukuRepository{
     }
 
     public void addBuku(Buku buku){
-        jdbcTemplate.update("INSERT INTO buku(idBuku, judulbuku, pengarang, idJenisBuku, hargaSewa, stok, keterangan) VALUES (?,?,?,?,?,?,?)",
-                buku.getIdBuku(), buku.getJudulBuku(), buku.getPengarang(), buku.getIdJenisBuku(), buku.getHargaSewa(), buku.getStok(), buku.getKeterangan());
+        jdbcTemplate.update("INSERT INTO buku(idBuku, judulbuku, pengarang, idJenisBuku, hargaSewa, stok, isActive, keterangan) VALUES (?,?,?,?,?,?,?,?)",
+                buku.getIdBuku(), buku.getJudulBuku(), buku.getPengarang(), buku.getIdJenisBuku(), buku.getHargaSewa(), buku.getStok(), 1, buku.getKeterangan());
     }
 
     public void updateBuku(Buku buku){
@@ -135,7 +154,8 @@ public class BukuRepositoryImpl implements BukuRepository{
                 (rs,rowNum)->
                         new Buku(
                                 rs.getString("idBuku"),
-                                rs.getInt("stok")
+                                rs.getInt("stok"),
+                                rs.getInt("isActive")
                         )).get(0);
     }
 

@@ -1,6 +1,7 @@
 package com.nexsoft.buku.controller;
 
 import com.nexsoft.buku.model.Buku;
+import com.nexsoft.buku.model.JenisBuku;
 import com.nexsoft.buku.service.BukuService;
 import com.nexsoft.buku.util.CustomErrorType;
 import com.nexsoft.buku.util.CustomSuccessType;
@@ -31,6 +32,17 @@ public class BukuController {
         }
 
         return new ResponseEntity<>(bukuList, HttpStatus.OK);
+    }
+
+    @GetMapping("/jenisbuku/")
+    public ResponseEntity<List<JenisBuku>> listAllJBuku() {
+        List<JenisBuku> buku= bukuService.getDataJenisBuku();
+
+        if(buku.isEmpty()) {
+            return new ResponseEntity<>(buku, HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(buku, HttpStatus.OK);
     }
 
     @GetMapping("/bukupaging/")
@@ -97,6 +109,14 @@ public class BukuController {
             bukuService.updateBuku(buku);
             return new ResponseEntity<>(new CustomSuccessType("Update buku dengan ID "+buku.getIdBuku()+" berhasil !! "), HttpStatus.OK);
         }
+    }
+
+    @PutMapping("/updatestatusbuku/")
+    public ResponseEntity<?> updateStatusBuku(@RequestBody Buku buku) {
+
+        bukuService.updateStatus(buku);
+        return new ResponseEntity<>(new CustomSuccessType("Berhasil merubah status Buku!! "), HttpStatus.OK);
+
     }
 
 

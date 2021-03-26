@@ -8,6 +8,7 @@ public class Buku {
     private String jenisBuku;
     private int hargaSewa;
     private int stok;
+    private int isActive;
     private String keterangan;
 
     public Buku() {
@@ -25,9 +26,27 @@ public class Buku {
         this.keterangan = keterangan;
     }
 
-    public Buku(String idBuku, int stok) {
+    public Buku(String idBuku, String judulBuku, String pengarang, int idJenisBuku, String jenisBuku, int hargaSewa, int stok, int isActive, String keterangan) {
+        this.idBuku = idBuku;
+        this.judulBuku = judulBuku;
+        this.pengarang = pengarang;
+        this.idJenisBuku = idJenisBuku;
+        this.jenisBuku = jenisBuku;
+        this.hargaSewa = hargaSewa;
+        this.stok = stok;
+        this.isActive = isActive;
+        this.keterangan = keterangan;
+    }
+
+    public Buku(String idBuku, int stok, int isActive) {
         this.idBuku = idBuku;
         this.stok = stok;
+        this.isActive = isActive;
+    }
+
+    public Buku(String idBuku, int isActive) {
+        this.idBuku = idBuku;
+        this.isActive = isActive;
     }
 
     public Buku(String idBuku, String judulBuku, String pengarang, int idJenisBuku, int hargaSewa, int stok, String keterangan) {
@@ -96,6 +115,14 @@ public class Buku {
         this.stok = stok;
     }
 
+    public int getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(int isActive) {
+        this.isActive = isActive;
+    }
+
     public String getKeterangan() {
         return keterangan;
     }
@@ -114,9 +141,8 @@ public class Buku {
                 ", jenisBuku='" + jenisBuku + '\'' +
                 ", hargaSewa=" + hargaSewa +
                 ", stok=" + stok +
+                ", isActive=" + isActive +
                 ", keterangan='" + keterangan + '\'' +
                 '}';
     }
-
-
 }
