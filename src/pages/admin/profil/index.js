@@ -389,7 +389,7 @@ class ProfilAdmin extends Component {
             <Div className="modal-body">
             <Div className="form-group">
               <Input
-                type="text"
+                type="hidden"
                 placeholder=""
                 value={this.state.idUser}
                 name="idUser"

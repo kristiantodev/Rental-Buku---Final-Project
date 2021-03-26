@@ -87,7 +87,7 @@ class BukuList extends Component {
         let dataEnsiklopedia = this.state.books.filter(
           (x) => x.jenisBuku === "Ensiklopedia"
         );
-        const total = this.state.books.length;
+        const total = this.state.books.filter(a => a.isActive === 1).length;
 
         this.setState({
           totalRows: total,
@@ -155,7 +155,7 @@ class BukuList extends Component {
             items: json2,
           });
 
-          const total = json.length;
+          const total = json.filter(a => a.isActive === 1).length;
           this.setState({ totalRows: total });
         })
         .catch((e) => {
@@ -397,14 +397,14 @@ class BukuList extends Component {
                 <Tablist>
                   <Li className="nav-item">
                     <Tabitem className="nav-link active" href="#allBuku">
-                      Semua Buku ({this.state.books.length})
+                      Semua Buku ({this.state.books.filter(a => a.isActive === 1).length})
                     </Tabitem>
                   </Li>
                   <Li className="nav-item">
                     <Tabitem className="nav-link" href="#komik">
                       Komik (
                       {
-                        this.state.books.filter((x) => x.jenisBuku === "Komik")
+                        this.state.books.filter((x) => x.jenisBuku === "Komik" && x.isActive === 1)
                           .length
                       }
                       )
@@ -414,7 +414,7 @@ class BukuList extends Component {
                     <Tabitem className="nav-link" href="#novel">
                       Novel (
                       {
-                        this.state.books.filter((x) => x.jenisBuku === "Novel")
+                        this.state.books.filter((x) => x.jenisBuku === "Novel" && x.isActive === 1)
                           .length
                       }
                       )
@@ -425,7 +425,7 @@ class BukuList extends Component {
                       Ensiklopedia (
                       {
                         this.state.books.filter(
-                          (x) => x.jenisBuku === "Ensiklopedia"
+                          (x) => x.jenisBuku === "Ensiklopedia" && x.isActive === 1
                         ).length
                       }
                       )
@@ -449,7 +449,7 @@ class BukuList extends Component {
                       </Div>
                     </Div>
                     <Row>
-                      {this.state.items.map((value, index) => {
+                      {this.state.items.filter(a => a.isActive === 1).map((value, index) => {
                         return (
                           <CardBuku
                             key={index}
@@ -483,7 +483,7 @@ class BukuList extends Component {
                   </Tabpane>
                   <Tabpane className="tab-pane p-3" id="komik">
                     <Row>
-                      {this.state.komik.map((value, index) => {
+                      {this.state.komik.filter(a => a.isActive === 1).map((value, index) => {
                         return (
                           <CardBuku
                             key={index}
@@ -509,7 +509,7 @@ class BukuList extends Component {
                   </Tabpane>
                   <Tabpane className="tab-pane p-3" id="novel">
                     <Row>
-                      {this.state.novel.map((value, index) => {
+                      {this.state.novel.filter(a => a.isActive === 1).map((value, index) => {
                         return (
                           <CardBuku
                             key={index}
@@ -535,7 +535,7 @@ class BukuList extends Component {
                   </Tabpane>
                   <Tabpane className="tab-pane p-3" id="ensiklopedia">
                     <Row>
-                      {this.state.ensiklopedia.map((value, index) => {
+                      {this.state.ensiklopedia.filter(a => a.isActive === 1).map((value, index) => {
                         return (
                           <CardBuku
                             key={index}

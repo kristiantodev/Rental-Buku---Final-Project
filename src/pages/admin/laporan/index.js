@@ -379,14 +379,7 @@ class Laporan extends Component {
           </Modal>     
 
           <Modal id="laporan">
-            <ModalContent className="modal-dialog modal-lg">
-              <Div className="modal-header bg-primary">
-                <ModalHeader judulheader="Laporan Print" />
-              </Div>
-              <Div className="modal-body">
               <ComponentToPrint ref={el => (this.componentRef = el)} items={this.state.laporan}/>
-              </Div>
-            </ModalContent>
           </Modal>   
       </>
     );

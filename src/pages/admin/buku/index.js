@@ -192,39 +192,6 @@ class Buku extends Component {
     });
   };
 
-  onClickDelete = (id) => {
-    swal({
-      title: "Apakah anda yakin ?",
-      text: "Buku akan dihapus secara permanen...",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((konfirmasi) => {
-      if (konfirmasi) {
-        fetch("http://localhost:8080/api/buku/" + id, {
-          method: "delete",
-          headers: {
-            "Content-Type": "application/json; ; charset=utf-8",
-            "Access-Control-Allow-Headers": "Authorization, Content-Type",
-            "Access-Control-Allow-Origin": "*",
-          },
-        })
-          .then((response) => response.json())
-          .then((json) => {
-            if (typeof json.errorMessage !== "undefined") {
-              swal("Gagal !", json.errorMessage, "error");
-            } else if (typeof json.successMessage !== "undefined") {
-              swal("Berhasil !", json.successMessage, "success");
-              this.getBooks();
-            }
-          })
-          .catch((e) => {});
-      } else {
-        swal("Batal !", "Hapus buku dibatalkan...", "error");
-      }
-    });
-  };
-
   setValueInput = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -516,7 +483,11 @@ class Buku extends Component {
                               alt="Buku"
                             />
                           </TableData>
-                          <TableData align="center">{value.idBuku}</TableData>
+                          <TableData align="center">
+                            {value.isActive === 1 ? <><Italic className="fas fa-check text-success"/> </>
+                            :
+                            <><Italic className="fas fa-times text-danger"/> </>}
+                            {value.idBuku}</TableData>
                           <TableData>{value.judulBuku}</TableData>
                           <TableData>{value.jenisBuku}</TableData>
                           <TableData align="center">{value.stok}</TableData>
@@ -543,17 +514,24 @@ class Buku extends Component {
                                 datatoggle="modal"
                                 datatarget="#buku"
                                 onClick={() => this.editClick(value.idBuku)}
+                                hidden={value.isActive === 1 ? false : true}
                               >
                                 <Italic className="fas fa-edit" />
                               </Button>
                             </Tooltip>
                             <ReactTooltip />
-                            <Tooltip keterangan="Hapus">
+                            <Tooltip keterangan="Aktifkan Buku">
                               <Button
-                                className="btn btn-outline-danger"
-                                onClick={() => this.onClickDelete(value.idBuku)}
+                                className="btn btn-outline-secondary"
+                                hidden={value.isActive === 1 ? false : true}
                               >
-                                <Italic className="fas fa-trash" />
+                                <Italic className="fas fa-times" />
+                              </Button>
+                              <Button
+                                className="btn btn-outline-success"
+                                hidden={value.isActive === 2 ? false : true}
+                              >
+                                <Italic className="fas fa-check" />
                               </Button>
                             </Tooltip>
                             <ReactTooltip />

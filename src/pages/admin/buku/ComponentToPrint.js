@@ -39,6 +39,7 @@ class ComponentToPrint extends Component {
                     <TableHeader>Pengarang</TableHeader>
                     <TableHeader>Jenis Buku</TableHeader>
                     <TableHeader>Stok Tersisa</TableHeader>
+                    <TableHeader>Status Buku</TableHeader>
                     <TableHeader>Biaya Sewa</TableHeader>
                   </TableRow>
                 </TableHead>
@@ -52,7 +53,8 @@ class ComponentToPrint extends Component {
                         <TableData>{value.pengarang}</TableData>
                         <TableData>{value.jenisBuku}</TableData>
                         <TableData align="center">{value.stok} buku</TableData>
-                        <TableData align="center">Rp. {this.changeRupiah(value.hargaSewa)}</TableData>
+                        <TableData align="center">{value.isActive === 1 ? "Aktif" : "Tidak Aktif"}</TableData>
+                        <TableData align="center">Rp. {this.changeRupiah(value.hargaSewa)}/hari</TableData>
                       </TableRow>
                     );
                   })}

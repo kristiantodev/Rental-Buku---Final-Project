@@ -701,7 +701,9 @@ class Keranjang extends Component {
       dangerMode: true,
     }).then((konfirmasi) => {
       if (konfirmasi) {
-        fetch("http://localhost:8080/api/hapusisikeranjang/" + id, {
+
+        if(this.state.listBuku.length === 1){
+          fetch("http://localhost:8080/api/cart/" + this.state.peminjaman.idCart, {
           method: "delete",
           headers: {
             "Content-Type": "application/json; ; charset=utf-8",
@@ -720,6 +722,29 @@ class Keranjang extends Component {
             }
           })
           .catch((e) => {});
+
+        }else{
+          fetch("http://localhost:8080/api/hapusisikeranjang/" + id, {
+          method: "delete",
+          headers: {
+            "Content-Type": "application/json; ; charset=utf-8",
+            "Access-Control-Allow-Headers": "Authorization, Content-Type",
+            "Access-Control-Allow-Origin": "*",
+          },
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            if (typeof json.errorMessage !== "undefined") {
+              swal("Gagal !", json.errorMessage, "error");
+            } else if (typeof json.successMessage !== "undefined") {
+              swal("Berhasil !", json.successMessage, "success");
+              this.getPeminjaman();
+              this.getStatusPeminjaman();
+            }
+          })
+          .catch((e) => {});
+        }
+        
       } else {
         swal("Batal !", "Hapus buku dari keranjang dibatalkan...", "error");
       }
