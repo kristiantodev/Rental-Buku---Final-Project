@@ -191,7 +191,6 @@ class User extends Component {
     console.log(obj.passwordUlangi);
 
     if (
-      obj.idUser === "" ||
       obj.username === "" ||
       obj.password === "" ||
       obj.namaUser === "" ||
@@ -204,7 +203,6 @@ class User extends Component {
       swal("Gagal !", "Password dan Konfirmasi password tidak sesuai", "error");
     } else {
       const objekDataAdmin = {
-        idUser: this.state.idUser,
         username: this.state.username,
         password: this.state.password,
         namaUser: this.state.namaUser,
@@ -214,7 +212,7 @@ class User extends Component {
         role: "Admin",
       };
 
-      fetch("http://localhost:8080/api/addadmin/", {
+      fetch("http://localhost:8080/api/registrasi/", {
         method: "post",
         headers: {
           "Content-Type": "application/json; ; charset=utf-8",
@@ -293,7 +291,7 @@ class User extends Component {
       text: "Password Pelanggan akan dirubah ke default (password = username)",
       icon: "warning",
       buttons: true,
-      dangerMode: true,
+      dangerMode: false,
     }).then((konfirmasi) => {
       if (konfirmasi) {
         fetch("http://localhost:8080/api/updatepassworddefault/", {
@@ -501,15 +499,6 @@ class User extends Component {
               <ModalHeader judulheader="Form Tambah Admin" />
             </Div>
             <Div className="modal-body">
-              <Div className="form-group">
-                <Input
-                  type="text"
-                  placeholder="ID Admin"
-                  name="idUser"
-                  onChange={this.setValueInput}
-                  value={this.state.idUser}
-                />
-              </Div>
               <Div className="form-group">
                 <Input
                   type="text"

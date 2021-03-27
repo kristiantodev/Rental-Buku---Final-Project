@@ -205,6 +205,11 @@ class Pengembalian extends Component {
 
     var telat = Math.ceil((dtNow - dtMaxPengembalian)/86400000);
     var lamaPinjam = Math.ceil((dtNow - tglPinjamnya.getTime())/86400000);
+
+    if(lamaPinjam === 0){
+      lamaPinjam=1;
+    }
+    
     var tglMaxPengembalian = `${datePinjam}`;
     console.log("lama pinjam", lamaPinjam)
 

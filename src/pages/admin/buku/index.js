@@ -446,7 +446,6 @@ class Buku extends Component {
 
   render() {
    this.checkAkses();
-   console.log("operator", this.state.operator)
     return (
       <>
         <Header />
@@ -600,31 +599,21 @@ class Buku extends Component {
                     size="col-xl-12"
                     color="card bg-secondary mini-stat position-relative"
                     judul="Komik :"
-                    isi={
-                      this.state.books.filter((x) => x.jenisBuku === "Komik")
-                        .length
-                    }
+                    isi={this.state.books.filter((x) => x.jenisBuku === "Komik").length}
                     icon="fas fa-book display-1"
                   />
                   <Card
                     size="col-xl-12"
                     color="card bg-primary mini-stat position-relative"
                     judul="Novel : "
-                    isi={
-                      this.state.books.filter((x) => x.jenisBuku === "Novel")
-                        .length
-                    }
+                    isi={this.state.books.filter((x) => x.jenisBuku === "Novel").length}
                     icon="fas fa-book display-2"
                   />
                   <Card
                     size="col-xl-12"
                     color="card bg-secondary mini-stat position-relative"
                     judul="Ensiklopedia :"
-                    isi={
-                      this.state.books.filter(
-                        (x) => x.jenisBuku === "Ensiklopedia"
-                      ).length
-                    }
+                    isi={this.state.books.filter((x) => x.jenisBuku === "Ensiklopedia").length}
                     icon="fas fa-book display-1"
                   />
                 </Row>
@@ -751,7 +740,7 @@ class Buku extends Component {
                 value={this.state.keterangan}
                 init={{
                   height: 250,
-                  menubar: false,
+                  menubar: true,
                 }}
                 onEditorChange={this.handleChange}
               />

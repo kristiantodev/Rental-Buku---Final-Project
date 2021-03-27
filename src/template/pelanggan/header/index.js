@@ -24,7 +24,7 @@ class Header extends Component {
         text: "Anda akan keluar dari sistem...",
         icon: "warning",
         buttons: true,
-        dangerMode: true,
+        dangerMode: false,
       })
       .then((logout) => {
         if (logout) {

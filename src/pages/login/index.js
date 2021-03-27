@@ -56,6 +56,8 @@ class Login extends Component {
             if(typeof json.errorMessage !== 'undefined')
             {
               swal("Gagal !", json.errorMessage , "error");
+            }else if(json.status === 400){
+              swal("Gagal !", "Username atau Password salah..." , "error");
             }
 
             if(this.state.pengguna.role === "Admin"){
