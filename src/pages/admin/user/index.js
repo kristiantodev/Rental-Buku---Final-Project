@@ -243,18 +243,18 @@ class User extends Component {
     }
   };
 
-  updateToMember = (id) => {
+  updateStatusPelanggan = (id, status) => {
     const dataStatus = {
       idUser: id,
-      role: "Member",
+      role: status,
     };
 
     swal({
       title: "Apakah anda yakin ?",
-      text: "Status Umum akan diubah menjadi Member...",
+      text: "Status pelanggan akan dirubah...",
       icon: "warning",
       buttons: true,
-      dangerMode: true,
+      dangerMode: false,
     }).then((konfirmasi) => {
       if (konfirmasi) {
         fetch("http://localhost:8080/api/updatestatus/", {
@@ -277,46 +277,7 @@ class User extends Component {
           })
           .catch((e) => {});
       } else {
-        swal("Batal !", "Update Umum ke Member dibatalkan...", "error");
-      }
-    });
-  };
-
-  updateToUmum = (id) => {
-    const dataStatus = {
-      idUser: id,
-      role: "Umum",
-    };
-
-    swal({
-      title: "Apakah anda yakin ?",
-      text: "Status Member akan dihapus menjadi Umum...",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((konfirmasi) => {
-      if (konfirmasi) {
-        fetch("http://localhost:8080/api/updatestatus/", {
-          method: "put",
-          headers: {
-            "Content-Type": "application/json; ; charset=utf-8",
-            "Access-Control-Allow-Headers": "Authorization, Content-Type",
-            "Access-Control-Allow-Origin": "*",
-          },
-          body: JSON.stringify(dataStatus),
-        })
-          .then((response) => response.json())
-          .then((json) => {
-            if (typeof json.errorMessage !== "undefined") {
-              swal("Gagal !", json.errorMessage, "error");
-            } else if (typeof json.successMessage !== "undefined") {
-              swal("Berhasil !", json.successMessage, "success");
-              this.getUsers();
-            }
-          })
-          .catch((e) => {});
-      } else {
-        swal("Batal !", "Hapus status Member menjadi umum dibatalkan", "error");
+        swal("Batal !", "Perubahan status pelangggan dibatalkan", "error");
       }
     });
   };
@@ -444,23 +405,6 @@ class User extends Component {
                           <TableData>{value.phone}</TableData>
                           <TableData>{value.role}</TableData>
                           <TableData align="center">
-                            {/* <Tooltip keterangan="Edit Profil">
-                              <Button
-                                className="btn btn-outline-warning"
-                                onClick={() =>
-                                  this.props.history.push("/admin/profil")
-                                }
-                                hidden={
-                                  value.idUser ===
-                                  this.props.dataUserLogin.idUser
-                                    ? false
-                                    : true
-                                }
-                              >
-                                <Italic className="fas fa-feather" />
-                              </Button>
-                            </Tooltip>
-                            <ReactTooltip /> */}
                             <Tooltip keterangan="Reset Password ke Default">
                               <Button
                                 className="btn btn-outline-info"
@@ -481,7 +425,7 @@ class User extends Component {
                                 className="btn btn-outline-secondary"
                                 hidden={value.role === "Umum" ? false : true}
                                 onClick={() => {
-                                  this.updateToMember(value.idUser);
+                                  this.updateStatusPelanggan(value.idUser, "Member");
                                 }}
                               >
                                 <Italic className="fas fa-check" />
@@ -493,7 +437,7 @@ class User extends Component {
                                 className="btn btn-outline-danger"
                                 hidden={value.role === "Member" ? false : true}
                                 onClick={() => {
-                                  this.updateToUmum(value.idUser);
+                                  this.updateStatusPelanggan(value.idUser, "Umum");
                                 }}
                               >
                                 <Italic className="fas fa-times" />

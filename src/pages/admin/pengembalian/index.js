@@ -401,7 +401,7 @@ class Pengembalian extends Component {
                     color="card bg-secondary mini-stat position-relative"
                     judul="Tanggal :"
                     isi={this.getTanggal()}
-                    icon="fas fa-tint display-1"
+                    icon="fas fa-clock display-1"
                   />
                   <Card
                     size="col-xl-12"

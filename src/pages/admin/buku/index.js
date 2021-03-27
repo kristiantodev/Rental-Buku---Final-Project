@@ -377,6 +377,45 @@ class Buku extends Component {
     }
   };
 
+  updateStatusBuku = (id, status) => {
+    const dataStatus = {
+      idBuku: id,
+      isActive: status,
+    };
+
+    swal({
+      title: "Apakah anda yakin ?",
+      text: "Status buku akan dirubah...",
+      icon: "warning",
+      buttons: true,
+      dangerMode: false,
+    }).then((konfirmasi) => {
+      if (konfirmasi) {
+        fetch("http://localhost:8080/api/updatestatusbuku/", {
+          method: "put",
+          headers: {
+            "Content-Type": "application/json; ; charset=utf-8",
+            "Access-Control-Allow-Headers": "Authorization, Content-Type",
+            "Access-Control-Allow-Origin": "*",
+          },
+          body: JSON.stringify(dataStatus),
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            if (typeof json.errorMessage !== "undefined") {
+              swal("Gagal !", json.errorMessage, "error");
+            } else if (typeof json.successMessage !== "undefined") {
+              swal("Berhasil !", json.successMessage, "success");
+              this.getBooks();
+            }
+          })
+          .catch((e) => {});
+      } else {
+        swal("Batal !", "Ubah status buku dibatalkan", "error");
+      }
+    });
+  };
+
   batalClick = () => {
     this.clear();
     $("#buku .close").click();
@@ -520,16 +559,21 @@ class Buku extends Component {
                               </Button>
                             </Tooltip>
                             <ReactTooltip />
-                            <Tooltip keterangan="Aktifkan Buku">
+                            <Tooltip keterangan="NonAktifkan Buku">
                               <Button
                                 className="btn btn-outline-secondary"
                                 hidden={value.isActive === 1 ? false : true}
+                                onClick={() => this.updateStatusBuku(value.idBuku, 2)}
                               >
                                 <Italic className="fas fa-times" />
                               </Button>
+                              </Tooltip>
+                            <ReactTooltip />
+                            <Tooltip keterangan="Aktifkan Buku">
                               <Button
                                 className="btn btn-outline-success"
                                 hidden={value.isActive === 2 ? false : true}
+                                onClick={() => this.updateStatusBuku(value.idBuku, 1)}
                               >
                                 <Italic className="fas fa-check" />
                               </Button>
