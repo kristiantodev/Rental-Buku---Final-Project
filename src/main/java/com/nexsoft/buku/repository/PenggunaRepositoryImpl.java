@@ -19,14 +19,9 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                 uuid,user.getUsername(), user.getPassword(), user.getNamaUser(), user.getAlamat(), user.getPhone(), user.getEmail(), user.getRole());
     }
 
-    public void addAdmin(User user){
-        jdbcTemplate.update("INSERT INTO users(idUser, username, password, namaUser, alamat, phone, email, role) VALUES (?,?,?,?,?,?,?,?)",
-                user.getIdUser(),user.getUsername(), user.getPassword(), user.getNamaUser(), user.getAlamat(), user.getPhone(), user.getEmail(), user.getRole());
-    }
-
     public User login(String username, String password) {
 
-        return jdbcTemplate.query("SELECT * FROM users WHERE BINARY username = ? AND password = ?",
+        return jdbcTemplate.query("SELECT * FROM users WHERE BINARY username = ? AND BINARY password = ?",
                 preparedStatement -> {
                     preparedStatement.setString(1, username);
                     preparedStatement.setString(2, password);

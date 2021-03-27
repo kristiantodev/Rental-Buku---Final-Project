@@ -7,7 +7,6 @@ import java.util.List;
 public interface PenggunaService {
     User login(String username, String password);
     void registrasi(User user);
-    void addAdmin(User user);
     User GetProfil(String idUser);
     void updatePassword(User user);
     void updateProfil(User user);

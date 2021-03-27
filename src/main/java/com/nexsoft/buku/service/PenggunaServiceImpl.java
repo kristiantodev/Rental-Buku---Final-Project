@@ -97,12 +97,6 @@ public class PenggunaServiceImpl implements PenggunaService{
         }
     }
 
-    public void addAdmin(User user) {
-        synchronized (this) {
-            penggunaRepository.addAdmin(user);
-        }
-    }
-
     public void updatePassword(User user) {
         synchronized (this) {
             penggunaRepository.updatePassword(user);

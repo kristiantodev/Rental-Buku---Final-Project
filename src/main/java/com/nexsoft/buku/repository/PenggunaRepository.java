@@ -7,7 +7,6 @@ public interface PenggunaRepository {
     User login(String username, String password);
     User GetProfil(String idUser);
     void registrasi(User user);
-    void addAdmin(User user);
     void updatePassword(User user);
     void updateStatus(User user);
     void updateProfil(User user);
