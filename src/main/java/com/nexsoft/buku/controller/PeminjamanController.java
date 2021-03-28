@@ -92,6 +92,21 @@ public class PeminjamanController {
         return new ResponseEntity<>(pinjam, HttpStatus.OK);
     }
 
+    @GetMapping("/totalriwayatpeminjaman/")
+    public ResponseEntity<?> countRiwayat(@RequestParam String idUser){
+        int count = peminjamanService.totalRiwayatPeminjaman(idUser);
+        if (count == 0){
+            return new ResponseEntity<>(count, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(count,HttpStatus.OK);
+    }
+
+    @GetMapping("/riwayatpeminjamanpaging/")
+    public ResponseEntity<?> riwayatPengembalianPaging(@RequestParam String idUser, @RequestParam int page, @RequestParam int limit) {
+        List<Peminjaman> pinjam = peminjamanService.riwayatPeminjamanPaging(idUser, page, limit);
+        return new ResponseEntity<>(pinjam, HttpStatus.OK);
+    }
+
     @GetMapping("/total/")
     public ResponseEntity<?> totalData() {
         logger.info("Comparing data!");

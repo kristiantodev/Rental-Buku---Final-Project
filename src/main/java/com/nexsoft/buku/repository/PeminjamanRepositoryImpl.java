@@ -279,6 +279,66 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
     }
 
     @Override
+    public int totalRiwayatPeminjaman(String idUser) {
+        int count;
+        count = jdbcTemplate.queryForObject("SELECT COUNT(*) as count FROM peminjaman where idUser='"+idUser+"'",
+                Integer.class);
+        return count;
+    }
+
+    @Override
+    public List<Peminjaman> riwayatPeminjamanPaging(String idUser, int page, int limit) {
+        List<Peminjaman> headers;
+
+        int numPages;
+        numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM peminjaman where idUser='"+idUser+"'",
+                (rs, rowNum) -> rs.getInt("count")).get(0);
+
+        if (page < 1) page = 1;
+        if (page > numPages) page = numPages;
+        int start = (page - 1) * limit;
+
+        if(numPages == 0){
+            start=0;
+            limit=0;
+        }
+
+        headers = jdbcTemplate.query("select u.*, p.* from peminjaman p, users u WHERE p.idUser = u.idUser AND p.idUser = ? ORDER BY p.tglKembali asc LIMIT " + start +"," + limit + ";",
+                preparedStatement -> {
+                    preparedStatement.setString(1, idUser);
+                },
+                (rs, rowNum) ->
+                        new Peminjaman(
+                                rs.getString("idPinjam"),
+                                rs.getString("idUser"),
+                                rs.getString("namaUser"),
+                                rs.getString("role"),
+                                rs.getString("tglPinjam"),
+                                rs.getString("tglKembali"),
+                                rs.getInt("statusPinjam"),
+                                rs.getInt("denda")
+                        ));
+
+        for (Peminjaman ch : headers){
+            List<PeminjamanDetail> details = new ArrayList<>();
+            details = jdbcTemplate.query("SELECT c.*, d.*, b.*, j.* FROM peminjaman c,  users u, detail_peminjaman d, buku b, jenisbuku j WHERE c.idUser = u.idUser AND c.idPinjam = d.idPinjam AND b.idJenisBuku = j.idJenisBuku AND b.idBuku = d.idBuku AND d.idPinjam = '"+ch.getIdPinjam()+"'",
+                    (rs, rowNum) ->
+                            new PeminjamanDetail(
+                                    rs.getString("idDetailPinjam"),
+                                    rs.getString("idPinjam"),
+                                    rs.getString("idBuku"),
+                                    rs.getString("judulBuku"),
+                                    rs.getString("jenisBuku"),
+                                    rs.getInt("biayaSewa"),
+                                    rs.getInt("qty")
+                            ));
+            ch.setListBuku(details);
+        }
+
+        return headers;
+    }
+
+    @Override
     public Peminjaman totalData() {
 
         return jdbcTemplate.query("SELECT COUNT(*) as totalData FROM peminjaman where statusPinjam=1",

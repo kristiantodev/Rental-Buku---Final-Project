@@ -97,6 +97,26 @@ public class PeminjamanServiceImpl implements PeminjamanService{
     }
 
     @Override
+    public int totalRiwayatPeminjaman(String idUser) {
+        return peminjamanRepository.totalRiwayatPeminjaman(idUser);
+    }
+
+    @Override
+    public List<Peminjaman> riwayatPeminjamanPaging(String idUser, int page, int limit) {
+        List<Peminjaman> pd;
+
+        try{
+            pd = peminjamanRepository.riwayatPeminjamanPaging(idUser, page, limit);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+
+        return pd;
+
+    }
+
+    @Override
     public List<Peminjaman> dataLaporan(int page, int limit) {
         List<Peminjaman> pd;
 
