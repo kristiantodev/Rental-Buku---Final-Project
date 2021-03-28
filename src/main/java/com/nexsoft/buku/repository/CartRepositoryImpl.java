@@ -15,17 +15,20 @@ public class CartRepositoryImpl implements CartRepository{
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Override
     public void addCart(Cart cart){
         jdbcTemplate.update("INSERT INTO cart_peminjaman(idCart, idUser) VALUES (?,?)",
                 cart.getIdCart(), cart.getIdUser());
     }
 
+    @Override
     public void isiKeranjang(CartDetail detail){
         String uuid= String.valueOf(UUID.randomUUID());
         jdbcTemplate.update("INSERT INTO cart_detail(idDetail, idCart, idBuku, qty) VALUES (?,?,?,?)",
                 uuid,  detail.getIdCart(), detail.getIdBuku(), 1);
     }
 
+    @Override
     public List<CartDetail> getIsiKeranjang(String idCart) {
         return jdbcTemplate.query("SELECT * FROM cart_detail WHERE idCart=?",
                 preparedStatement -> {
@@ -40,6 +43,7 @@ public class CartRepositoryImpl implements CartRepository{
                         ));
     }
 
+    @Override
     public CartDetail checkIsiKeranjang(String idCart, String idBuku) {
         return jdbcTemplate.query("SELECT * FROM cart_detail WHERE idCart=? AND idBuku=?",
                 preparedStatement -> {
@@ -55,10 +59,12 @@ public class CartRepositoryImpl implements CartRepository{
                         )).get(0);
     }
 
+    @Override
     public void deleteDetailById(String id){
         jdbcTemplate.update("DELETE from cart_detail WHERE idDetail=?",id);
     }
 
+    @Override
     public Cart findById(String idCart) {
         return jdbcTemplate.query("SELECT c.*, u.namaUser FROM cart_peminjaman c, users u WHERE c.idUser = u.idUser AND c.idCart = ?",
                 preparedStatement -> {
@@ -73,6 +79,7 @@ public class CartRepositoryImpl implements CartRepository{
                         )).get(0);
     }
 
+    @Override
     public Cart listPeminjaman(String idCart) {
         Cart cart;
         cart = jdbcTemplate.query("SELECT c.*, u.namaUser FROM cart_peminjaman c, users u WHERE c.idUser = u.idUser AND c.idCart = ?",
@@ -107,6 +114,7 @@ public class CartRepositoryImpl implements CartRepository{
         return cart;
     }
 
+    @Override
     public void deleteById(String id){
         jdbcTemplate.update("DELETE from cart_peminjaman WHERE idCart=?",id);
         jdbcTemplate.update("DELETE from cart_detail WHERE idCart=?",id);

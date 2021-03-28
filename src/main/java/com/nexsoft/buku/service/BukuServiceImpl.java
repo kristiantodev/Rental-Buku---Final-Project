@@ -13,18 +13,21 @@ public class BukuServiceImpl implements BukuService{
     @Autowired
     BukuRepository bukuRepository;
 
+    @Override
     public void addBuku(Buku buku) {
         synchronized (this) {
             bukuRepository.addBuku(buku);
         }
     }
 
+    @Override
     public void updateBuku(Buku buku) {
         synchronized (this) {
             bukuRepository.updateBuku(buku);
         }
     }
 
+    @Override
     public List<Buku> getDataBuku() {
         List<Buku> pd;
 
@@ -39,6 +42,7 @@ public class BukuServiceImpl implements BukuService{
 
     }
 
+    @Override
     public List<JenisBuku> getDataJenisBuku() {
         List<JenisBuku> pd;
 
@@ -53,12 +57,14 @@ public class BukuServiceImpl implements BukuService{
 
     }
 
+    @Override
     public void updateStatus(Buku buku) {
         synchronized (this) {
             bukuRepository.updateStatus(buku);
         }
     }
 
+    @Override
     public Buku checkStok(String idBuku) {
         Buku pd;
 
@@ -73,6 +79,7 @@ public class BukuServiceImpl implements BukuService{
 
     }
 
+    @Override
     public List<Buku> findWithPaging(int page, int limit) {
         List<Buku> pd;
 
@@ -87,6 +94,7 @@ public class BukuServiceImpl implements BukuService{
 
     }
 
+    @Override
     public List<Buku> searchWithPaging(int page, int limit, String keyword) {
         List<Buku> pd;
 
@@ -101,6 +109,7 @@ public class BukuServiceImpl implements BukuService{
 
     }
 
+    @Override
     public List<Buku> serchingBuku(String keyword) {
         List<Buku> pd;
 
@@ -115,12 +124,14 @@ public class BukuServiceImpl implements BukuService{
 
     }
 
+    @Override
     public void deleteById(String id) {
         synchronized (this) {
             bukuRepository.deleteById(id);
         }
     }
 
+    @Override
     public boolean isIdBukuExist(Buku buku) {
         Buku pd;
         try{
@@ -137,6 +148,7 @@ public class BukuServiceImpl implements BukuService{
         }
     }
 
+    @Override
     public boolean isJudulBukuExist(Buku buku) {
         Buku pd;
         try{
@@ -153,6 +165,7 @@ public class BukuServiceImpl implements BukuService{
         }
     }
 
+    @Override
     public boolean isJudulBukuEditExist(Buku buku) {
         Buku pd;
         try{

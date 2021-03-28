@@ -13,12 +13,14 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Override
     public void registrasi(User user){
         String uuid= String.valueOf(UUID.randomUUID());
         jdbcTemplate.update("INSERT INTO users(idUser, username, password, namaUser, alamat, phone, email, role) VALUES (?,?,?,?,?,?,?,?)",
                 uuid,user.getUsername(), user.getPassword(), user.getNamaUser(), user.getAlamat(), user.getPhone(), user.getEmail(), user.getRole());
     }
 
+    @Override
     public User login(String username, String password) {
 
         return jdbcTemplate.query("SELECT * FROM users WHERE BINARY username = ? AND BINARY password = ?",
@@ -40,6 +42,7 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                         )).get(0);
     }
 
+    @Override
     public List<User> getDataUser(){
         return jdbcTemplate.query("select*from users ORDER BY role asc",
                 (rs,rowNum)->
@@ -55,6 +58,7 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                         ));
     }
 
+    @Override
     public List<User> serchingUser(String keyword){
         return jdbcTemplate.query("select*from users WHERE idUser LIKE ? OR username LIKE ? OR namaUser LIKE ? " +
                         "OR alamat LIKE ? OR phone LIKE ? OR email LIKE ? OR role LIKE ? ORDER BY role asc",
@@ -80,6 +84,7 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                         ));
     }
 
+    @Override
     public List<User> findWithPaging(int page, int limit) {
         int numPages;
         numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM users",
@@ -104,6 +109,7 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                                 ));
     }
 
+    @Override
     public List<User> searchWithPaging(int page, int limit, String keyword) {
         int numPages;
         numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM users",
@@ -138,6 +144,7 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                         ));
     }
 
+    @Override
     public User GetProfil(String idUser) {
 
         return jdbcTemplate.query("SELECT * FROM users WHERE idUser = ?",
@@ -157,14 +164,17 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                         )).get(0);
     }
 
+    @Override
     public void updatePassword(User user){
         jdbcTemplate.update("UPDATE users SET password = '"+user.getPassword()+"' WHERE idUser = '"+user.getIdUser()+"'");
     }
 
+    @Override
     public void updateStatus(User user){
         jdbcTemplate.update("UPDATE users SET role = '"+user.getRole()+"' WHERE idUser = '"+user.getIdUser()+"'");
     }
 
+    @Override
     public void updateProfil(User user){
         jdbcTemplate.update(
                 "UPDATE users SET username = ?, namaUser = ?, alamat = ?, email = ?, phone = ? WHERE idUser = ?",
@@ -172,6 +182,7 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
         );
     }
 
+    @Override
     public User findById(String idUser) {
 
         return jdbcTemplate.query("SELECT * FROM users WHERE idUser = ?",
@@ -191,6 +202,7 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                         )).get(0);
     }
 
+    @Override
     public User findByUsername(String username) {
 
         return jdbcTemplate.query("SELECT * FROM users WHERE username = ?",
@@ -210,6 +222,7 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                         )).get(0);
     }
 
+    @Override
     public User findByEmail(String email) {
 
         return jdbcTemplate.query("SELECT * FROM users WHERE email = ?",
@@ -229,6 +242,7 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                         )).get(0);
     }
 
+    @Override
     public User findByPhone(String phone) {
 
         return jdbcTemplate.query("SELECT * FROM users WHERE phone = ?",
@@ -248,6 +262,7 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                         )).get(0);
     }
 
+    @Override
     public User findByUsernameEdit(String username, String idUser) {
 
         return jdbcTemplate.query("SELECT * FROM users WHERE username = ? AND idUser <> ?",
@@ -268,6 +283,7 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                         )).get(0);
     }
 
+    @Override
     public User findByEmailEdit(String email, String idUser) {
 
         return jdbcTemplate.query("SELECT * FROM users WHERE email = ? AND idUser <> ?",
@@ -288,6 +304,7 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
                         )).get(0);
     }
 
+    @Override
     public User findByPhoneEdit(String phone, String idUser) {
 
         return jdbcTemplate.query("SELECT * FROM users WHERE phone = ? AND idUser <> ?",

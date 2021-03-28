@@ -13,7 +13,7 @@ public class BukuRepositoryImpl implements BukuRepository{
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-
+    @Override
     public List<Buku> getDataBuku(){
         return jdbcTemplate.query("select b.*, j.jenisBuku from buku b, jenisbuku j WHERE b.idJenisBuku = j.idJenisBuku order by b.isActive asc, b.judulBuku asc"
                         ,
@@ -31,6 +31,7 @@ public class BukuRepositoryImpl implements BukuRepository{
                         ));
     }
 
+    @Override
     public List<JenisBuku> getDataJenisBuku(){
         return jdbcTemplate.query("select*from jenisbuku"
                 ,
@@ -41,10 +42,12 @@ public class BukuRepositoryImpl implements BukuRepository{
                         ));
     }
 
+    @Override
     public void updateStatus(Buku buku){
         jdbcTemplate.update("UPDATE buku SET isActive = "+buku.getIsActive()+" WHERE idBuku = '"+buku.getIdBuku()+"'");
     }
 
+    @Override
     public List<Buku> serchingBuku(String keyword){
         return jdbcTemplate.query("select b.*, j.jenisBuku from buku b, jenisbuku j WHERE (b.idBuku LIKE ? OR b.judulBuku LIKE ?" +
                         "OR b.pengarang LIKE ? OR b.hargaSewa LIKE ? OR b.stok LIKE ? OR j.jenisBuku LIKE ?) AND b.idJenisBuku = j.idJenisBuku order by b.isActive asc, b.judulBuku asc",
@@ -70,6 +73,7 @@ public class BukuRepositoryImpl implements BukuRepository{
                         ));
     }
 
+    @Override
     public List<Buku> searchWithPaging(int page, int limit, String keyword) {
         int numPages;
         numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM buku",
@@ -104,6 +108,7 @@ public class BukuRepositoryImpl implements BukuRepository{
                         ));
     }
 
+    @Override
     public List<Buku> findWithPaging(int page, int limit) {
         int numPages;
         numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM buku",
@@ -129,15 +134,18 @@ public class BukuRepositoryImpl implements BukuRepository{
                         ));
     }
 
+    @Override
     public void deleteById(String id){
         jdbcTemplate.update("DELETE from buku WHERE idBuku=?",id);
     }
 
+    @Override
     public void addBuku(Buku buku){
         jdbcTemplate.update("INSERT INTO buku(idBuku, judulbuku, pengarang, idJenisBuku, hargaSewa, stok, isActive, keterangan) VALUES (?,?,?,?,?,?,?,?)",
                 buku.getIdBuku(), buku.getJudulBuku(), buku.getPengarang(), buku.getIdJenisBuku(), buku.getHargaSewa(), buku.getStok(), 1, buku.getKeterangan());
     }
 
+    @Override
     public void updateBuku(Buku buku){
         jdbcTemplate.update(
                 "UPDATE buku SET judulBuku = ?, pengarang = ?, idJenisBuku = ?, hargaSewa = ?, stok = ?, keterangan = ? WHERE idBuku = ?",
@@ -145,6 +153,7 @@ public class BukuRepositoryImpl implements BukuRepository{
         );
     }
 
+    @Override
     public Buku findById(String idBuku) {
 
         return jdbcTemplate.query("SELECT * FROM buku WHERE idBuku = ?",
@@ -159,6 +168,7 @@ public class BukuRepositoryImpl implements BukuRepository{
                         )).get(0);
     }
 
+    @Override
     public Buku findByJudul(String judulBuku) {
 
         return jdbcTemplate.query("SELECT * FROM buku WHERE judulBuku = ?",
@@ -171,6 +181,7 @@ public class BukuRepositoryImpl implements BukuRepository{
                         )).get(0);
     }
 
+    @Override
     public Buku findByJudulEdit(String idBuku, String judulBuku) {
 
         return jdbcTemplate.query("SELECT * FROM buku WHERE judulBuku = ? AND idBuku <> ?",

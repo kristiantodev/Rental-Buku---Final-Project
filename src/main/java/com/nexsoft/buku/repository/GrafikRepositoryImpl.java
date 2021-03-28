@@ -12,6 +12,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Override
     public List<Grafik> pelangganTeraktif(){
         return jdbcTemplate.query("select u.namauser, count(*) as total from users u, peminjaman j where u.idUser=j.idUser AND MONTH(j.tglKembali) = MONTH(NOW()) AND YEAR(j.tglKembali) = YEAR(NOW()) AND j.statusPinjam=2 GROUP BY u.idUser order by total desc limit 3"
                 ,
@@ -22,6 +23,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         ));
     }
 
+    @Override
     public List<Grafik> pelangganTeraktifFilter(int bulan, int tahun){
         return jdbcTemplate.query("select u.namauser, count(*) as total from users u, peminjaman j where u.idUser=j.idUser AND j.statusPinjam=2 AND MONTH(j.tglKembali) = ? AND YEAR(j.tglKembali) = ? GROUP BY u.idUser order by total desc limit 3"
                 ,
@@ -36,6 +38,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         ));
     }
 
+    @Override
     public List<Grafik> bukuPopuler(){
         return jdbcTemplate.query("select b.judulBuku, count(*) as total from detail_peminjaman d, buku b, peminjaman j where d.idBuku=b.idBuku AND j.idPinjam=d.idPinjam AND MONTH(j.tglKembali) = MONTH(NOW()) AND YEAR(j.tglKembali) = YEAR(NOW()) GROUP BY d.idBuku order by total desc LIMIT 5;"
                 ,
@@ -46,6 +49,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         ));
     }
 
+    @Override
     public List<Grafik> bukuPopulerFilter(int bulan, int tahun){
         return jdbcTemplate.query("select b.judulBuku, count(*) as total from detail_peminjaman d, buku b, peminjaman p where d.idBuku=b.idBuku AND p.idPinjam=d.idPinjam AND MONTH(p.tglKembali) = ? AND YEAR(p.tglKembali) = ?  GROUP BY d.idBuku order by total desc LIMIT 5;"
                 ,
@@ -60,6 +64,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         ));
     }
 
+    @Override
     public List<Grafik> allPendapatan(){
         return jdbcTemplate.query("select p.tglKembali, (sum(d.biayaSewa*p.lamaPinjam)+p.denda) as total from peminjaman p, detail_peminjaman d where p.idPinjam = d.idPinjam AND MONTH(p.tglKembali) = MONTH(NOW()) AND YEAR(p.tglKembali) = YEAR(NOW()) AND p.statusPinjam=2 GROUP BY p.tglKembali order by p.tglKembali asc"
                 ,
@@ -70,6 +75,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         ));
     }
 
+    @Override
     public List<Grafik> allPendapatanFilter(int bulan, int tahun){
         return jdbcTemplate.query("select p.tglKembali, (sum(d.biayaSewa*p.lamaPinjam)+p.denda) as total from peminjaman p, detail_peminjaman d where p.idPinjam = d.idPinjam AND MONTH(p.tglKembali) = ? AND YEAR(p.tglKembali) = ? AND p.statusPinjam=2 GROUP BY p.tglKembali order by p.tglKembali asc"
                 ,
@@ -84,6 +90,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         ));
     }
 
+    @Override
     public List<Grafik> pengeluaranPelanggan(String idUser){
         return jdbcTemplate.query("select p.tglKembali, sum(d.biayaSewa*p.lamaPinjam)+p.denda as total from peminjaman p, detail_peminjaman d where p.idPinjam = d.idPinjam AND p.statusPinjam=2 AND MONTH(p.tglKembali) = MONTH(NOW()) AND p.idUser=? GROUP BY p.tglKembali order by p.tglKembali asc"
                 ,
@@ -97,6 +104,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         ));
     }
 
+    @Override
     public List<Grafik> pengeluaranPelangganFilter(String idUser, int bulan, int tahun){
         return jdbcTemplate.query("select p.tglKembali, sum(d.biayaSewa*p.lamaPinjam)+p.denda as total from peminjaman p, detail_peminjaman d where p.idPinjam = d.idPinjam AND p.statusPinjam=2 AND MONTH(p.tglKembali) = ? AND YEAR(p.tglKembali) = ? AND p.idUser=? GROUP BY p.tglKembali order by p.tglKembali asc"
                 ,
@@ -112,6 +120,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         ));
     }
 
+    @Override
     public Grafik totalBukuPinjam(String idUser){
         return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=2 AND MONTH(p.tglKembali) = MONTH(NOW()) AND p.idUser=?"
                 ,
@@ -124,6 +133,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         )).get(0);
     }
 
+    @Override
     public Grafik totalBukuBelumDikembalikan(String idUser){
         return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=1 AND p.idUser=?"
                 ,
@@ -136,6 +146,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         )).get(0);
     }
 
+    @Override
     public Grafik totalPengeluaran(String idUser){
         return jdbcTemplate.query("select sum(d.biayaSewa*p.lamaPinjam) + (select sum(denda) from peminjaman where idUser=? AND MONTH(tglKembali) = MONTH(NOW())) as total from peminjaman p, detail_peminjaman d where p.idPinjam=d.idPinjam AND p.statusPinjam=2 AND p.idUser=? AND MONTH(p.tglKembali) = MONTH(NOW())"
                 ,
@@ -149,6 +160,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         )).get(0);
     }
 
+    @Override
     public Grafik totalPengeluaranFilter(String idUser, int bulan, int tahun){
         return jdbcTemplate.query("select sum(d.biayaSewa*p.tglPinjam) + (select sum(denda) from peminjaman where idUser=? AND MONTH(tglKembali) = ? AND YEAR(tglKembali) = ?) as total from peminjaman p, detail_peminjaman d where p.idPinjam=d.idPinjam AND p.statusPinjam=2 AND p.idUser=? AND MONTH(p.tglKembali) = ? AND YEAR(p.tglkembali) = ?"
                 ,
@@ -166,6 +178,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         )).get(0);
     }
 
+    @Override
     public Grafik bukuTerpinjam(){
         return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=1 AND MONTH(p.tglPinjam) = MONTH(NOW()) AND YEAR(p.tglPinjam) = YEAR(NOW())",
                 (rs,rowNum)->
@@ -174,6 +187,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         )).get(0);
     }
 
+    @Override
     public Grafik bukuKembali(){
         return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=2 AND MONTH(p.tglPinjam) = MONTH(NOW()) AND YEAR(p.tglPinjam) = YEAR(NOW())",
                 (rs,rowNum)->
@@ -182,6 +196,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         )).get(0);
     }
 
+    @Override
     public Grafik bukuTerpinjamFilter(int bulan, int tahun){
         return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=1 AND MONTH(p.tglPinjam) = ? AND YEAR(p.tglPinjam) = ?",
                 preparedStatement -> {
@@ -194,6 +209,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         )).get(0);
     }
 
+    @Override
     public Grafik bukuKembaliFilter(int bulan, int tahun){
         return jdbcTemplate.query("select count(*) as total from peminjaman p, detail_peminjaman d WHERE p.idPinjam = d.idPinjam AND p.statusPinjam=2 AND MONTH(p.tglPinjam) = ? AND YEAR(p.tglPinjam) = ?",
                 preparedStatement -> {
@@ -206,6 +222,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         )).get(0);
     }
 
+    @Override
     public Grafik totalPendapatanRental(){
         return jdbcTemplate.query("select sum(d.biayaSewa*p.lamaPinjam) + (select sum(denda) from peminjaman where MONTH(tglKembali) = MONTH(NOW())) as total from peminjaman p, detail_peminjaman d where p.idPinjam=d.idPinjam AND p.statusPinjam=2 AND MONTH(p.tglKembali) = MONTH(NOW()) AND YEAR(p.tglPinjam) = YEAR(NOW())",
                 (rs,rowNum)->
@@ -214,6 +231,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         )).get(0);
     }
 
+    @Override
     public Grafik totalPendapatanRentalFilter(int bulan, int tahun){
         return jdbcTemplate.query("select sum(d.biayaSewa*p.lamaPinjam) + (select sum(denda) from peminjaman where MONTH(tglKembali) = ? AND YEAR(tglKembali) = ?) as total from peminjaman p, detail_peminjaman d where p.idPinjam=d.idPinjam AND p.statusPinjam=2 AND MONTH(p.tglKembali) = ? AND YEAR(p.tglKembali) = ?",
                 preparedStatement -> {
@@ -228,6 +246,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         )).get(0);
     }
 
+    @Override
     public Grafik totalPinjamKomik(String idUser){
         return jdbcTemplate.query("select b.idJenisBuku, count(*) as total from peminjaman p, detail_peminjaman d, buku b where p.idPinjam=d.idPinjam AND b.idBuku=d.idBuku AND b.idJenisBuku='1' AND p.idUser=? AND DATE(p.tglPinjam) BETWEEN DATE(SUBDATE(DATE(NOW()), 7)) AND DATE(NOW())"
                 ,
@@ -240,6 +259,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         )).get(0);
     }
 
+    @Override
     public Grafik totalPinjamNovel(String idUser){
         return jdbcTemplate.query("select b.idJenisBuku, count(*) as total from peminjaman p, detail_peminjaman d, buku b where p.idPinjam=d.idPinjam AND b.idBuku=d.idBuku AND b.idJenisBuku='2' AND p.idUser=? AND DATE(p.tglPinjam) BETWEEN DATE(SUBDATE(DATE(NOW()), 7)) AND DATE(NOW())"
                 ,
@@ -252,6 +272,7 @@ public class GrafikRepositoryImpl implements  GrafikRepository{
                         )).get(0);
     }
 
+    @Override
     public Grafik totalPinjamEnsiklopedia(String idUser){
         return jdbcTemplate.query("select b.idJenisBuku, count(*) as total from peminjaman p, detail_peminjaman d, buku b where p.idPinjam=d.idPinjam AND b.idBuku=d.idBuku AND b.idJenisBuku='3' AND p.idUser=? AND DATE(p.tglPinjam) BETWEEN DATE(SUBDATE(DATE(NOW()), 7)) AND DATE(NOW())"
                 ,

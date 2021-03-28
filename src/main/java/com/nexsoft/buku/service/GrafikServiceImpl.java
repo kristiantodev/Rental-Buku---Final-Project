@@ -13,6 +13,7 @@ public class GrafikServiceImpl implements GrafikService{
     @Autowired
     GrafikRepository grafikRepository;
 
+    @Override
     public List<Grafik> pelangganTeraktif() {
         List<Grafik> pd;
         try{
@@ -24,6 +25,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public List<Grafik> pelangganTeraktifFilter(int bulan, int tahun) {
         List<Grafik> pd;
         try{
@@ -35,6 +37,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public List<Grafik> bukuPopuler() {
         List<Grafik> pd;
         try{
@@ -46,6 +49,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public List<Grafik> bukuPopulerFilter(int bulan, int tahun) {
         List<Grafik> pd;
         try{
@@ -57,6 +61,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public List<Grafik> allPendapatan() {
         List<Grafik> pd;
         try{
@@ -68,6 +73,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public List<Grafik> allPendapatanFilter(int bulan, int tahun) {
         List<Grafik> pd;
         try{
@@ -79,6 +85,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public List<Grafik> pengeluaranPelanggan(String idUser) {
         List<Grafik> pd;
         try{
@@ -90,6 +97,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public List<Grafik> pengeluaranPelangganFilter(String idUser, int bulan, int tahun) {
         List<Grafik> pd;
         try{
@@ -101,6 +109,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public Grafik totalBukuPinjam(String idUser){
         Grafik pd;
         try{
@@ -112,6 +121,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public Grafik totalBukuBelumDikembalikan(String idUser){
         Grafik pd;
         try{
@@ -123,6 +133,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public Grafik totalPengeluaran(String idUser){
         Grafik pd;
         try{
@@ -134,6 +145,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public Grafik totalPengeluaranFilter(String idUser, int bulan, int tahun){
         Grafik pd;
         try{
@@ -145,6 +157,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public Grafik bukuTerpinjam(){
         Grafik pd;
         try{
@@ -156,6 +169,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public Grafik bukuTerpinjamFilter(int bulan, int tahun){
         Grafik pd;
         try{
@@ -167,6 +181,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public Grafik bukuKembali(){
         Grafik pd;
         try{
@@ -178,6 +193,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public Grafik bukuKembaliFilter(int bulan, int tahun){
         Grafik pd;
         try{
@@ -189,6 +205,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public Grafik totalPendapatanRental(){
         Grafik pd;
         try{
@@ -200,6 +217,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public Grafik totalPendapatanRentalFilter(int bulan, int tahun){
         Grafik pd;
         try{
@@ -211,6 +229,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public Grafik totalPinjamKomik(String idUser){
         Grafik pd;
         try{
@@ -222,6 +241,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public Grafik totalPinjamNovel(String idUser){
         Grafik pd;
         try{
@@ -233,6 +253,7 @@ public class GrafikServiceImpl implements GrafikService{
         return pd;
     }
 
+    @Override
     public Grafik totalPinjamEnsiklopedia(String idUser){
         Grafik pd;
         try{

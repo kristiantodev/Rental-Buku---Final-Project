@@ -13,18 +13,21 @@ public class CartServiceImpl implements CartService{
     @Autowired
     CartRepository cartRepository;
 
+    @Override
     public void addCart(Cart cart) {
         synchronized (this) {
             cartRepository.addCart(cart);
         }
     }
 
+    @Override
     public void isiKeranjang(CartDetail detail) {
         synchronized (this) {
             cartRepository.isiKeranjang(detail);
         }
     }
 
+    @Override
     public boolean checkIsiKeranjang(CartDetail detail) {
         CartDetail pd;
         try{
@@ -41,6 +44,7 @@ public class CartServiceImpl implements CartService{
         }
     }
 
+    @Override
     public List<CartDetail> getIsiKeranjang(String idCart) {
         List<CartDetail> pd;
 
@@ -55,12 +59,14 @@ public class CartServiceImpl implements CartService{
 
     }
 
+    @Override
     public void deleteDetailById(String id) {
         synchronized (this) {
             cartRepository.deleteDetailById(id);
         }
     }
 
+    @Override
     public Cart findById(String idCart) {
         Cart pd;
         try{
@@ -72,6 +78,7 @@ public class CartServiceImpl implements CartService{
         return pd;
     }
 
+    @Override
     public Cart listPeminjaman(String idCart) {
         Cart pd;
         try{
@@ -83,6 +90,7 @@ public class CartServiceImpl implements CartService{
         return pd;
     }
 
+    @Override
     public void deleteById(String id) {
         synchronized (this) {
             cartRepository.deleteById(id);

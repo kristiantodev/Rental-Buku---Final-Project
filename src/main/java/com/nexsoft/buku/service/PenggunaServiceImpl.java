@@ -13,6 +13,7 @@ public class PenggunaServiceImpl implements PenggunaService{
     @Autowired
     PenggunaRepository penggunaRepository;
 
+    @Override
     public User login(String username, String password) {
         User pd;
         try{
@@ -24,6 +25,7 @@ public class PenggunaServiceImpl implements PenggunaService{
         return pd;
     }
 
+    @Override
     public User GetProfil(String idUser) {
         User pd;
         try{
@@ -35,6 +37,7 @@ public class PenggunaServiceImpl implements PenggunaService{
         return pd;
     }
 
+    @Override
     public List<User> getDataUser() {
         List<User> pd;
 
@@ -49,6 +52,7 @@ public class PenggunaServiceImpl implements PenggunaService{
 
     }
 
+    @Override
     public List<User> serchingUser(String keyword) {
         List<User> pd;
 
@@ -63,6 +67,7 @@ public class PenggunaServiceImpl implements PenggunaService{
 
     }
 
+    @Override
     public List<User> findWithPaging(int page, int limit) {
         List<User> pd;
 
@@ -77,6 +82,7 @@ public class PenggunaServiceImpl implements PenggunaService{
 
     }
 
+    @Override
     public List<User> searchWithPaging(int page, int limit, String keyword) {
         List<User> pd;
 
@@ -91,30 +97,35 @@ public class PenggunaServiceImpl implements PenggunaService{
 
     }
 
+    @Override
     public void registrasi(User user) {
         synchronized (this) {
             penggunaRepository.registrasi(user);
         }
     }
 
+    @Override
     public void updatePassword(User user) {
         synchronized (this) {
             penggunaRepository.updatePassword(user);
         }
     }
 
+    @Override
     public void updateStatus(User user) {
         synchronized (this) {
             penggunaRepository.updateStatus(user);
         }
     }
 
+    @Override
     public void updateProfil(User user) {
         synchronized (this) {
             penggunaRepository.updateProfil(user);
         }
     }
 
+    @Override
     public boolean isIdUserExist(User user) {
         User pd;
         try{
@@ -131,6 +142,7 @@ public class PenggunaServiceImpl implements PenggunaService{
         }
     }
 
+    @Override
     public boolean isUsernameExist(User user) {
         User pd;
         try{
@@ -147,6 +159,7 @@ public class PenggunaServiceImpl implements PenggunaService{
         }
     }
 
+    @Override
     public boolean isEmailExist(User user) {
         User pd;
         try{
@@ -163,6 +176,7 @@ public class PenggunaServiceImpl implements PenggunaService{
         }
     }
 
+    @Override
     public boolean isPhoneExist(User user) {
         User pd;
         try{
@@ -179,6 +193,7 @@ public class PenggunaServiceImpl implements PenggunaService{
         }
     }
 
+    @Override
     public boolean isUsernameEditExist(User user) {
         User pd;
         try{
@@ -195,6 +210,7 @@ public class PenggunaServiceImpl implements PenggunaService{
         }
     }
 
+    @Override
     public boolean isEmailEditExist(User user) {
         User pd;
         try{
@@ -211,6 +227,7 @@ public class PenggunaServiceImpl implements PenggunaService{
         }
     }
 
+    @Override
     public boolean isPhoneEditExist(User user) {
         User pd;
         try{

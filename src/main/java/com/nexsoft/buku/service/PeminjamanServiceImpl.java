@@ -12,18 +12,21 @@ public class PeminjamanServiceImpl implements PeminjamanService{
     @Autowired
     PeminjamanRepository peminjamanRepository;
 
+    @Override
     public void save(Peminjaman peminjaman) {
         synchronized (this) {
             peminjamanRepository.save(peminjaman);
         }
     }
 
+    @Override
     public void pengembalianBuku(Peminjaman peminjaman) {
         synchronized (this) {
             peminjamanRepository.pengembalianBuku(peminjaman);
         }
     }
 
+    @Override
     public Peminjaman checkPengembalian(String idUser) {
         Peminjaman pd;
         try{
@@ -35,6 +38,7 @@ public class PeminjamanServiceImpl implements PeminjamanService{
         return pd;
     }
 
+    @Override
     public List<Peminjaman> dataPengembalianPaging(int page, int limit) {
         List<Peminjaman> pd;
 
@@ -49,6 +53,7 @@ public class PeminjamanServiceImpl implements PeminjamanService{
 
     }
 
+    @Override
     public List<Peminjaman> searchPengembalian(String keyword) {
         List<Peminjaman> pd;
 
@@ -63,6 +68,7 @@ public class PeminjamanServiceImpl implements PeminjamanService{
 
     }
 
+    @Override
     public List<Peminjaman> searchPengembalianPaging(String keyword, int page, int limit) {
         List<Peminjaman> pd;
 
@@ -75,6 +81,7 @@ public class PeminjamanServiceImpl implements PeminjamanService{
         return pd;
     }
 
+    @Override
     public List<Peminjaman> riwayatPeminjaman(String idUser) {
         List<Peminjaman> pd;
 
@@ -89,6 +96,7 @@ public class PeminjamanServiceImpl implements PeminjamanService{
 
     }
 
+    @Override
     public List<Peminjaman> dataLaporan(int page, int limit) {
         List<Peminjaman> pd;
 
@@ -103,6 +111,7 @@ public class PeminjamanServiceImpl implements PeminjamanService{
 
     }
 
+    @Override
     public List<Peminjaman> cetakAllLaporan() {
         List<Peminjaman> pd;
 
@@ -117,6 +126,7 @@ public class PeminjamanServiceImpl implements PeminjamanService{
 
     }
 
+    @Override
     public Peminjaman totalData() {
         Peminjaman pd;
 
@@ -130,6 +140,7 @@ public class PeminjamanServiceImpl implements PeminjamanService{
 
     }
 
+    @Override
     public Peminjaman totalDataLaporan() {
         Peminjaman pd;
 
@@ -143,6 +154,7 @@ public class PeminjamanServiceImpl implements PeminjamanService{
 
     }
 
+    @Override
     public List<Peminjaman> filterLaporan(String keyword, String start, String end) {
         List<Peminjaman> pd;
 
@@ -157,6 +169,7 @@ public class PeminjamanServiceImpl implements PeminjamanService{
 
     }
 
+    @Override
     public List<Peminjaman> filterLaporanPaging(String keyword, String start, String end, int page, int limit) {
         List<Peminjaman> pd;
 

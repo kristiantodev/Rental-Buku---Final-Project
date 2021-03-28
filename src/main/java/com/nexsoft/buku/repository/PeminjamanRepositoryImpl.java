@@ -16,6 +16,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Override
     public void save(Peminjaman peminjaman){
         String uuid= String.valueOf(UUID.randomUUID());
         jdbcTemplate.update("INSERT INTO peminjaman(idPinjam, idUser, statusPinjam, denda) VALUES (?,?,?,?)",
@@ -33,6 +34,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
         }
     }
 
+    @Override
     public void pengembalianBuku(Peminjaman peminjaman){
         jdbcTemplate.update("UPDATE peminjaman set tglPinjam=tglPinjam, tglKembali=?, statusPinjam=2, denda=?, lamaPinjam=? where idPinjam=?",
                 new Date(), peminjaman.getDenda(), peminjaman.getLamaPinjam(), peminjaman.getIdPinjam());
@@ -43,6 +45,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
         }
     }
 
+    @Override
     public Peminjaman checkPengembalian(String idUser) {
 
         return jdbcTemplate.query("SELECT * FROM peminjaman WHERE statusPinjam=1 AND idUser = ?",
@@ -60,6 +63,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                         )).get(0);
     }
 
+    @Override
     public List<Peminjaman> dataPengembalianPaging(int page, int limit) {
         List<Peminjaman> headers;
 
@@ -106,6 +110,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
         return headers;
     }
 
+    @Override
     public List<Peminjaman> searchPengembalian(String keyword) {
         List<Peminjaman> headers;
 
@@ -145,6 +150,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
         return headers;
     }
 
+    @Override
     public List<Peminjaman> searchPengembalianPaging(String keyword, int page, int limit) {
         List<Peminjaman> headers;
         int numPages;
@@ -196,7 +202,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
         return headers;
     }
 
-
+    @Override
     public List<Peminjaman> cetakAllLaporan() {
         List<Peminjaman> headers;
 
@@ -233,6 +239,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
         return headers;
     }
 
+    @Override
     public List<Peminjaman> riwayatPeminjaman(String idUser) {
         List<Peminjaman> headers;
 
@@ -271,6 +278,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
         return headers;
     }
 
+    @Override
     public Peminjaman totalData() {
 
         return jdbcTemplate.query("SELECT COUNT(*) as totalData FROM peminjaman where statusPinjam=1",
@@ -280,6 +288,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                         )).get(0);
     }
 
+    @Override
     public List<Peminjaman> dataLaporan(int page, int limit) {
         List<Peminjaman> headers;
 
@@ -329,6 +338,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
         return headers;
     }
 
+    @Override
     public Peminjaman totalDataLaporan() {
 
         return jdbcTemplate.query("SELECT COUNT(*) as totalData FROM peminjaman where statusPinjam=2",
@@ -338,6 +348,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
                         )).get(0);
     }
 
+    @Override
     public List<Peminjaman> filterLaporan(String keyword, String start, String end) {
         List<Peminjaman> headers;
 
@@ -625,6 +636,7 @@ public class PeminjamanRepositoryImpl implements PeminjamanRepository{
        return headers;
     }
 
+    @Override
     public List<Peminjaman> filterLaporanPaging(String keyword, String start, String end, int page, int limit) {
         List<Peminjaman> headers;
         int numPages;
