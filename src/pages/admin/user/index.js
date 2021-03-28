@@ -44,12 +44,10 @@ class User extends Component {
       totalRows: 0,
       idUser: "",
       username: "",
-      password: "",
       namaUser: "",
       alamat: "",
       phone: "",
       email: "",
-      passwordUlangi: "",
       cari: "",
     };
   }
@@ -79,7 +77,7 @@ class User extends Component {
   }
 
   searchData = (el) => {
-    var keyword = el.target.value;
+    let keyword = el.target.value;
     this.setState({
       cari: keyword,
     });
@@ -87,13 +85,10 @@ class User extends Component {
     if (keyword === "") {
       this.getUsers();
     } else {
-      let url = `http://localhost:8080/api/userserching/?keyword=${encodeURIComponent(
-        keyword
-      )}`;
+      let url = `http://localhost:8080/api/userserching/?keyword=${keyword}`;
 
       let url2 = `http://localhost:8080/api/userserchingpaging/?page=${
-        this.state.page + 1
-      }&limit=${this.state.rowsPerPage}&keyword=${encodeURIComponent(keyword)}`;
+        this.state.page + 1}&limit=${this.state.rowsPerPage}&keyword=${keyword}`;
 
       Promise.all([fetch(url), fetch(url2)])
         .then(([response, response2]) =>
@@ -118,7 +113,7 @@ class User extends Component {
     fetch(
       `http://localhost:8080/api/userserchingpaging/?page=${
         this.state.page + 1
-      }&limit=${this.state.rowsPerPage}&keyword=${encodeURIComponent(keyword)}`,
+      }&limit=${this.state.rowsPerPage}&keyword=${keyword}`,
       {
         method: "get",
         headers: {
@@ -187,24 +182,21 @@ class User extends Component {
 
   tambahAdmin = () => {
     let obj = this.state;
-    console.log(obj.password);
-    console.log(obj.passwordUlangi);
 
     if (
       obj.username === "" ||
-      obj.password === "" ||
       obj.namaUser === "" ||
       obj.alamat === "" ||
       obj.phone === "" ||
       obj.email === ""
     ) {
       swal("Gagal !", "Semua Data wajib diisi", "error");
-    } else if (obj.password !== obj.passwordUlangi) {
-      swal("Gagal !", "Password dan Konfirmasi password tidak sesuai", "error");
+    }else if(Number(obj.namaUser.length) >= 51){
+      swal("Gagal !", "Nama Lengkap terlalu Panjang, maksimal 50 Karakter", "error");
     } else {
       const objekDataAdmin = {
         username: this.state.username,
-        password: this.state.password,
+        password: this.state.username,
         namaUser: this.state.namaUser,
         alamat: this.state.alamat,
         phone: this.state.phone,
@@ -319,21 +311,20 @@ class User extends Component {
     });
   };
 
-  render() {
-    if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Member"
-    ) {
+  checkAkses = () =>{
+    if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin" && this.props.dataUserLogin.password === this.props.dataUserLogin.username) {
+      this.props.history.push("/ubahpassworddefault");
+    }else if (this.props.checkLogin === true &&this.props.dataUserLogin.role === "Member") {
       this.props.history.push("/pelanggan");
-    } else if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Umum"
-    ) {
+    } else if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Umum") {
       this.props.history.push("/pelanggan");
     } else if (this.props.checkLogin === false) {
       this.props.history.push("/login");
     }
+  }
 
+  render() {
+    this.checkAkses();
     return (
       <>
         <Header />
@@ -541,24 +532,6 @@ class User extends Component {
                   name="email"
                   onChange={this.setValueInput}
                   value={this.state.email}
-                />
-              </Div>
-              <Div className="form-group">
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  onChange={this.setValueInput}
-                  value={this.state.password}
-                />
-              </Div>
-              <Div className="form-group">
-                <Input
-                  type="password"
-                  placeholder="Konfirmasi password"
-                  name="passwordUlangi"
-                  onChange={this.setValueInput}
-                  value={this.state.passwordUlangi}
                 />
               </Div>
             </Div>

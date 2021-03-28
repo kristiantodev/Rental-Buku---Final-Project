@@ -98,7 +98,7 @@ class UbahPasswordDefault extends Component {
   };
 
 checkAkses= () => {
-  if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin") {
+  if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin" && this.props.dataUserLogin.password !== this.props.dataUserLogin.username) {
     this.props.history.push("/admin");
   }else if(this.props.checkLogin === true && this.props.dataUserLogin.role !== "Admin" && this.props.dataUserLogin.password !== this.props.dataUserLogin.username){
     this.props.history.push("/pelanggan");
@@ -114,7 +114,7 @@ checkAkses= () => {
         <AccountPage className="wrapper-page">
           <Logo logo={logo} />
           <Div className="p-1">
-            <h4 className="font-18 m-b-5 text-center text-primary">Ubah Password<br/> (Username : {this.props.dataUserLogin.username})<br/></h4>
+            <h4 className="font-18 m-b-5 text-center text-primary">Ubah Password ({this.props.dataUserLogin.username})<br/></h4>
             <Div className="form-group">
               <Label>Password Lama<font color="red">*</font></Label>
               <Input

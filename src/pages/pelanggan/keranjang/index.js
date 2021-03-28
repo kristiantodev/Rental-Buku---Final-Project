@@ -177,6 +177,12 @@ class Keranjang extends Component {
         colorText: "#ff4040",
         disable:true,
       });
+    }else if(this.state.totalPinjamNovel === 0 && this.state.totalPinjamKomik === 2 && this.state.totalPinjamEnsiklopedia === 0){
+      this.setState({
+        statusPeminjaman: "PEMINJAMAN DITOLAK",
+        colorText: "#ff4040",
+        disable:true,
+      });
       //2 jika syarat peminjaman sudah memenuhi dalam 1 bulan (checkout gagal)
      }else if(this.state.totalPinjamNovel === 1 && this.state.totalPinjamKomik === 1 && this.state.totalPinjamEnsiklopedia === 0){
       this.setState({
@@ -223,6 +229,12 @@ class Keranjang extends Component {
             colorText: "#1aa23e",
             disable:false,
           });
+        }else if(jumlahPinjamNovel === 0 && jumlahPinjamKomik <= 1 && jumlahPinjamEnsiklopedia === 0){
+          this.setState({
+            statusPeminjaman: "PEMINJAMAN DITERIMA",
+            colorText: "#1aa23e",
+            disable:false,
+          });
         }else{
           this.setState({
             statusPeminjaman: "PEMINJAMAN DITOLAK",
@@ -232,31 +244,19 @@ class Keranjang extends Component {
         }
 //4.3 (baru meminjam)
       }else if(this.state.totalPinjamNovel === 0 && this.state.totalPinjamKomik === 0 && this.state.totalPinjamEnsiklopedia === 0){
-        if(jumlahPinjamNovel === 2 && jumlahPinjamKomik === 0 && jumlahPinjamEnsiklopedia === 0){
+        if(jumlahPinjamNovel <= 2 && jumlahPinjamKomik === 0 && jumlahPinjamEnsiklopedia === 0){
           this.setState({
             statusPeminjaman: "PEMINJAMAN DITERIMA",
             colorText: "#1aa23e",
             disable:false,
           });
-        }else if(jumlahPinjamNovel === 1 && jumlahPinjamKomik === 1 && jumlahPinjamEnsiklopedia === 0){
+        }else if(jumlahPinjamNovel === 0 && jumlahPinjamKomik <= 2 && jumlahPinjamEnsiklopedia === 0){
           this.setState({
             statusPeminjaman: "PEMINJAMAN DITERIMA",
             colorText: "#1aa23e",
             disable:false,
           });
-        }else if(jumlahPinjamNovel === 0 && jumlahPinjamKomik === 0 && jumlahPinjamEnsiklopedia === 1){
-          this.setState({
-            statusPeminjaman: "PEMINJAMAN DITERIMA",
-            colorText: "#1aa23e",
-            disable:false,
-          });
-        }else if(jumlahPinjamNovel === 1 && jumlahPinjamKomik === 0 && jumlahPinjamEnsiklopedia === 0){
-          this.setState({
-            statusPeminjaman: "PEMINJAMAN DITERIMA",
-            colorText: "#1aa23e",
-            disable:false,
-          });
-        }else if(jumlahPinjamNovel === 0 && jumlahPinjamKomik === 1 && jumlahPinjamEnsiklopedia === 0){
+        }else if(jumlahPinjamNovel <=1 && jumlahPinjamKomik <= 1 && jumlahPinjamEnsiklopedia === 0){
           this.setState({
             statusPeminjaman: "PEMINJAMAN DITERIMA",
             colorText: "#1aa23e",
@@ -686,7 +686,7 @@ class Keranjang extends Component {
   };
 
   changeRupiah = (bilangan) => {
-    var reverse = bilangan.toString().split("").reverse().join(""),
+    let reverse = bilangan.toString().split("").reverse().join(""),
     ribuan = reverse.match(/\d{1,3}/g);
     ribuan = ribuan.join(".").split("").reverse().join("");
     return ribuan;
@@ -791,6 +791,8 @@ class Keranjang extends Component {
     //1 jika syarat peminjaman sudah memenuhi
     if(this.state.totalPinjamNovel === 2 && this.state.totalPinjamKomik === 0 && this.state.totalPinjamEnsiklopedia === 0){
       this.infoPeminjamanTolak();
+    }else if(this.state.totalPinjamNovel === 0 && this.state.totalPinjamKomik === 2 && this.state.totalPinjamEnsiklopedia === 0){
+      this.infoPeminjamanTolak();
       //2 jika syarat peminjaman sudah memenuhi
      }else if(this.state.totalPinjamNovel === 1 && this.state.totalPinjamKomik === 1 && this.state.totalPinjamEnsiklopedia === 0){
       this.infoPeminjamanTolak();
@@ -813,20 +815,18 @@ class Keranjang extends Component {
        }else if(this.state.totalPinjamNovel === 0 && this.state.totalPinjamKomik === 1 && this.state.totalPinjamEnsiklopedia === 0){
         if(jumlahPinjamNovel === 1 && jumlahPinjamKomik === 0 && jumlahPinjamEnsiklopedia === 0){
           this.simpanPeminjaman();
+        }else if(jumlahPinjamNovel === 0 && jumlahPinjamKomik === 1 && jumlahPinjamEnsiklopedia === 0){
+          this.simpanPeminjaman();
         }else{
           this.infoPeminjamanTolak();
         }
 //4.3 (baru meminjam)
       }else if(this.state.totalPinjamNovel === 0 && this.state.totalPinjamKomik === 0 && this.state.totalPinjamEnsiklopedia === 0){
-        if(jumlahPinjamNovel === 2 && jumlahPinjamKomik === 0 && jumlahPinjamEnsiklopedia === 0){
+        if(jumlahPinjamNovel <= 2 && jumlahPinjamKomik === 0 && jumlahPinjamEnsiklopedia === 0){
+          this.simpanPeminjaman();
+        }else if(jumlahPinjamNovel === 0 && jumlahPinjamKomik <= 2 && jumlahPinjamEnsiklopedia === 0){
           this.simpanPeminjaman();
         }else if(jumlahPinjamNovel === 1 && jumlahPinjamKomik === 1 && jumlahPinjamEnsiklopedia === 0){
-          this.simpanPeminjaman();
-        }else if(jumlahPinjamNovel === 0 && jumlahPinjamKomik === 0 && jumlahPinjamEnsiklopedia === 1){
-          this.simpanPeminjaman();
-        }else if(jumlahPinjamNovel === 1 && jumlahPinjamKomik === 0 && jumlahPinjamEnsiklopedia === 0){
-          this.simpanPeminjaman();
-        }else if(jumlahPinjamNovel === 0 && jumlahPinjamKomik === 1 && jumlahPinjamEnsiklopedia === 0){
           this.simpanPeminjaman();
         }else if(jumlahPinjamNovel === 0 && jumlahPinjamKomik === 0 && jumlahPinjamEnsiklopedia === 1){
           this.simpanPeminjaman();
@@ -1110,7 +1110,7 @@ class Keranjang extends Component {
     } else {
       swal(
         "Informasi",
-        "Pelanggan UMUM hanya bisa meminjam paling banyak 2 buku dalam kurun waktu 7 HARI TERAKHIR, dengan syarat: \n 2 buku novel. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
+        "Pelanggan UMUM hanya bisa meminjam paling banyak 2 buku dalam kurun waktu 7 HARI TERAKHIR, dengan syarat: \n 2 buku novel. \n 2 buku komik. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
         "warning"
       );
     }
@@ -1126,7 +1126,7 @@ class Keranjang extends Component {
     } else {
       swal(
         "Ditolak !!",
-        "Pelanggan UMUM hanya bisa meminjam paling banyak 2 buku dalam kurun waktu 7 HARI TERAKHIR, dengan syarat: \n 2 buku novel. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
+        "Pelanggan UMUM hanya bisa meminjam paling banyak 2 buku dalam kurun waktu 7 HARI TERAKHIR, dengan syarat: \n 2 buku novel. \n 2 buku komik. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
         "warning"
       );
     }

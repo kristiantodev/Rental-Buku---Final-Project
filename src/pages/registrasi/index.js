@@ -62,14 +62,8 @@ class Registrasi extends Component {
       obj.email === ""
     ) {
       swal("Gagal !", "Semua Data wajib diisi", "error");
-      // }else if(obj.username.length < 6 || obj.username.length > 8){
-      //   swal("Gagal !", "Panjang username antara 6-8 huruf", "error");
-      // }else if(!(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(obj.email))){
-      //   swal("Gagal !", "Format Email Tidak Sesuai", "error");
-      // }else if(!(/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/i.test(obj.phone))){
-      //   swal("Gagal !", "Format No.HP Tidak Sesuai", "error");
-      // }else if(!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,8}$/i.test(obj.password))){
-      //   swal("Gagal !", "Password minimal 6 karakter dan maksimal 8 karakter yang terdiri dari minimal 1 huruf besar, 1 huruf kecil, satu angka", "error");
+    }else if(Number(obj.namaUser.length) >= 51){
+      swal("Gagal !", "Nama Lengkap terlalu Panjang, maksimal 50 Karakter", "error");
     } else if (obj.password !== obj.passwordUlangi) {
       swal("Gagal !", "Password dan Konfirmasi password tidak sesuai", "error");
     } else {
@@ -107,7 +101,7 @@ class Registrasi extends Component {
   };
 
   checkAkses = () =>{
-    if (this.props.checkLogin === true && this.props.dataUserLogin.role !== "Admin" && this.props.dataUserLogin.password === this.props.dataUserLogin.username) {
+    if (this.props.checkLogin === true && this.props.dataUserLogin.password === this.props.dataUserLogin.username) {
       this.props.history.push("/ubahpassworddefault");
     }else if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin") {
       this.props.history.push("/admin");

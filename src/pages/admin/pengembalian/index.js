@@ -94,13 +94,10 @@ class Pengembalian extends Component {
     if (keyword === "") {
       this.getPeminjaman();
     } else {
-      let url = `http://localhost:8080/api/searchpengembalian/?keyword=${encodeURIComponent(
-        keyword
-      )}`;
+      let url = `http://localhost:8080/api/searchpengembalian/?keyword=${keyword}`;
 
-      let url2 = `http://localhost:8080/api/searchpengembalianpaging/?keyword=${encodeURIComponent(keyword)}&page=${
-        this.state.page + 1
-      }&limit=${this.state.rowsPerPage}`;
+      let url2 = `http://localhost:8080/api/searchpengembalianpaging/?keyword=${keyword}&page=${
+        this.state.page + 1}&limit=${this.state.rowsPerPage}`;
 
       Promise.all([fetch(url), fetch(url2)])
         .then(([response, response2]) =>
@@ -123,7 +120,7 @@ class Pengembalian extends Component {
 
   searchDataTampung = (keyword) => {
     fetch(
-      `http://localhost:8080/api/searchpengembalianpaging/?keyword=${encodeURIComponent(keyword)}&page=${
+      `http://localhost:8080/api/searchpengembalianpaging/?keyword=${keyword}&page=${
         this.state.page + 1
       }&limit=${this.state.rowsPerPage}`,
       {
@@ -182,8 +179,8 @@ class Pengembalian extends Component {
   };
 
   changeRupiah = (bilangan) => {
-    var reverse = bilangan.toString().split("").reverse().join(""),
-      ribuan = reverse.match(/\d{1,3}/g);
+    let reverse = bilangan.toString().split("").reverse().join(""),
+    ribuan = reverse.match(/\d{1,3}/g);
     ribuan = ribuan.join(".").split("").reverse().join("");
     return ribuan;
   };
@@ -197,23 +194,23 @@ class Pengembalian extends Component {
       listBuku : bukuDetail,
     });
 
-    var tglPinjamnya = new Date(tglPinjam);
-    var datePinjam = new Date(tglPinjam); 
+    let tglPinjamnya = new Date(tglPinjam);
+    let datePinjam = new Date(tglPinjam); 
     datePinjam.setDate(datePinjam.getDate() + 5);
-    var dtMaxPengembalian = datePinjam.getTime();
-    var dtNow = dateKembali.getTime();
+    let dtMaxPengembalian = datePinjam.getTime();
+    let dtNow = dateKembali.getTime();
 
-    var telat = Math.ceil((dtNow - dtMaxPengembalian)/86400000);
-    var lamaPinjam = Math.ceil((dtNow - tglPinjamnya.getTime())/86400000);
+    let telat = Math.ceil((dtNow - dtMaxPengembalian)/86400000);
+    let lamaPinjam = Math.ceil((dtNow - tglPinjamnya.getTime())/86400000);
 
     if(lamaPinjam === 0){
       lamaPinjam=1;
     }
     
-    var tglMaxPengembalian = `${datePinjam}`;
+    let tglMaxPengembalian = `${datePinjam}`;
     console.log("lama pinjam", lamaPinjam)
 
-    var denda;
+    let denda;
     if(dtNow <= dtMaxPengembalian){
       denda=0;
       this.setState({
@@ -236,10 +233,10 @@ class Pengembalian extends Component {
       });
     }
 
-    var total = bukuDetail.map((x) => x.hargaSewa)
+    let total = bukuDetail.map((x) => x.hargaSewa)
     .reduce((result, item) => result + (Number(item)*Number(lamaPinjam)), 0);
 
-    var totalBayar = denda+total;
+    let totalBayar = denda+total;
 
     this.setState({
       totalBayar : totalBayar
@@ -286,15 +283,11 @@ class Pengembalian extends Component {
 };
 
   checkAkses = () =>{
-    if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Member"
-    ) {
+    if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin" && this.props.dataUserLogin.password === this.props.dataUserLogin.username) {
+      this.props.history.push("/ubahpassworddefault");
+    }else if (this.props.checkLogin === true &&this.props.dataUserLogin.role === "Member") {
       this.props.history.push("/pelanggan");
-    } else if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Umum"
-    ) {
+    } else if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Umum") {
       this.props.history.push("/pelanggan");
     } else if (this.props.checkLogin === false) {
       this.props.history.push("/login");

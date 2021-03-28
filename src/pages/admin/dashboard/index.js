@@ -383,15 +383,11 @@ class Dashboard extends Component {
   };
 
   checkAkses = () => {
-    if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Member"
-    ) {
+    if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin" && this.props.dataUserLogin.password === this.props.dataUserLogin.username) {
+      this.props.history.push("/ubahpassworddefault");
+    }else if (this.props.checkLogin === true &&this.props.dataUserLogin.role === "Member") {
       this.props.history.push("/pelanggan");
-    } else if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Umum"
-    ) {
+    } else if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Umum") {
       this.props.history.push("/pelanggan");
     } else if (this.props.checkLogin === false) {
       this.props.history.push("/login");

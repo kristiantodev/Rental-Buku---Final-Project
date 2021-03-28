@@ -68,9 +68,7 @@ class BukuList extends Component {
     Promise.all([
       fetch(url),
       fetch("http://localhost:8080/api/buku/"),
-      fetch(`http://localhost:8080/api/lihatisikeranjang/?idCart=${encodeURIComponent(
-        this.props.dataUserLogin.idUser
-      )}`)
+      fetch(`http://localhost:8080/api/lihatisikeranjang/?idCart=${this.props.dataUserLogin.idUser}`)
     ])
       .then(([response, response2, response3]) =>
         Promise.all([response.json(), response2.json(), response3.json()])
@@ -84,9 +82,8 @@ class BukuList extends Component {
 
         let dataKomik = this.state.books.filter((x) => x.jenisBuku === "Komik");
         let dataNovel = this.state.books.filter((x) => x.jenisBuku === "Novel");
-        let dataEnsiklopedia = this.state.books.filter(
-          (x) => x.jenisBuku === "Ensiklopedia"
-        );
+        let dataEnsiklopedia = this.state.books.filter((x) => x.jenisBuku === "Ensiklopedia");
+
         const total = this.state.books.filter(a => a.isActive === 1).length;
 
         this.setState({
@@ -130,7 +127,7 @@ class BukuList extends Component {
   };
 
   searchData = (el) => {
-    var keyword = el.target.value;
+    let keyword = el.target.value;
     this.setState({
       cari: keyword,
     });
@@ -138,13 +135,11 @@ class BukuList extends Component {
     if (keyword === "") {
       this.getBooks();
     } else {
-      let url = `http://localhost:8080/api/bukuserching/?keyword=${encodeURIComponent(
-        keyword
-      )}`;
+      let url = `http://localhost:8080/api/bukuserching/?keyword=${keyword}`;
 
       let url2 = `http://localhost:8080/api/bukuserchingpaging/?page=${
         this.state.page + 1
-      }&limit=${this.state.rowsPerPage}&keyword=${encodeURIComponent(keyword)}`;
+      }&limit=${this.state.rowsPerPage}&keyword=${keyword}`;
 
       Promise.all([fetch(url), fetch(url2)])
         .then(([response, response2]) =>
@@ -169,7 +164,7 @@ class BukuList extends Component {
     fetch(
       `http://localhost:8080/api/bukuserchingpaging/?page=${
         this.state.page + 1
-      }&limit=${this.state.rowsPerPage}&keyword=${encodeURIComponent(keyword)}`,
+      }&limit=${this.state.rowsPerPage}&keyword=${keyword}`,
       {
         method: "get",
         headers: {
@@ -201,8 +196,8 @@ class BukuList extends Component {
   };
 
   changeRupiah = (bilangan) => {
-    var reverse = bilangan.toString().split("").reverse().join(""),
-      ribuan = reverse.match(/\d{1,3}/g);
+    let reverse = bilangan.toString().split("").reverse().join(""),
+    ribuan = reverse.match(/\d{1,3}/g);
     ribuan = ribuan.join(".").split("").reverse().join("");
     return ribuan;
   };
@@ -217,7 +212,7 @@ class BukuList extends Component {
     } else {
       swal(
         "Informasi",
-        "Pelanggan UMUM hanya bisa meminjam paling banyak 2 buku dalam kurun waktu 7 HARI TERAKHIR, dengan syarat: \n 2 buku novel. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
+        "Pelanggan UMUM hanya bisa meminjam paling banyak 2 buku dalam kurun waktu 7 HARI TERAKHIR, dengan syarat: \n 2 buku novel. \n 2 buku komik. \n 1 buku novel dan buku komik. \n 1 buku ensiklopedia.",
         "warning"
       );
     }
@@ -286,9 +281,7 @@ class BukuList extends Component {
 
   checkCart = () => {
     fetch(
-      `http://localhost:8080/api/cart/?idCart=${encodeURIComponent(
-        this.props.dataUserLogin.idUser
-      )}`,
+      `http://localhost:8080/api/cart/?idCart=${this.props.dataUserLogin.idUser}`,
       {
         method: "get",
         headers: {
@@ -309,9 +302,7 @@ class BukuList extends Component {
 
   checkPengembalian = () => {
     fetch(
-      `http://localhost:8080/api/checkpengembalian/?idUser=${encodeURIComponent(
-        this.props.dataUserLogin.idUser
-      )}`,
+      `http://localhost:8080/api/checkpengembalian/?idUser=${this.props.dataUserLogin.idUser}`,
       {
         method: "get",
         headers: {

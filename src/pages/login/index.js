@@ -77,7 +77,7 @@ class Login extends Component {
   };
 
 checkAkses= () => {
-  if (this.props.checkLogin === true && this.props.dataUserLogin.role !== "Admin" && this.props.dataUserLogin.password === this.props.dataUserLogin.username) {
+  if (this.props.checkLogin === true && this.props.dataUserLogin.password === this.props.dataUserLogin.username) {
     this.props.history.push("/ubahpassworddefault");
   }else if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin") {
     this.props.history.push("/admin");

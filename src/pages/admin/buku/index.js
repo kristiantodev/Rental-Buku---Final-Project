@@ -122,7 +122,7 @@ class Buku extends Component {
   };
 
   searchData = (el) => {
-    var keyword = el.target.value;
+    let keyword = el.target.value;
     this.setState({
       cari: keyword,
     });
@@ -130,13 +130,10 @@ class Buku extends Component {
     if (keyword === "") {
       this.getBooks();
     } else {
-      let url = `http://localhost:8080/api/bukuserching/?keyword=${encodeURIComponent(
-        keyword
-      )}`;
+      let url = `http://localhost:8080/api/bukuserching/?keyword=${keyword}`;
 
       let url2 = `http://localhost:8080/api/bukuserchingpaging/?page=${
-        this.state.page + 1
-      }&limit=${this.state.rowsPerPage}&keyword=${encodeURIComponent(keyword)}`;
+        this.state.page + 1}&limit=${this.state.rowsPerPage}&keyword=${keyword}`;
 
       Promise.all([fetch(url), fetch(url2)])
         .then(([response, response2]) =>
@@ -217,6 +214,9 @@ class Buku extends Component {
 
   tambahBuku = () => {
     let obj = this.state;
+
+    console.log("length stok", obj.stok.length)
+    console.log("length harga", obj.hargaSewa.length)
     if (
       obj.idBuku === "" ||
       obj.judulBuku === "" ||
@@ -227,8 +227,16 @@ class Buku extends Component {
       obj.keterangan === ""
     ) {
       swal("Gagal !", "Semua Data wajib diisi", "error");
+    }else if(Number(obj.idBuku.length) >= 20){
+      swal("Gagal !", "ID Buku tidak boleh melebihi 20 Karakter", "error");
+    }else if(Number(obj.judulBuku.length) >= 100){
+      swal("Gagal !", "Judul Buku terlalu Panjang, maksimal 100 Karakter", "error");
+    }else if(Number(obj.pengarang.length) >= 51){
+      swal("Gagal !", "Nama Pengarang terlalu Panjang, maksimal 50 Karakter", "error");
     }else if(obj.stok < 0 || obj.hargaSewa < 0){
       swal("Gagal !", "Stok atau harga sewa tidak boleh kurang dari 0", "error");
+    }else if(Number(obj.stok.length) >= 4 || Number(obj.hargaSewa.length) >= 8){
+      swal("Gagal !", "Stok atau harga sewa tidak boleh melebihi 3 atau 7 Digit", "error");
     } else {
       const objekBuku = {
         idBuku: this.state.idBuku,
@@ -304,8 +312,14 @@ class Buku extends Component {
       obj.keterangan === ""
     ) {
       swal("Gagal !", "Semua Data wajib diisi", "error");
+    }else if(Number(obj.judulBuku.length) >= 100){
+      swal("Gagal !", "Judul Buku terlalu Panjang, maksimal 100 Karakter", "error");
+    }else if(Number(obj.pengarang.length) >= 51){
+      swal("Gagal !", "Nama Pengarang terlalu Panjang, maksimal 50 Karakter", "error");
     }else if(obj.stok < 0 || obj.hargaSewa < 0){
       swal("Gagal !", "Stok atau harga sewa tidak boleh kurang dari 0", "error");
+    }else if(Number(obj.hargaSewa.length) >= 8){
+      swal("Gagal !", "Harga sewa tidak boleh melebihi 7 Digit", "error");
     } else {
       const objekBuku = {
         idBuku: this.state.idBuku,
@@ -422,22 +436,18 @@ class Buku extends Component {
   };
 
   changeRupiah = (bilangan) => {
-    var reverse = bilangan.toString().split("").reverse().join(""),
+    let reverse = bilangan.toString().split("").reverse().join(""),
     ribuan = reverse.match(/\d{1,3}/g);
     ribuan = ribuan.join(".").split("").reverse().join("");
     return ribuan;
   };
 
-  checkAkses=()=>{
-    if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Member"
-    ) {
+  checkAkses = () =>{
+    if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin" && this.props.dataUserLogin.password === this.props.dataUserLogin.username) {
+      this.props.history.push("/ubahpassworddefault");
+    }else if (this.props.checkLogin === true &&this.props.dataUserLogin.role === "Member") {
       this.props.history.push("/pelanggan");
-    } else if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Umum"
-    ) {
+    } else if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Umum") {
       this.props.history.push("/pelanggan");
     } else if (this.props.checkLogin === false) {
       this.props.history.push("/login");

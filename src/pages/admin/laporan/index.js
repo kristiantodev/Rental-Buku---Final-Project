@@ -152,27 +152,23 @@ class Laporan extends Component {
   };
 
   changeRupiah = (bilangan) => {
-    var reverse = bilangan.toString().split("").reverse().join(""),
+    let reverse = bilangan.toString().split("").reverse().join(""),
     ribuan = reverse.match(/\d{1,3}/g);
     ribuan = ribuan.join(".").split("").reverse().join("");
     return ribuan;
   };
 
   getTotalBayar = (biaya, denda) => {
-    var totalbayar = biaya + denda;
+    let totalbayar = biaya + denda;
     return totalbayar;
   };
 
   checkAkses = () => {
-    if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Member"
-    ) {
+    if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin" && this.props.dataUserLogin.password === this.props.dataUserLogin.username) {
+      this.props.history.push("/ubahpassworddefault");
+    }else if (this.props.checkLogin === true &&this.props.dataUserLogin.role === "Member") {
       this.props.history.push("/pelanggan");
-    } else if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Umum"
-    ) {
+    } else if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Umum") {
       this.props.history.push("/pelanggan");
     } else if (this.props.checkLogin === false) {
       this.props.history.push("/login");
