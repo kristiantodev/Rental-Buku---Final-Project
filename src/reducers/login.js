@@ -1,6 +1,6 @@
 let defaultState = {
     users: [{
-        idUser : "1",
+        idUser : "11111",
         username : "admin",
         password : "admin",
         namaUser : "Andika Sanjaya",
@@ -19,7 +19,7 @@ let defaultState = {
         phone : "081000111222",
         email : "admin@nexsoft.co.id",
         tglRegistrasi : "2020-11-10",
-        role : "Pelanggan"
+        role : "Umum"
     }]
 }
 

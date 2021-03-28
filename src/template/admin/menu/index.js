@@ -14,7 +14,7 @@ class Menu extends Component {
   }
 
   getProfil = () => {
-    fetch(`http://localhost:8080/api/profil/?idUser=${encodeURIComponent(this.props.dataUserLogin.idUser)}`, {
+    fetch(`http://localhost:8080/api/profil/?idUser=${this.props.dataUserLogin.idUser}`, {
       method: "get",
       headers: {
           "Content-Type": "application/json; ; charset=utf-8",

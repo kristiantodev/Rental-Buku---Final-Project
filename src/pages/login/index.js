@@ -62,11 +62,9 @@ class Login extends Component {
 
             if(this.state.pengguna.role === "Admin"){
               this.props.submitLogin({ userData: this.state.pengguna});
-              this.props.history.push("/admin");
               swal("Success !", "Login berhasil, selamat datang...", "success");
             }else if(this.state.pengguna.role === "Member" || this.state.pengguna.role === "Umum"){
               this.props.submitLogin({ userData: this.state.pengguna});
-              this.props.history.push("/pelanggan");
               swal("Success !", "Login berhasil, selamat datang...", "success");
             }
         })
@@ -79,7 +77,9 @@ class Login extends Component {
   };
 
 checkAkses= () => {
-  if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin") {
+  if (this.props.checkLogin === true && this.props.dataUserLogin.role !== "Admin" && this.props.dataUserLogin.password === this.props.dataUserLogin.username) {
+    this.props.history.push("/ubahpassworddefault");
+  }else if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin") {
     this.props.history.push("/admin");
   }else if(this.props.checkLogin === true && this.props.dataUserLogin.role === "Member"){
     this.props.history.push("/pelanggan");

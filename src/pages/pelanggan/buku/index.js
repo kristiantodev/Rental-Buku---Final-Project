@@ -361,18 +361,16 @@ class BukuList extends Component {
   };
 
   checkAkses=()=>{
-    if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Admin"
-    ) {
+    if (this.props.checkLogin === true && this.props.dataUserLogin.role !== "Admin" && this.props.dataUserLogin.password === this.props.dataUserLogin.username) {
+      this.props.history.push("/ubahpassworddefault");
+    }else  if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin") {
       this.props.history.push("/admin");
-    } else if (this.props.checkLogin === false) {
+    }else if(this.props.checkLogin === false){
       this.props.history.push("/login");
     }
   }
 
   render() {
-    console.log("object items", this.state.items)
     this.checkAkses();
     return (
       <>

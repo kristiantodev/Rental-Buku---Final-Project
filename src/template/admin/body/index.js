@@ -17,6 +17,7 @@ import {
 } from "../../../pages/pelanggan";
 import { Login } from "../../../pages";
 import { Registrasi } from "../../../pages";
+import { UbahPasswordDefault } from "../../../pages";
 
 class Body extends Component {
   constructor(props) {
@@ -51,6 +52,7 @@ class Body extends Component {
           component={(props) => <Profil {...props} />}
         />
         <Route path="/login" component={(props) => <Login {...props} />} />
+        <Route path="/ubahpassworddefault" component={(props) => <UbahPasswordDefault {...props} />} />
         <Route
           path="/registrasi"
           component={(props) => <Registrasi {...props} />}

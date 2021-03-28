@@ -107,20 +107,13 @@ class Registrasi extends Component {
   };
 
   checkAkses = () =>{
-    if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Admin"
-    ) {
+    if (this.props.checkLogin === true && this.props.dataUserLogin.role !== "Admin" && this.props.dataUserLogin.password === this.props.dataUserLogin.username) {
+      this.props.history.push("/ubahpassworddefault");
+    }else if (this.props.checkLogin === true && this.props.dataUserLogin.role === "Admin") {
       this.props.history.push("/admin");
-    } else if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Member"
-    ) {
+    }else if(this.props.checkLogin === true && this.props.dataUserLogin.role === "Member"){
       this.props.history.push("/pelanggan");
-    } else if (
-      this.props.checkLogin === true &&
-      this.props.dataUserLogin.role === "Umum"
-    ) {
+    }else if(this.props.checkLogin === true && this.props.dataUserLogin.role === "Umum"){
       this.props.history.push("/pelanggan");
     }
 

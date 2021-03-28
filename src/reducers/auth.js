@@ -13,7 +13,7 @@ const authReducer = (state = defaultState, action) => {
               isLogin: true,
               userLogin: {
                 idUser : action.payload.userData.idUser,
-                namaUser: action.payload.userData.namaUser,
+                username: action.payload.userData.username,
                 role: action.payload.userData.role,
                 password: action.payload.userData.password
             }
