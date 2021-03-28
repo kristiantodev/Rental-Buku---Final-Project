@@ -99,12 +99,6 @@ class BukuList extends Component {
       });
   }
 
-  addItemToState = (item) => {
-    this.setState((prevState) => ({
-      items: [...prevState.items, item],
-    }));
-  };
-
   componentDidMount() {
     this.getBooks();
     this.checkCart();

@@ -96,12 +96,6 @@ class Buku extends Component {
       });
   }
 
-  addItemToState = (item) => {
-    this.setState((prevState) => ({
-      items: [...prevState.items, item],
-    }));
-  };
-
   componentDidMount() {
     this.getBooks();
   }

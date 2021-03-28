@@ -136,12 +136,6 @@ class User extends Component {
       });
   };
 
-  addItemToState = (item) => {
-    this.setState((prevState) => ({
-      items: [...prevState.items, item],
-    }));
-  };
-
   componentDidMount() {
     this.getUsers();
   }

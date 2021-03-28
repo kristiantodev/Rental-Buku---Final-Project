@@ -26,7 +26,8 @@ import {
   ModalClick,
   Label,
   Input,
-  Textarea
+  Textarea,
+  Bold
 } from "../../../component";
 
 class Profil extends Component {
@@ -273,6 +274,12 @@ class Profil extends Component {
           </HeaderContent>
 
           <IsiBody>
+        <Div className="alert alert-ku" role="alert">
+        <font color="#0285b4"><h6><Bold><Italic className="fas fa-exclamation-circle" /> Informasi :</Bold></h6>
+    <Italic className="fas fa-angle-double-right" /> Anda dapat mengubah status pelanggan dengan menghubungi Admin<br />
+    <Italic className="fas fa-angle-double-right" /> Ketika meminjam, keterlambatan 1 detik akan dihitung denda perhari Rp. 1.000 </font>
+        </Div>
+
             <Row>
               <Div className="col-lg-4">
     

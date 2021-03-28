@@ -144,12 +144,6 @@ class Pengembalian extends Component {
       });
   };
 
-  addItemToState = (item) => {
-    this.setState((prevState) => ({
-      items: [...prevState.items, item],
-    }));
-  };
-
   componentDidMount() {
     this.getPeminjaman();
   }
@@ -253,6 +247,15 @@ class Pengembalian extends Component {
       listBuku : this.state.listBuku
     };
 
+    swal({
+      title: "Apakah anda yakin ?",
+      text: "Data Peminjaman yang sudah dikembalikan akan dipindahkan ke Laporan...",
+      icon: "warning",
+      buttons: true,
+      dangerMode: false,
+    }).then((konfirmasi) => {
+      if (konfirmasi) {
+
     fetch("http://localhost:8080/api/pengembalianbuku/", {
     method: "put",
     headers: {
@@ -275,11 +278,15 @@ class Pengembalian extends Component {
           .then((value) => {
             this.getPeminjaman();
             $("#pengembalian .close").click();
-          })
-          
+          })     
       }
     })
     .catch((e) => {});
+  } else {
+    swal("Batal !", "Pengembalian Buku dibatalkan", "error");
+  }
+});
+
 };
 
   checkAkses = () =>{

@@ -698,7 +698,7 @@ class Keranjang extends Component {
       text: "Buku akan dihapus dari keranjang...",
       icon: "warning",
       buttons: true,
-      dangerMode: true,
+      dangerMode: false,
     }).then((konfirmasi) => {
       if (konfirmasi) {
 
@@ -1054,7 +1054,7 @@ class Keranjang extends Component {
         "Setelah anda meminjam, anda harus mengembalikan terlebih dahulu untuk meminjam kembali...",
       icon: "warning",
       buttons: true,
-      dangerMode: true,
+      dangerMode: false,
     }).then((konfirmasi) => {
       if (konfirmasi) {
         this.simpanPeminjamanByRole();
@@ -1071,7 +1071,7 @@ class Keranjang extends Component {
         "Peminjaman akan dibatalkan dan semua buku dalam keranjang akan dihapus...",
       icon: "warning",
       buttons: true,
-      dangerMode: true,
+      dangerMode: false,
     }).then((konfirmasi) => {
       if (konfirmasi) {
         fetch("http://localhost:8080/api/cart/" + id, {

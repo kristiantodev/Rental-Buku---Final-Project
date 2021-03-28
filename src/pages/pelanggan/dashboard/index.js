@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Header, Menu, Footer } from "../../../template/pelanggan";
 import { Line } from "react-chartjs-2";
 import swal from "sweetalert";
+import TablePagination from "@material-ui/core/TablePagination";
 import {
   Card,
   Content,
@@ -31,7 +32,10 @@ class DashboardPelanggan extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      riwayatPeminjaman: [
+      page: 0,
+      rowsPerPage: 3,
+      totalRows: 0,
+      items: [
         {
           idPinjam: "",
           idUser: "",
@@ -131,57 +135,51 @@ class DashboardPelanggan extends Component {
   componentDidMount() {
     Promise.all([
       fetch(
-        `http://localhost:8080/api/pengeluaranpelanggan/?idUser=${encodeURIComponent(
-          this.props.dataUserLogin.idUser
-        )}`
+        `http://localhost:8080/api/pengeluaranpelanggan/?idUser=${this.props.dataUserLogin.idUser}`
       ),
       fetch(
-        `http://localhost:8080/api/riwayatpeminjaman/?idUser=${encodeURIComponent(
-          this.props.dataUserLogin.idUser
-        )}`
+        `http://localhost:8080/api/riwayatpeminjamanpaging/?idUser=${this.props.dataUserLogin.idUser}
+        &&page=${this.state.page + 1}&limit=${this.state.rowsPerPage}`
       ),
       fetch(
-        `http://localhost:8080/api/totalbukupinjam/?idUser=${encodeURIComponent(
-          this.props.dataUserLogin.idUser
-        )}`
+        `http://localhost:8080/api/totalbukupinjam/?idUser=${this.props.dataUserLogin.idUser}`
       ),
       fetch(
-        `http://localhost:8080/api/totalbukubelumdikembalikan/?idUser=${encodeURIComponent(
-          this.props.dataUserLogin.idUser
-        )}`
+        `http://localhost:8080/api/totalbukubelumdikembalikan/?idUser=${this.props.dataUserLogin.idUser}`
       ),
       fetch(
-        `http://localhost:8080/api/totalpengeluaran/?idUser=${encodeURIComponent(
-          this.props.dataUserLogin.idUser
-        )}`
+        `http://localhost:8080/api/totalpengeluaran/?idUser=${this.props.dataUserLogin.idUser}`
+      ),
+      fetch(
+        `http://localhost:8080/api/totalriwayatpeminjaman/?idUser=${this.props.dataUserLogin.idUser}`
       ),
     ])
-      .then(([response, response2, response3, response4, response5]) =>
+      .then(([response, response2, response3, response4, response5, response6]) =>
         Promise.all([
           response.json(),
           response2.json(),
           response3.json(),
           response4.json(),
           response5.json(),
+          response6.json(),
         ])
       )
-      .then(([json, json2, json3, json4, json5]) => {
+      .then(([json, json2, json3, json4, json5, json6]) => {
         var date = new Date(); 
         this.setState({
           totalBukuTerpinjam: json3.data,
           totalBukuBelumDikembalikan: json4.data,
           totalPengeluaran: json5.data,
           pilihbulan:date.getMonth()+1,
-          pilihtahun:date.getFullYear()
+          pilihtahun:date.getFullYear(),
+          totalRows:json6
         });
 
         if (json2.length !== 0) {
           this.setState({
-            riwayatPeminjaman: json2,
+            items: json2,
           });
         }
-
-        console.log("object", this.state.riwayatPeminjaman);
 
         const labelPdp = json.map(function (obj) {
           return obj.label;
@@ -224,6 +222,49 @@ class DashboardPelanggan extends Component {
       })
 
   }
+
+  getRiwayat=()=>{
+    Promise.all([
+      fetch(
+        `http://localhost:8080/api/riwayatpeminjamanpaging/?idUser=${this.props.dataUserLogin.idUser}
+        &&page=${this.state.page + 1}&limit=${this.state.rowsPerPage}`
+      ),
+      fetch(
+        `http://localhost:8080/api/totalriwayatpeminjaman/?idUser=${this.props.dataUserLogin.idUser}`
+      ),
+    ])
+      .then(([response, response2]) =>
+        Promise.all([response.json(), response2.json()])
+      )
+      .then(([json, json2]) => {
+
+        if (json2.length !== 0) {
+          this.setState({
+            items: json,
+          });
+        }
+
+        this.setState({
+          totalRows:json2
+        })
+
+      })
+
+      .catch(() => {
+        swal("Gagal !", "Gagal mengambil data", "error");
+      });
+  }
+
+  handleChangeRowsPerPage = (event) => {
+    this.setState({ rowsPerPage: parseInt(event.target.value, 10) });
+    this.setState({ page: 0 });
+  };
+
+  handleChangePage = (event, newPage) => {
+    this.setState({ page: newPage }, () => {
+      this.getRiwayat()
+    });
+  };
 
   setValueInput = (e) => {
     this.setState({
@@ -423,7 +464,7 @@ class DashboardPelanggan extends Component {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {this.state.riwayatPeminjaman.map((value, index) => {
+                  {this.state.items.map((value, index) => {
                     return (
                       <TableRow align="center" key={index}>
                         <TableData>{value.tglPinjam}</TableData>
@@ -463,6 +504,14 @@ class DashboardPelanggan extends Component {
                   })}
                 </TableBody>
               </Table>
+              <TablePagination
+                  component="div"
+                  count={this.state.totalRows}
+                  page={this.state.page}
+                  onChangePage={this.handleChangePage}
+                  rowsPerPage={this.state.rowsPerPage}
+                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                />
             </Div>
           </ModalContent>
         </Modal>
