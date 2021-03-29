@@ -52,10 +52,16 @@ class User extends Component {
     };
   }
 
-  getUsers() {
+  getUsers(rowsPerPage) {
+    if(rowsPerPage){
+
+    }else{
+      rowsPerPage = this.state.rowsPerPage
+    }
+
     let url = `http://localhost:8080/api/userpaging/?page=${
       this.state.page + 1
-    }&limit=${this.state.rowsPerPage}`;
+    }&limit=${rowsPerPage}`;
 
     Promise.all([fetch(url), fetch("http://localhost:8080/api/user/")])
       .then(([response, response2]) =>
@@ -142,12 +148,14 @@ class User extends Component {
   handleChangeRowsPerPage = (event) => {
     this.setState({ rowsPerPage: parseInt(event.target.value, 10) });
     this.setState({ page: 0 });
+    this.getUsers(event.target.value)
+
   };
 
   handleChangePage = (event, newPage) => {
     this.setState({ page: newPage }, () => {
       if (this.state.cari === "") {
-        this.getUsers();
+        this.getUsers(this.state.rowsPerPage);
       } else {
         this.searchDataTampung(this.state.cari);
       }
@@ -197,7 +205,7 @@ class User extends Component {
         role: "Admin",
       };
 
-      fetch("http://localhost:8080/api/registrasi/", {
+      fetch("http://localhost:8080/api/tambahadmin/", {
         method: "post",
         headers: {
           "Content-Type": "application/json; ; charset=utf-8",

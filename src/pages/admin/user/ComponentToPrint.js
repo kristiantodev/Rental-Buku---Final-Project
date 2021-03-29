@@ -45,7 +45,7 @@ class ComponentToPrint extends Component {
                         <TableData align="left">{value.phone}</TableData>
                         <TableData align="left">{value.email}</TableData>
                         <TableData>{value.tglRegistrasi}</TableData>
-                        <TableData align="left">{value.alamat}</TableData>
+                        <TableData align="left">{value.alamat.substring(30,0)}</TableData>
                       </TableRow>
                     );
                   })}

@@ -96,7 +96,28 @@ class Keranjang extends Component {
       .catch((e) => {});
   };
 
+  getProfil = () => {
+    fetch(`http://localhost:8080/api/profil/?idUser=${this.props.dataUserLogin.idUser}`, {
+      method: "get",
+      headers: {
+          "Content-Type": "application/json; ; charset=utf-8",
+          "Access-Control-Allow-Headers": "Authorization, Content-Type",
+          "Access-Control-Allow-Origin": "*"
+      }
+  })
+  .then(response => response.json())
+  .then(json => {
+    this.props.updateStatus({ userData: json});
+  })
+  .catch((e) => {
+      console.log(e);
+      swal("Gagal !", "Gagal mengambil data", "error");
+  });
+ 
+  };
+
   componentDidMount() {
+    this.getProfil();
     this.getPeminjaman();
     this.getStatusPeminjaman();
     this.checkPengembalian();
@@ -1410,6 +1431,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     keluar: () => dispatch({ type: "LOGOUT_SUCCESS" }),
+    updateStatus: (data) => dispatch({ type: "UPDATE_STATUS_SUCCESS", payload: data })
   };
 };
 

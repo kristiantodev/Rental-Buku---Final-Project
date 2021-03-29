@@ -109,7 +109,7 @@ class Profil extends Component {
         text: "Password akan diganti dan anda akan keluar dari sistem...",
         icon: "warning",
         buttons: true,
-        dangerMode: true,
+        dangerMode: false,
       })
       .then((konfirmasi) => {
         if (konfirmasi) {
@@ -193,7 +193,7 @@ class Profil extends Component {
         text: "Anda akan mengubah profil dan username anda...",
         icon: "warning",
         buttons: true,
-        dangerMode: true,
+        dangerMode: false,
       })
       .then((konfirmasi) => {
         if (konfirmasi) {

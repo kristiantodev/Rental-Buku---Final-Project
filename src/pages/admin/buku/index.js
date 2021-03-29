@@ -67,10 +67,17 @@ class Buku extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  getBooks() {
+  getBooks(rowsPerPage) {
+
+    if(rowsPerPage){
+
+    }else{
+      rowsPerPage = this.state.rowsPerPage
+    }
+
     let url = `http://localhost:8080/api/bukupaging/?page=${
       this.state.page + 1
-    }&limit=${this.state.rowsPerPage}`;
+    }&limit=${rowsPerPage}`;
 
     Promise.all([
       fetch(url),
@@ -103,12 +110,13 @@ class Buku extends Component {
   handleChangeRowsPerPage = (event) => {
     this.setState({ rowsPerPage: parseInt(event.target.value, 10) });
     this.setState({ page: 0 });
+    this.getBooks(event.target.value);
   };
 
   handleChangePage = (event, newPage) => {
     this.setState({ page: newPage }, () => {
       if (this.state.cari === "") {
-        this.getBooks();
+        this.getBooks(this.state.rowsPerPage);
       } else {
         this.searchDataTampung(this.state.cari);
       }

@@ -52,10 +52,16 @@ class Pengembalian extends Component {
     };
   }
 
-  getPeminjaman() {
+  getPeminjaman(rowsPerPage) {
+    if(rowsPerPage){
+
+    }else{
+      rowsPerPage = this.state.rowsPerPage
+    }
+
     let url = `http://localhost:8080/api/pengembalian/?page=${
       this.state.page + 1
-    }&limit=${this.state.rowsPerPage}`;
+    }&limit=${rowsPerPage}`;
 
     Promise.all([
       fetch(url),
@@ -151,12 +157,13 @@ class Pengembalian extends Component {
   handleChangeRowsPerPage = (event) => {
     this.setState({ rowsPerPage: parseInt(event.target.value, 10) });
     this.setState({ page: 0 });
+    this.getPeminjaman(event.target.value);
   };
 
   handleChangePage = (event, newPage) => {
     this.setState({ page: newPage }, () => {
       if (this.state.cari === "") {
-        this.getPeminjaman();
+        this.getPeminjaman(this.state.rowsPerPage);
       } else {
         this.searchDataTampung(this.state.cari);
       }

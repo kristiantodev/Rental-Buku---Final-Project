@@ -404,7 +404,6 @@ class DashboardPelanggan extends Component {
                   onChange={this.setValueInput}
                   name="pilihbulan"
                 >
-                  <Option value="">-- Pilih Bulan--</Option>
                   {this.state.bulan.map((Item, idx) => (
                         <Option value={Item.bulan} key={idx}>
                           {Item.namaBulan}
@@ -418,7 +417,6 @@ class DashboardPelanggan extends Component {
                   onChange={this.setValueInput}
                   name="pilihtahun"
                 >
-                  <Option value="">-- Pilih Tahun--</Option>
                   {this.state.tahun.map((item, idx) => <Option key={idx} value={item}>{item}</Option>)}
                 </Select>   
               </Div>

@@ -411,7 +411,6 @@ class Dashboard extends Component {
                   onChange={this.setValueInput}
                   name="pilihbulan"
                 >
-                  <Option value="">-- Pilih Bulan--</Option>
                   {this.state.bulan.map((Item, idx) => (
                         <Option value={Item.bulan} key={idx}>
                           {Item.namaBulan}
@@ -425,7 +424,6 @@ class Dashboard extends Component {
                   onChange={this.setValueInput}
                   name="pilihtahun"
                 >
-                  <Option value="">-- Pilih Tahun--</Option>
                   {this.state.tahun.map((item, idx) => <Option key={idx} value={item}>{item}</Option>)}
                 </Select>   
               </Div>
@@ -451,7 +449,7 @@ class Dashboard extends Component {
               color="card bg-primary mini-stat position-relative"
               judul="Dikembalikan :"
               isi={this.state.bukuKembali + " Buku"}
-              icon="fas fa-clock display-2"
+              icon="fas fa-book-open display-2"
             />
             <Card
               size="col-xl-4 col-md-6"

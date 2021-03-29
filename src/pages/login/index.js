@@ -140,7 +140,6 @@ checkAkses= () => {
 
 const mapStateToProps = (state) => ({
   checkLogin: state.AReducer.isLogin,
-  dataUser: state.UReducer.users,
   dataUserLogin: state.AReducer.userLogin,
 });
 
