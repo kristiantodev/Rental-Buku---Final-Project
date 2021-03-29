@@ -129,7 +129,7 @@ class BukuList extends Component {
     if (keyword === "") {
       this.getBooks();
     } else {
-      let url = `http://localhost:8080/api/bukuserching/?keyword=${keyword}`;
+      let url = `http://localhost:8080/api/totalbukupaginguser/?keyword=${keyword}`;
 
       let url2 = `http://localhost:8080/api/bukuserchingpaging/?page=${
         this.state.page + 1
@@ -142,10 +142,9 @@ class BukuList extends Component {
         .then(([json, json2]) => {
           this.setState({
             items: json2,
+            totalRows:json
           });
 
-          const total = json.filter(a => a.isActive === 1).length;
-          this.setState({ totalRows: total });
         })
         .catch((e) => {
           console.log(e);

@@ -85,7 +85,7 @@ class User extends Component {
     if (keyword === "") {
       this.getUsers();
     } else {
-      let url = `http://localhost:8080/api/userserching/?keyword=${keyword}`;
+      let url = `http://localhost:8080/api/totaluserpaging/?keyword=${keyword}`;
 
       let url2 = `http://localhost:8080/api/userserchingpaging/?page=${
         this.state.page + 1}&limit=${this.state.rowsPerPage}&keyword=${keyword}`;
@@ -97,10 +97,9 @@ class User extends Component {
         .then(([json, json2]) => {
           this.setState({
             items: json2,
+            totalRows:json
           });
 
-          const total = json.length;
-          this.setState({ totalRows: total });
         })
         .catch((e) => {
           console.log(e);

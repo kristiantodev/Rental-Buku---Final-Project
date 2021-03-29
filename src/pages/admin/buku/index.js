@@ -124,7 +124,7 @@ class Buku extends Component {
     if (keyword === "") {
       this.getBooks();
     } else {
-      let url = `http://localhost:8080/api/bukuserching/?keyword=${keyword}`;
+      let url = `http://localhost:8080/api/totalbukupaging/?keyword=${keyword}`;
 
       let url2 = `http://localhost:8080/api/bukuserchingpaging/?page=${
         this.state.page + 1}&limit=${this.state.rowsPerPage}&keyword=${keyword}`;
@@ -136,10 +136,8 @@ class Buku extends Component {
         .then(([json, json2]) => {
           this.setState({
             items: json2,
+            totalRows:json
           });
-
-          const total = json.length;
-          this.setState({ totalRows: total });
         })
         .catch((e) => {
           console.log(e);

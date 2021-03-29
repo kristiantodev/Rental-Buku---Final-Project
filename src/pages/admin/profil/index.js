@@ -26,7 +26,8 @@ import {
   ModalClick,
   Label,
   Input,
-  Textarea
+  Textarea,
+  Bold
 } from "../../../component";
 
 class ProfilAdmin extends Component {
@@ -270,6 +271,10 @@ class ProfilAdmin extends Component {
           </HeaderContent>
 
           <IsiBody>
+          <Div className="alert alert-ku" role="alert">
+        <font color="#0285b4"><h6><Bold><Italic className="fas fa-exclamation-circle" /> Informasi :</Bold></h6>
+    <Italic className="fas fa-angle-double-right" /> Untuk mengubah password tidak disarankan password = username. Karena memiliki keamanan rendah</font>
+        </Div>
             <Row>
               <Div className="col-lg-4">
     
