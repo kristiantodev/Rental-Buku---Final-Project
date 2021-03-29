@@ -99,7 +99,7 @@ public class BukuController {
                 return new ResponseEntity<>(new CustomErrorType("ID Buku " +
                         buku.getIdBuku() + " sudah digunakan. Silahkan masukan ID lain..."), HttpStatus.CONFLICT);
             }else  if (bukuService.isJudulBukuExist(buku)) {
-                logger.error("Registrasi gagal !! Email sudah digunakan. Silahkan masukan Email lain...");
+                logger.error("Judul Buku sudah digunakan !! Silahkan masukan judul lain...");
                 return new ResponseEntity<>(new CustomErrorType("Judul Buku " +
                         buku.getJudulBuku() + " sudah digunakan. Silahkan masukan Judul lain..."), HttpStatus.CONFLICT);
             }else{
