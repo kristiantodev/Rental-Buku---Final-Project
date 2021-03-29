@@ -49,6 +49,15 @@ public class PenggunaController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @GetMapping("/totaluserpaging/")
+    public ResponseEntity<?> countUserPaging(@RequestParam String keyword){
+        int count = penggunaService.totalUserPaging(keyword);
+        if (count == 0){
+            return new ResponseEntity<>(count, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(count,HttpStatus.OK);
+    }
+
     @GetMapping("/user/")
     public ResponseEntity<List<User>> listAllUser() {
         List<User> userList = penggunaService.getDataUser();

@@ -98,6 +98,11 @@ public class PenggunaServiceImpl implements PenggunaService{
     }
 
     @Override
+    public int totalUserPaging(String keyword) {
+        return penggunaRepository.totalUserPaging(keyword);
+    }
+
+    @Override
     public void registrasi(User user) {
         synchronized (this) {
             penggunaRepository.registrasi(user);

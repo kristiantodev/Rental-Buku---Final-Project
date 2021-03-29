@@ -110,6 +110,16 @@ public class BukuServiceImpl implements BukuService{
     }
 
     @Override
+    public int totalBukuPaging(String keyword) {
+        return bukuRepository.totalBukuPaging(keyword);
+    }
+
+    @Override
+    public int totalBukuPagingUser(String keyword) {
+        return bukuRepository.totalBukuPagingUser(keyword);
+    }
+
+    @Override
     public List<Buku> serchingBuku(String keyword) {
         List<Buku> pd;
 

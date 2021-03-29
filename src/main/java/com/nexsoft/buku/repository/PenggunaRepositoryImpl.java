@@ -145,6 +145,15 @@ public class PenggunaRepositoryImpl implements PenggunaRepository{
     }
 
     @Override
+    public int totalUserPaging(String keyword){
+        int count;
+        count = jdbcTemplate.queryForObject("select count(*) as count from users WHERE idUser LIKE '%"+keyword+"%' OR username LIKE '%"+keyword+"%' OR namaUser LIKE '%"+keyword+"%' " +
+                        "OR alamat LIKE '%"+keyword+"%' OR phone LIKE '%"+keyword+"%' OR email LIKE '%"+keyword+"%' OR role LIKE '%"+keyword+"%'"
+                ,Integer.class);
+        return count;
+    }
+
+    @Override
     public User GetProfil(String idUser) {
 
         return jdbcTemplate.query("SELECT * FROM users WHERE idUser = ?",

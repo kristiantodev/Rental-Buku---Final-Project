@@ -21,4 +21,5 @@ public interface PenggunaRepository {
     List<User> findWithPaging(int page, int limit);
     List<User> searchWithPaging(int page, int limit, String keyword);
     List<User> serchingUser(String keyword);
+    int totalUserPaging(String keyword);
 }

@@ -74,6 +74,24 @@ public class BukuRepositoryImpl implements BukuRepository{
     }
 
     @Override
+    public int totalBukuPaging(String keyword){
+        int count;
+        count = jdbcTemplate.queryForObject("select count(*) as count from buku b, jenisbuku j WHERE (b.idBuku LIKE '%"+keyword+"%' OR b.judulBuku LIKE '%"+keyword+"%'" +
+                        " OR b.pengarang LIKE '%"+keyword+"%' OR b.hargaSewa LIKE '%"+keyword+"%' OR b.stok LIKE '%"+keyword+"%' OR j.jenisBuku LIKE '%"+keyword+"%') AND b.idJenisBuku = j.idJenisBuku order by b.isActive asc, b.judulBuku asc"
+                ,Integer.class);
+        return count;
+    }
+
+    @Override
+    public int totalBukuPagingUser(String keyword){
+        int count;
+        count = jdbcTemplate.queryForObject("select count(*) as count from buku b, jenisbuku j WHERE (b.idBuku LIKE '%"+keyword+"%' OR b.judulBuku LIKE '%"+keyword+"%'" +
+                        " OR b.pengarang LIKE '%"+keyword+"%' OR b.hargaSewa LIKE '%"+keyword+"%' OR b.stok LIKE '%"+keyword+"%' OR j.jenisBuku LIKE '%"+keyword+"%') AND b.idJenisBuku = j.idJenisBuku AND b.isActive=1 order by b.isActive asc, b.judulBuku asc"
+                ,Integer.class);
+        return count;
+    }
+
+    @Override
     public List<Buku> searchWithPaging(int page, int limit, String keyword) {
         int numPages;
         numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM buku",

@@ -59,6 +59,24 @@ public class BukuController {
         return new ResponseEntity<>(buku, HttpStatus.OK);
     }
 
+    @GetMapping("/totalbukupaging/")
+    public ResponseEntity<?> countBukuPaging(@RequestParam String keyword){
+        int count = bukuService.totalBukuPaging(keyword);
+        if (count == 0){
+            return new ResponseEntity<>(count, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(count,HttpStatus.OK);
+    }
+
+    @GetMapping("/totalbukupaginguser/")
+    public ResponseEntity<?> countBukuPagingUser(@RequestParam String keyword){
+        int count = bukuService.totalBukuPagingUser(keyword);
+        if (count == 0){
+            return new ResponseEntity<>(count, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(count,HttpStatus.OK);
+    }
+
     @GetMapping("/bukuserchingpaging/")
     public ResponseEntity<?> getBukuSerchingPaging(@RequestParam int page, @RequestParam int limit, @RequestParam String keyword) {
         List<Buku> buku = bukuService.searchWithPaging(page, limit, keyword);
