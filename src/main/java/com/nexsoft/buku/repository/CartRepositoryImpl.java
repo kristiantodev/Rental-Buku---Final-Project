@@ -65,10 +65,10 @@ public class CartRepositoryImpl implements CartRepository{
     }
 
     @Override
-    public Cart findById(String idCart) {
-        return jdbcTemplate.query("SELECT c.*, u.namaUser FROM cart_peminjaman c, users u WHERE c.idUser = u.idUser AND c.idCart = ?",
+    public Cart findById(String idUser) {
+        return jdbcTemplate.query("SELECT c.*, u.namaUser FROM cart_peminjaman c, users u WHERE c.idUser = u.idUser AND c.idUser = ?",
                 preparedStatement -> {
-                    preparedStatement.setString(1, idCart);
+                    preparedStatement.setString(1, idUser);
                 },
                 (rs,rowNum)->
                         new Cart(

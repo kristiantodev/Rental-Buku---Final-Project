@@ -67,10 +67,10 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public Cart findById(String idCart) {
+    public Cart findById(String idUser) {
         Cart pd;
         try{
-            pd = cartRepository.findById(idCart);
+            pd = cartRepository.findById(idUser);
         }catch (IndexOutOfBoundsException e){
             System.out.println(e);
             pd = null;

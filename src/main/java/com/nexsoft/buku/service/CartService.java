@@ -9,7 +9,7 @@ public interface CartService {
     void addCart(Cart cart);
     void isiKeranjang(CartDetail detail);
     boolean checkIsiKeranjang(CartDetail detail);
-    Cart findById(String idCart);
+    Cart findById(String idUser);
     Cart listPeminjaman(String idCart);
     void deleteById(String id);
     List<CartDetail> getIsiKeranjang(String idCart);

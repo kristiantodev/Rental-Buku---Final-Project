@@ -282,4 +282,62 @@ public class PenggunaController {
     }
 
 
+    @PostMapping("/tambahadmin/")
+    public  ResponseEntity<?> createUserAdmin (@RequestBody User user){
+        if (user.getNamaUser().isBlank() || user.getUsername().isBlank()||
+                user.getPassword().isBlank()|| user.getPhone().isBlank() || user.getEmail().isBlank()){
+            return new ResponseEntity<>("Masukan semua data yang ada!!", HttpStatus.BAD_REQUEST);
+        } else {
+            Pattern p_uname = Pattern.compile("^(?=.{6,8}$)(?![.])[a-zA-Z0-9.]+(?<![_.])$");
+            Matcher m_uname = p_uname.matcher(user.getUsername());
+
+            Pattern p_email = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+            Matcher m_email = p_email.matcher(user.getEmail());
+
+            Pattern p_phone = Pattern.compile("^(^\\+62|62|^08)(\\d{3,4}-?){2}\\d{3,4}$");
+            Matcher m_phone = p_phone.matcher(user.getPhone());
+
+            if (m_uname.matches()){
+                if (m_phone.matches()){
+                    if (m_email.matches()){
+                            try{
+                                if (penggunaService.isUsernameExist(user)) {
+                                    logger.error("Registrasi gagal !! Username sudah digunakan. Silahkan masukan username lain...", user.getUsername());
+                                    return new ResponseEntity<>(new CustomErrorType("Registrasi gagal !!. Username " +
+                                            user.getUsername() + " sudah digunakan. Silahkan masukan username lain..."), HttpStatus.CONFLICT);
+                                }else  if (penggunaService.isEmailExist(user)) {
+                                    logger.error("Registrasi gagal !! Email sudah digunakan. Silahkan masukan Email lain...", user.getEmail());
+                                    return new ResponseEntity<>(new CustomErrorType("Registrasi gagal !!. Email " +
+                                            user.getEmail() + " sudah digunakan. Silahkan masukan Email lain..."), HttpStatus.CONFLICT);
+                                }else  if (penggunaService.isPhoneExist(user)) {
+                                    logger.error("Registrasi gagal !! No.HP sudah digunakan. Silahkan masukan Np.HP lain...", user.getPhone());
+                                    return new ResponseEntity<>(new CustomErrorType("Registrasi gagal !!. No.HP " +
+                                            user.getPhone() + " sudah digunakan. Silahkan masukan No.HP lain..."), HttpStatus.CONFLICT);
+                                }else{
+                                    penggunaService.registrasi(user);
+                                    return new ResponseEntity<>(new CustomSuccessType("Registrasi berhasil !! Silahkan login..."), HttpStatus.CREATED);
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                                return new ResponseEntity<>(new CustomErrorType("Failed create user"), HttpStatus.BAD_REQUEST);
+                            }
+
+                    }else {
+                        return new ResponseEntity<>(new CustomErrorType("Format email salah. Contoh : (xxxxxx@xxx.xxx)")
+                                , HttpStatus.BAD_REQUEST);
+                    }
+                }else {
+                    return new ResponseEntity<>(new CustomErrorType("Masukan format HP Indonesia (ex: +628113912109 atau 628113912109 atau 08134455555)")
+                            , HttpStatus.BAD_REQUEST);
+                }
+            }else {
+                return new ResponseEntity<>(new CustomErrorType("Username memuat 6-8 huruf dan tidak boleh ada karakter uniq")
+                        , HttpStatus.BAD_REQUEST);
+
+            }
+
+        }
+    }
+
+
 }

@@ -70,9 +70,9 @@ public class CartController {
     }
 
     @GetMapping("/cart/")
-    public ResponseEntity<?> cartGet(@RequestParam String idCart) {
+    public ResponseEntity<?> cartGet(@RequestParam String idUser) {
         logger.info("Comparing data!");
-        Cart cart = cartService.findById(idCart);
+        Cart cart = cartService.findById(idUser);
         return new ResponseEntity<>(cart, HttpStatus.OK);
 
     }

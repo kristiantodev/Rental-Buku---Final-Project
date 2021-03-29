@@ -9,7 +9,7 @@ public interface CartRepository {
     void addCart(Cart cart);
     void isiKeranjang(CartDetail detail);
     CartDetail checkIsiKeranjang(String idCart, String idBuku);
-    Cart findById(String idCart);
+    Cart findById(String idUser);
     Cart listPeminjaman(String idCart);
     void deleteById(String id);
     List<CartDetail> getIsiKeranjang(String idCart);
